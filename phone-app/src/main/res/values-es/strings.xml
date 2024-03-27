@@ -18,4 +18,7 @@
     <string name="attributions">"Atribuciones"</string>
     <string name="rate_on_google_play">"Califica en Google Play"</string>
     <string name="install_on_watch">"Instalar en reloj (Wear OS)"</string>
+    <string name="get_picture_from">"Obtener imagen de"</string>
+    <string name="camera">"Cámara"</string>
+    <string name="gallery">"Galería"</string>
 </resources>

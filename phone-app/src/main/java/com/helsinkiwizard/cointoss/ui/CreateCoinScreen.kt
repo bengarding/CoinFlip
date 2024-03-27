@@ -1,8 +1,6 @@
 package com.helsinkiwizard.cointoss.ui
 
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -36,18 +34,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.helsinkiwizard.cointoss.Constants.MIME_TYPE_IMAGE
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.theme.CoinTossTheme
-import com.helsinkiwizard.cointoss.ui.ImageCropActivity.Companion.EXTRA_URI
+import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.DialogState
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
-import com.helsinkiwizard.cointoss.utils.parcelable
+import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.TwentyFour
@@ -81,7 +78,12 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
     when (val state = viewModel.dialogState.collectAsState().value) {
         is DialogState.ShowContent -> {
             when (val type = state.type as CreateCoinDialogs) {
-                is CreateCoinDialogs.MediaPicker -> {}
+                is CreateCoinDialogs.MediaPicker -> {
+                    MediaPicker(
+                        onDismiss = { viewModel.resetDialogState() },
+                        imageSelected = { uri -> viewModel.setUri(uri, type.coinSide) }
+                    )
+                }
             }
         }
 
@@ -94,16 +96,6 @@ private fun Content(
     model: CreateCoinModel,
     viewModel: CreateCoinViewModel,
 ) {
-    val context = LocalContext.current
-    val imageCropLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = {
-            val uri = it.data?.extras?.parcelable<Uri>(EXTRA_URI)
-            if (uri != null) {
-                viewModel.setHeadsUri(uri)
-            }
-        }
-    )
     Row(
         horizontalArrangement = Arrangement.spacedBy(TwentyFour),
         modifier = Modifier
@@ -111,34 +103,25 @@ private fun Content(
             .padding(horizontal = TwentyFour)
 
     ) {
-        CoinSide(
+        CoinImage(
             textRes = R.string.heads,
             headsUri = model.headsUri,
-            onImageSelected = { uri -> imageCropLauncher.launch(ImageCropActivity.createIntent(context, uri)) }
+            onClick = { viewModel.onCoinSideClicked(CoinSide.HEADS) }
         )
-        CoinSide(
+        CoinImage(
             textRes = R.string.tails,
             headsUri = model.tailsUri,
-            onImageSelected = { uri -> imageCropLauncher.launch(ImageCropActivity.createIntent(context, uri)) }
+            onClick = { viewModel.onCoinSideClicked(CoinSide.TAILS) }
         )
     }
 }
 
 @Composable
-private fun RowScope.CoinSide(
+private fun RowScope.CoinImage(
     textRes: Int,
     headsUri: Uri?,
-    onImageSelected: (Uri) -> Unit
+    onClick: () -> Unit
 ) {
-    val galleryLauncher = rememberLauncherForActivityResult(
-        onResult = { uri ->
-            uri?.let {
-                onImageSelected(it)
-            }
-        },
-        contract = ActivityResultContracts.GetContent()
-    )
-
     Column(
         modifier = Modifier.weight(1f),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -152,12 +135,17 @@ private fun RowScope.CoinSide(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .border(width = Two, color = MaterialTheme.colorScheme.primary, shape = CircleShape)
+                .border(
+                    width = Two,
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    shape = CircleShape
+                )
                 .clip(CircleShape)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = MaterialTheme.colorScheme.primary)
-                ) { galleryLauncher.launch(MIME_TYPE_IMAGE) }
+                    indication = rememberRipple(color = MaterialTheme.colorScheme.surfaceContainerHighest),
+                    onClick = onClick
+                )
         ) {
             if (headsUri != null) {
                 AsyncImage(
@@ -169,7 +157,7 @@ private fun RowScope.CoinSide(
                 Icon(
                     imageVector = Icons.Outlined.Add,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = MaterialTheme.colorScheme.surfaceContainerHighest,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(Forty)

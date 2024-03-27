@@ -20,4 +20,7 @@
     <string name="attributions">"Attributions"</string>
     <string name="rate_on_google_play">"Rate on Google Play"</string>
     <string name="install_on_watch">"Install on watch (Wear OS)"</string>
+    <string name="get_picture_from">"Get picture from"</string>
+    <string name="camera">"Camera"</string>
+    <string name="gallery">"Gallery"</string>
 </resources>

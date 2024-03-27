@@ -24,12 +24,11 @@ import com.helsinkiwizard.cointoss.data.ThemeMode
 @Composable
 fun CoinTossTheme(
     repository: Repository? = null, // nullable for previews
-    initialThemeMode: ThemeMode? = null, // nullable for previews
+    themeMode: ThemeMode = ThemeMode.LIGHT, // default for previews
     initialMaterialYou: Boolean? = null, // nullable for previews
     content: @Composable () -> Unit
 ) {
     val isSystemInDarkTheme = isSystemInDarkTheme()
-    val themeMode = repository?.getThemeMode?.collectAsState(initial = initialThemeMode)?.value
     val dynamicColor = repository?.getMaterialYou?.collectAsState(initial = initialMaterialYou)?.value
 
     val darkTheme by remember(themeMode) {

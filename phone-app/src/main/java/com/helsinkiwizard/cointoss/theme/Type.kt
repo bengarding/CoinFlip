@@ -24,6 +24,11 @@ val Mulish = FontFamily(
 )
 
 val Typography = Typography(
+    bodyLarge = TextStyle(
+        fontFamily = Mulish,
+        fontWeight = FontWeight.Normal,
+        fontSize = Text20
+    ),
     bodyMedium = TextStyle(
         fontFamily = Mulish,
         fontWeight = FontWeight.Normal,
