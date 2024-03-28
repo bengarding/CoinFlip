@@ -28,9 +28,8 @@
             android:theme="@style/Theme.CoinToss" />
 
         <activity
-            android:name=".ui.ImageCropActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CoinToss" />
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -39,7 +38,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
     </application>

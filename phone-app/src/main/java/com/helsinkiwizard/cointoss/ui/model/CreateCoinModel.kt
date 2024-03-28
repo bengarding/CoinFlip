@@ -1,11 +1,11 @@
 package com.helsinkiwizard.cointoss.ui.model
 
-import android.net.Uri
+import android.graphics.Bitmap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 class CreateCoinModel {
-    var headsUri by mutableStateOf<Uri?>(null)
-    val tailsUri  by mutableStateOf<Uri?>(null)
+    var headsBitmap by mutableStateOf<Bitmap?>(null)
+    var tailsBitmap  by mutableStateOf<Bitmap?>(null)
 }

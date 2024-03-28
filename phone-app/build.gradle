@@ -68,7 +68,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
     implementation "io.coil-kt:coil-compose:$compose_coil_version"
-    implementation "com.github.SmartToolFactory:Compose-Cropper:0.4.0"
+    implementation "com.vanniktech:android-image-cropper:4.5.0"
 
     implementation("androidx.compose.material:material-icons-core:$material_icons_version")
     implementation("androidx.compose.material:material-icons-extended:$material_icons_version")

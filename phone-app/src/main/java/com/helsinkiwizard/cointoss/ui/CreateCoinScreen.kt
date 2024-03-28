@@ -1,6 +1,6 @@
 package com.helsinkiwizard.cointoss.ui
 
-import android.net.Uri
+import android.graphics.Bitmap
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -81,7 +81,7 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
                 is CreateCoinDialogs.MediaPicker -> {
                     MediaPicker(
                         onDismiss = { viewModel.resetDialogState() },
-                        imageSelected = { uri -> viewModel.setUri(uri, type.coinSide) }
+                        onImageCropped = { bitmap -> viewModel.setBitmap(bitmap, type.coinSide) }
                     )
                 }
             }
@@ -105,12 +105,12 @@ private fun Content(
     ) {
         CoinImage(
             textRes = R.string.heads,
-            headsUri = model.headsUri,
+            bitmap = model.headsBitmap,
             onClick = { viewModel.onCoinSideClicked(CoinSide.HEADS) }
         )
         CoinImage(
             textRes = R.string.tails,
-            headsUri = model.tailsUri,
+            bitmap = model.tailsBitmap,
             onClick = { viewModel.onCoinSideClicked(CoinSide.TAILS) }
         )
     }
@@ -119,7 +119,7 @@ private fun Content(
 @Composable
 private fun RowScope.CoinImage(
     textRes: Int,
-    headsUri: Uri?,
+    bitmap: Bitmap?,
     onClick: () -> Unit
 ) {
     Column(
@@ -147,9 +147,9 @@ private fun RowScope.CoinImage(
                     onClick = onClick
                 )
         ) {
-            if (headsUri != null) {
+            if (bitmap != null) {
                 AsyncImage(
-                    model = headsUri,
+                    model = bitmap,
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize()
                 )

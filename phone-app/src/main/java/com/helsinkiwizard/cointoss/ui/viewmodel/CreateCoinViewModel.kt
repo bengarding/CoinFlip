@@ -1,6 +1,6 @@
 package com.helsinkiwizard.cointoss.ui.viewmodel
 
-import android.net.Uri
+import android.graphics.Bitmap
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.core.coin.CoinSide
@@ -18,11 +18,11 @@ class CreateCoinViewModel @Inject constructor(
         mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
     }
 
-    fun setUri(uri: Uri, coinSide: CoinSide) {
+    fun setBitmap(bitmap: Bitmap, coinSide: CoinSide) {
         if (coinSide == CoinSide.HEADS) {
-            model.headsUri = uri
+            model.headsBitmap = bitmap
         } else {
-            model.headsUri = uri
+            model.tailsBitmap = bitmap
         }
     }
 
