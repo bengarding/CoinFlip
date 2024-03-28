@@ -1,6 +1,7 @@
-package com.helsinkiwizard.cointoss.theme.dynamictheme
+package com.helsinkiwizard.cointoss.ui.theme.dynamictheme
 
 import androidx.compose.ui.graphics.Color
+import com.helsinkiwizard.cointoss.theme.dynamictheme.PaletteTokens
 
 /**
  *  Copied from material 3

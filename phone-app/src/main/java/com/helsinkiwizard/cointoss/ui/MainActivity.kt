@@ -43,7 +43,7 @@ import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.navigation.MAIN_ROUTE
 import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.navigation.mainGraph
-import com.helsinkiwizard.cointoss.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.drawer.DrawerContent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

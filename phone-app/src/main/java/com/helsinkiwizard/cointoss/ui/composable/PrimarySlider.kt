@@ -16,7 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.helsinkiwizard.cointoss.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.CoreConstants.SPEED_MAX
 import com.helsinkiwizard.core.CoreConstants.SPEED_MIN
 import com.helsinkiwizard.core.CoreConstants.SPEED_STEPS

@@ -1,4 +1,4 @@
-package com.helsinkiwizard.cointoss.theme
+package com.helsinkiwizard.cointoss.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
-import com.helsinkiwizard.cointoss.theme.dynamictheme.dynamicDarkColorScheme
-import com.helsinkiwizard.cointoss.theme.dynamictheme.dynamicLightColorScheme
+import com.helsinkiwizard.cointoss.ui.theme.dynamictheme.dynamicDarkColorScheme
+import com.helsinkiwizard.cointoss.ui.theme.dynamictheme.dynamicLightColorScheme
 
 @Composable
 fun CoinTossTheme(

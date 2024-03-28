@@ -31,7 +31,7 @@ import androidx.navigation.NavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.navigation.NavRoute
-import com.helsinkiwizard.cointoss.theme.Mulish
+import com.helsinkiwizard.cointoss.ui.theme.Mulish
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
