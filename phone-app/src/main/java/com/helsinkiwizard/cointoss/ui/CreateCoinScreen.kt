@@ -56,7 +56,6 @@ import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.DialogState
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
 import com.helsinkiwizard.core.coin.CoinSide
-import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
@@ -224,7 +223,7 @@ private fun Buttons(
 ) {
     PrimaryButton(
         text = stringResource(id = R.string.save),
-        modifier = Modifier.padding(start = Twenty, top = Twenty, end = Twenty, bottom = Eight),
+        modifier = Modifier.padding(start = Twenty, top = Twenty, end = Twenty, bottom = Twelve),
         onClick = onSaveClicked
     )
     PrimaryOutlinedButton(

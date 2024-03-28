@@ -75,7 +75,7 @@ fun PrimaryOutlinedButton(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(ButtonHeight),
-        border = BorderStroke(width = One, color = MaterialTheme.colorScheme.onTertiaryContainer),
+        border = BorderStroke(width = One, color = MaterialTheme.colorScheme.onSecondaryContainer),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
