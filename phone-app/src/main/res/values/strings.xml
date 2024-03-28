@@ -23,4 +23,8 @@
     <string name="get_picture_from">"Get picture from"</string>
     <string name="camera">"Camera"</string>
     <string name="gallery">"Gallery"</string>
+    <string name="save">"Save"</string>
+    <string name="clear">"Clear"</string>
+    <string name="add_both_images_to_save">"Add both images to save"</string>
+    <string name="save_error">"An error occurred while saving"</string>
 </resources>

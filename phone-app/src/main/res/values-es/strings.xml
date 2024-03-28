@@ -21,4 +21,9 @@
     <string name="get_picture_from">"Obtener imagen de"</string>
     <string name="camera">"Cámara"</string>
     <string name="gallery">"Galería"</string>
+    <string name="save">"Guardar"</string>
+    <string name="clear">"Borrar"</string>
+    <string name="add_both_images_to_save">"Añade ambas imágenes para guardar"</string>
+    <string name="save_error">"Ocurrió un error al guardar"</string>
+
 </resources>

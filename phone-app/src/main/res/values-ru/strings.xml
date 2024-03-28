@@ -21,4 +21,8 @@
     <string name="get_picture_from">"Получить изображение из"</string>
     <string name="camera">"Камера"</string>
     <string name="gallery">"Галерея"</string>
+    <string name="save">"Сохранять"</string>
+    <string name="clear">"Прозрачный"</string>
+    <string name="add_both_images_to_save">"Добавьте оба изображения, чтобы сохранить"</string>
+    <string name="save_error">"Произошла ошибка при сохранении"</string>
 </resources>

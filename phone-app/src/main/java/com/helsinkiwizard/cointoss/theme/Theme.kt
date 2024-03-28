@@ -37,7 +37,6 @@ fun CoinTossTheme(
                 ThemeMode.LIGHT -> false
                 ThemeMode.DARK -> true
                 ThemeMode.SYSTEM -> isSystemInDarkTheme
-                else -> false
             }
         )
     }
