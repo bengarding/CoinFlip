@@ -1,9 +1,8 @@
-package com.helsinkiwizard.cointoss
+package com.helsinkiwizard.cointoss.data
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.core.BaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

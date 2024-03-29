@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.ui.theme.Mulish
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent

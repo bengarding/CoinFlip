@@ -44,7 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.helsinkiwizard.cointoss.R
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryOutlinedButton
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker

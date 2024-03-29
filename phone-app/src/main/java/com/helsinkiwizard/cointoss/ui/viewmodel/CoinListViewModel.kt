@@ -1,7 +1,7 @@
 package com.helsinkiwizard.cointoss.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.core.coin.CoinType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

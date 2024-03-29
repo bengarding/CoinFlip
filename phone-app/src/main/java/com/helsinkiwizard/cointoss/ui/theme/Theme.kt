@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.ui.theme.dynamictheme.dynamicDarkColorScheme
 import com.helsinkiwizard.cointoss.ui.theme.dynamictheme.dynamicLightColorScheme

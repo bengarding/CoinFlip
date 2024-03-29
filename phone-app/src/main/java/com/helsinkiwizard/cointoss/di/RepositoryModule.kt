@@ -1,7 +1,7 @@
 package com.helsinkiwizard.cointoss.di
 
 import android.content.Context
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.core.BaseRepository
 import dagger.Module
 import dagger.Provides

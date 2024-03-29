@@ -2,7 +2,7 @@ package com.helsinkiwizard.cointoss.ui.viewmodel
 
 import android.graphics.Bitmap
 import android.net.Uri
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.core.coin.CoinSide
 import dagger.hilt.android.lifecycle.HiltViewModel

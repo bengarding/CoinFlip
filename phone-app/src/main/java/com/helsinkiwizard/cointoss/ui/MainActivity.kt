@@ -38,7 +38,7 @@ import com.helsinkiwizard.cointoss.Constants.EXTRA_MATERIAL_YOU
 import com.helsinkiwizard.cointoss.Constants.EXTRA_THEME_MODE
 import com.helsinkiwizard.cointoss.Constants.NAV_TRANSITION_DURATION
 import com.helsinkiwizard.cointoss.R
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.navigation.MAIN_ROUTE
 import com.helsinkiwizard.cointoss.navigation.NavRoute
