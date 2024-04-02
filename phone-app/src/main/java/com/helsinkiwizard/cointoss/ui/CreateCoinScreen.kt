@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -152,7 +153,11 @@ private fun Content(
         }
         val context = LocalContext.current
         Buttons(
-            onSaveClicked = { viewModel.saveCoin(storeBitmap = { bitmap -> storeBitmap(context, bitmap) }) },
+            onSaveClicked = {
+                viewModel.saveCoin(
+                    storeBitmap = { bitmap -> storeBitmap(context, bitmap) }
+                )
+            },
             onClearClicked = { viewModel.clear() }
         )
     }
@@ -175,23 +180,23 @@ private fun RowScope.CoinImage(
             modifier = Modifier.padding(start = Twelve, top = Twelve, end = Twelve, bottom = Twelve)
         )
 
-        val color by animateColorAsState(
-            targetValue = if (hasError) {
-                MaterialTheme.colorScheme.error
-            } else {
-                MaterialTheme.colorScheme.surfaceContainerHighest
+        val borderColor by animateColorAsState(
+            targetValue = when {
+                hasError -> MaterialTheme.colorScheme.error
+                bitmap != null -> Color.Transparent
+                else -> MaterialTheme.colorScheme.surfaceContainerHighest
             },
-            label = "Coin color"
+            label = "Border color"
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .border(width = Two, color = color, shape = CircleShape)
+                .border(width = Two, color = borderColor, shape = CircleShape)
                 .clip(CircleShape)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = color),
+                    indication = rememberRipple(color = borderColor),
                     onClick = onClick
                 )
         ) {
@@ -205,7 +210,7 @@ private fun RowScope.CoinImage(
                 Icon(
                     imageVector = Icons.Outlined.Add,
                     contentDescription = null,
-                    tint = color,
+                    tint = borderColor,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(Forty)
