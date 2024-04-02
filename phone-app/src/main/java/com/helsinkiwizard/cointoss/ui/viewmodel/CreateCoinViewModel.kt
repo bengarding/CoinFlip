@@ -2,10 +2,13 @@ package com.helsinkiwizard.cointoss.ui.viewmodel
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.lifecycle.viewModelScope
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
+import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinSide
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -13,7 +16,7 @@ class CreateCoinViewModel @Inject constructor(
     private val repository: Repository
 ) : AbstractViewModel() {
 
-    private val model = CreateCoinModel()
+    private val model = CreateCoinModel(repository.getCustomCoins())
 
     init {
         mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
@@ -46,7 +49,14 @@ class CreateCoinViewModel @Inject constructor(
         val tailsUri = storeBitmap(model.tailsBitmap)
 
         if (headsUri != null && tailsUri != null) {
-
+            viewModelScope.launch {
+                repository.storeCustomCoin(headsUri, tailsUri, model.name.value)
+                with(model) {
+                    headsBitmap = null
+                    tailsBitmap = null
+                    name.value = EMPTY_STRING
+                }
+            }
         } else {
             mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SaveError)
         }

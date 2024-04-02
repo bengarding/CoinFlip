@@ -1,11 +1,15 @@
 package com.helsinkiwizard.cointoss.data
 
 import android.content.Context
+import android.net.Uri
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.helsinkiwizard.cointoss.data.room.CoinTossDatabase
+import com.helsinkiwizard.cointoss.data.room.CustomCoin
+import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.BaseRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class Repository @Inject constructor(
     context: Context,
-    database: CoinTossDatabase? = null
+    private val database: CoinTossDatabase? = null
 ) : BaseRepository(context) {
 
     companion object {
@@ -32,4 +36,21 @@ class Repository @Inject constructor(
         .map { preferences ->
             preferences[MATERIAL_YOU] ?: true
         }
+
+    suspend fun storeCustomCoin(headsUri: Uri, tailsUri: Uri, name: String) {
+        database?.let {
+            val customCoin = CustomCoin(
+                heads = headsUri.toString(),
+                tails = tailsUri.toString(),
+                name = name
+            )
+            it.customCoinDao().insert(customCoin)
+        }
+    }
+
+    fun getCustomCoins(): Flow<List<CustomCoinUiModel>> {
+        return database?.customCoinDao()?.getAllFlow()?.map { list ->
+            list.map { it.toUiModel() }
+        } ?: flowOf()
+    }
 }
