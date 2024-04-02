@@ -23,12 +23,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.composable.PillButton
 import com.helsinkiwizard.cointoss.ui.composable.PrimarySlider
 import com.helsinkiwizard.cointoss.ui.composable.PrimarySwitch
 import com.helsinkiwizard.cointoss.ui.model.MutableInputWrapper
 import com.helsinkiwizard.cointoss.ui.model.SettingsModel
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState

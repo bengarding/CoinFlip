@@ -3,13 +3,18 @@ package com.helsinkiwizard.cointoss.data
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.helsinkiwizard.cointoss.data.room.CoinTossDatabase
 import com.helsinkiwizard.core.BaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class Repository(context: Context) : BaseRepository(context) {
+class Repository @Inject constructor(
+    context: Context,
+    database: CoinTossDatabase? = null
+) : BaseRepository(context) {
 
     companion object {
         private val THEME_MODE = stringPreferencesKey("selected_theme")

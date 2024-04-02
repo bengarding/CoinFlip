@@ -6,5 +6,6 @@ internal object Constants {
 
     const val NAV_TRANSITION_DURATION = 300
 
-    const val MIME_TYPE_IMAGE = "image/*"
+    // Database
+    const val DATABASE_NAME = "coin_toss_database"
 }

@@ -73,6 +73,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core:$material_icons_version")
     implementation("androidx.compose.material:material-icons-extended:$material_icons_version")
 
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 

@@ -2,6 +2,7 @@ package com.helsinkiwizard.cointoss.di
 
 import android.content.Context
 import com.helsinkiwizard.cointoss.data.Repository
+import com.helsinkiwizard.cointoss.data.room.CoinTossDatabase
 import com.helsinkiwizard.core.BaseRepository
 import dagger.Module
 import dagger.Provides
@@ -14,12 +15,12 @@ import dagger.hilt.components.SingletonComponent
 object RepositoryModule {
 
     @Provides
-    fun provideRepository(@ApplicationContext context: Context): Repository {
-        return Repository(context)
+    fun provideRepository(@ApplicationContext context: Context, database: CoinTossDatabase): Repository {
+        return Repository(context, database)
     }
 
     @Provides
-    fun provideBaseRepository(@ApplicationContext context: Context): BaseRepository {
-        return Repository(context)
+    fun provideBaseRepository(@ApplicationContext context: Context, database: CoinTossDatabase): BaseRepository {
+        return Repository(context, database)
     }
 }
