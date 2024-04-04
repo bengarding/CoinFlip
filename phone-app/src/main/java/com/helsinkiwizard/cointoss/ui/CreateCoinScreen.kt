@@ -7,47 +7,33 @@ import android.os.Build
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Icon
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -58,9 +44,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
-import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
-import com.helsinkiwizard.cointoss.ui.composable.PrimaryOutlinedButton
-import com.helsinkiwizard.cointoss.ui.composable.PrimaryTextField
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
@@ -73,14 +56,11 @@ import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Eighty
-import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.Sixteen
-import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
 import com.helsinkiwizard.core.theme.TwentyFour
-import com.helsinkiwizard.core.theme.Two
-import com.helsinkiwizard.core.utils.sentenceCase
+import kotlinx.coroutines.flow.flowOf
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -144,6 +124,7 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class) // animateItemPlacement
 @Composable
 private fun Content(
     model: CreateCoinModel,
@@ -155,12 +136,14 @@ private fun Content(
     LazyColumn {
         item {
             val context = LocalContext.current
+            val keyboardController = LocalSoftwareKeyboardController.current
 
             AddCoinDetails(
                 model = model,
                 onHeadsClicked = { viewModel.onCoinSideClicked(CoinSide.HEADS) },
                 onTailsClicked = { viewModel.onCoinSideClicked(CoinSide.TAILS) },
                 onSaveClicked = {
+                    keyboardController?.hide()
                     viewModel.saveCoin(
                         storeBitmap = { bitmap -> storeBitmap(context, bitmap) }
                     )
@@ -169,190 +152,94 @@ private fun Content(
                 onNameChange = { name -> viewModel.onNameChange(name) }
             )
         }
+        item(key = selectedCoin?.id) {
+            SelectedCoin(
+                selectedCoin = selectedCoin,
+                modifier = Modifier.animateItemPlacement()
+            )
+        }
         item {
-            SelectedCoin(selectedCoin)
+            Text(
+                text = stringResource(id = R.string.custom_coins),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(start = Twenty)
+                    .semantics { heading() }
+            )
+        }
+        items(items = customCoins, key = { it.id }) { customCoin ->
+            CustomCoinItem(
+                coin = customCoin,
+                modifier = Modifier.animateItemPlacement(),
+                showDivider = true
+            )
         }
     }
 }
 
 @Composable
-private fun AddCoinDetails(
-    model: CreateCoinModel,
-    onHeadsClicked: () -> Unit,
-    onTailsClicked: () -> Unit,
-    onSaveClicked: () -> Unit,
-    onClearClicked: () -> Unit,
-    onNameChange: (String) -> Unit
+private fun SelectedCoin(
+    selectedCoin: CustomCoinUiModel?,
+    modifier: Modifier
 ) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(TwentyFour),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = TwentyFour)
-    ) {
-        AddCoinImage(
-            textRes = R.string.heads,
-            bitmap = model.headsBitmap,
-            hasError = model.headsError,
-            onClick = onHeadsClicked
-        )
-        AddCoinImage(
-            textRes = R.string.tails,
-            bitmap = model.tailsBitmap,
-            hasError = model.tailsError,
-            onClick = onTailsClicked
-        )
-    }
-
-    PrimaryTextField(
-        value = model.name.value,
-        onValueChange = onNameChange,
-        label = stringResource(id = R.string.name),
-        isError = model.name.isError,
-        errorText = stringResource(id = R.string.enter_valid_name),
-        markOptional = true,
-        modifier = Modifier.padding(start = TwentyFour, top = Sixteen, end = TwentyFour)
-    )
-
-    AddCoinDetailsButtons(
-        onSaveClicked = onSaveClicked,
-        onClearClicked = onClearClicked
-    )
-}
-
-@Composable
-private fun RowScope.AddCoinImage(
-    textRes: Int,
-    bitmap: Bitmap?,
-    hasError: Boolean,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier.weight(1f),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(id = textRes).sentenceCase(),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(start = Twelve, top = Twelve, end = Twelve, bottom = Twelve)
-        )
-
-        val borderColor by animateColorAsState(
-            targetValue = when {
-                hasError -> MaterialTheme.colorScheme.error
-                bitmap != null -> Color.Transparent
-                else -> MaterialTheme.colorScheme.surfaceContainerHighest
-            },
-            label = "Border color"
-        )
-        val backgroundColor by animateColorAsState(
-            targetValue = if (hasError) MaterialTheme.colorScheme.errorContainer else Color.Transparent,
-            label = "Background color"
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .border(width = Two, color = borderColor, shape = CircleShape)
-                .clip(CircleShape)
-                .background(backgroundColor)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = borderColor),
-                    onClick = onClick
-                )
+    if (selectedCoin != null) {
+        Column(
+            modifier = modifier.padding(top = TwentyFour, bottom = Sixteen)
         ) {
-            if (bitmap != null) {
-                AsyncImage(
-                    model = bitmap,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Outlined.Add,
-                    contentDescription = null,
-                    tint = borderColor,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(Forty)
-                        .fillMaxSize()
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.selected_custom_coin),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(start = Twenty)
+                    .semantics { heading() }
+            )
+            CustomCoinItem(coin = selectedCoin)
         }
     }
 }
 
 @Composable
-private fun AddCoinDetailsButtons(
-    onSaveClicked: () -> Unit,
-    onClearClicked: () -> Unit
+private fun CustomCoinItem(
+    coin: CustomCoinUiModel,
+    modifier: Modifier = Modifier,
+    showDivider: Boolean = false
 ) {
-    PrimaryButton(
-        text = stringResource(id = R.string.save),
-        modifier = Modifier.padding(start = Twenty, top = Twenty, end = Twenty, bottom = Twelve),
-        onClick = onSaveClicked
-    )
-    PrimaryOutlinedButton(
-        text = stringResource(id = R.string.clear),
-        modifier = Modifier.padding(horizontal = Twenty),
-        onClick = onClearClicked
-    )
-}
-
-@Composable
-private fun SelectedCoin(selectedCoin: CustomCoinUiModel?) {
-    AnimatedVisibility(
-        visible = selectedCoin != null,
-        enter = slideInVertically() + fadeIn()
-    ) {
-        if (selectedCoin != null) {
-            Column(
-                modifier = Modifier.padding(start = Twenty, top = TwentyFour, bottom = TwentyFour)
+    Column {
+        Column(
+            modifier = modifier.padding(start = Twenty, top = Eight, bottom = Eight)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(id = R.string.selected_custom_coin),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier
-                        .padding(bottom = Eight)
-                        .semantics { heading() }
+                CustomCoinSide(
+                    uri = coin.headsUri,
+                    name = coin.name,
+                    coinSideString = stringResource(id = R.string.heads),
+                    modifier = Modifier.padding(end = Eight)
                 )
-                CustomCoinItem(coin = selectedCoin)
+                CustomCoinSide(
+                    uri = coin.tailsUri,
+                    name = coin.name,
+                    coinSideString = stringResource(id = R.string.tails),
+                    modifier = Modifier.padding()
+                )
+                IconButtons(
+                    onEditClicked = {},
+                    onDeleteClicked = {},
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            if (coin.name.isNotEmpty()) {
+                Text(
+                    text = coin.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(start = Eight, top = Four)
+                )
             }
         }
-    }
-}
-
-@Composable
-private fun CustomCoinItem(coin: CustomCoinUiModel) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        CustomCoinSide(
-            uri = coin.headsUri,
-            name = coin.name,
-            coinSideString = stringResource(id = R.string.heads),
-            modifier = Modifier.padding(end = Eight)
-        )
-        CustomCoinSide(
-            uri = coin.tailsUri,
-            name = coin.name,
-            coinSideString = stringResource(id = R.string.tails),
-            modifier = Modifier.padding()
-        )
-        IconButtons(
-            onEditClicked = {},
-            onDeleteClicked = {},
-            modifier = Modifier.weight(1f)
-        )
-    }
-    if (coin.name.isNotEmpty()) {
-        Text(
-            text = coin.name,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(start = Eight, top = Four)
-        )
+        if (showDivider) {
+            HorizontalDivider()
+        }
     }
 }
 
@@ -424,7 +311,15 @@ private fun storeBitmap(context: Context, bitmap: Bitmap?): Uri? {
 @Preview(showBackground = true)
 @Composable
 private fun CreateCoinScreenPreview() {
-    val model = CreateCoinModel()
+    val model = CreateCoinModel(
+        selectedCoin = flowOf(CustomCoinUiModel(1, Uri.EMPTY, Uri.EMPTY, "Name", true)),
+        customCoins = flowOf(
+            listOf(
+                CustomCoinUiModel(2, Uri.EMPTY, Uri.EMPTY, "Second", false),
+                CustomCoinUiModel(3, Uri.EMPTY, Uri.EMPTY, "Third", false)
+            )
+        )
+    )
     val repository = Repository(LocalContext.current)
     val viewModel = CreateCoinViewModel(repository)
     CoinTossTheme {
@@ -433,15 +328,3 @@ private fun CreateCoinScreenPreview() {
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun SelectedCoinPreview() {
-    CoinTossTheme {
-        Surface {
-            val coin = CustomCoinUiModel(1, Uri.EMPTY, Uri.EMPTY, "Name", true)
-            SelectedCoin(coin)
-        }
-    }
-}
-
