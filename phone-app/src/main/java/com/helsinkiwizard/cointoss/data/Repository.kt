@@ -42,10 +42,15 @@ class Repository @Inject constructor(
             val customCoin = CustomCoin(
                 heads = headsUri.toString(),
                 tails = tailsUri.toString(),
-                name = name
+                name = name,
+                selected = true
             )
-            it.customCoinDao().insert(customCoin)
+            it.customCoinDao().deselectThenInsert(customCoin)
         }
+    }
+
+    fun getSelectedCustomCoin(): Flow<CustomCoinUiModel?> {
+        return database?.customCoinDao()?.getSelectedCoin()?.map { it?.toUiModel() } ?: flowOf()
     }
 
     fun getCustomCoins(): Flow<List<CustomCoinUiModel>> {

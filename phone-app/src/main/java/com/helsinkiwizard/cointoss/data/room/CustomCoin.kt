@@ -12,13 +12,9 @@ class CustomCoin(
     @ColumnInfo(name = "heads") val heads: String,
     @ColumnInfo(name = "tails") val tails: String,
     @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "selected") val selected: Boolean,
 ) {
     fun toUiModel(): CustomCoinUiModel {
-        return CustomCoinUiModel(
-            id = id,
-            headsUri = Uri.parse(heads),
-            tailsUri = Uri.parse(tails),
-            name = name
-        )
+        return CustomCoinUiModel(id, Uri.parse(heads), Uri.parse(tails), name, selected)
     }
 }

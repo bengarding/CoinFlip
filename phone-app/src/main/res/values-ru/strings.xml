@@ -25,4 +25,9 @@
     <string name="clear">"Прозрачный"</string>
     <string name="add_both_images_to_save">"Добавьте оба изображения, чтобы сохранить"</string>
     <string name="save_error">"Произошла ошибка при сохранении"</string>
+    <string name="selected_custom_coin">"Выбрано"</string>
+    <string name="custom_coins">"Пользовательские монеты"</string>
+    <string name="select">"Выбирать"</string>
+    <string name="edit">"Редактировать"</string>
+    <string name="delete">"Удалить"</string>
 </resources>

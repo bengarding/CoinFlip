@@ -6,5 +6,6 @@ class CustomCoinUiModel(
     val id: Int,
     val headsUri: Uri,
     val tailsUri: Uri,
-    val name: String
+    val name: String,
+    val selected: Boolean
 )

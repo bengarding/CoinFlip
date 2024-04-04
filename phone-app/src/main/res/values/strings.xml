@@ -27,4 +27,9 @@
     <string name="clear">"Clear"</string>
     <string name="add_both_images_to_save">"Add both images to save"</string>
     <string name="save_error">"An error occurred while saving"</string>
+    <string name="selected_custom_coin">"Selected"</string>
+    <string name="custom_coins">"Custom coins"</string>
+    <string name="select">"Select"</string>
+    <string name="edit">"Edit"</string>
+    <string name="delete">"Delete"</string>
 </resources>

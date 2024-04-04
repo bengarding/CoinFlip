@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class CreateCoinModel(
+    val selectedCoin: Flow<CustomCoinUiModel?> = flowOf(),
     val customCoins: Flow<List<CustomCoinUiModel>> = flowOf()
 ) {
     var headsBitmap by mutableStateOf<Bitmap?>(null)

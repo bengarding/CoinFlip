@@ -25,5 +25,9 @@
     <string name="clear">"Borrar"</string>
     <string name="add_both_images_to_save">"Añade ambas imágenes para guardar"</string>
     <string name="save_error">"Ocurrió un error al guardar"</string>
-
+    <string name="selected_custom_coin">"Seleccionado"</string>
+    <string name="custom_coins">"Monedas personalizadas"</string>
+    <string name="select">"Seleccionar"</string>
+    <string name="edit">"Editar"</string>
+    <string name="delete">"Borrar"</string>
 </resources>

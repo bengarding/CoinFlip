@@ -16,7 +16,10 @@ class CreateCoinViewModel @Inject constructor(
     private val repository: Repository
 ) : AbstractViewModel() {
 
-    private val model = CreateCoinModel(repository.getCustomCoins())
+    private val model = CreateCoinModel(
+        selectedCoin = repository.getSelectedCustomCoin(),
+        customCoins = repository.getCustomCoins()
+    )
 
     init {
         mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
