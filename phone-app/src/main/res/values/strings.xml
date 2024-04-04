@@ -1,5 +1,4 @@
 <resources>
-    <string name="empty_string" translatable="false">""</string>
     <string name="back">"Back"</string>
     <string name="confirm">"Confirm crop"</string>
     <string name="menu">"Menu"</string>
@@ -32,4 +31,7 @@
     <string name="select">"Select"</string>
     <string name="edit">"Edit"</string>
     <string name="delete">"Delete"</string>
+    <string name="name">"Name"</string>
+    <string name="append_optional">" (Optional)"</string>
+    <string name="enter_valid_name">"Enter a valid name"</string>
 </resources>

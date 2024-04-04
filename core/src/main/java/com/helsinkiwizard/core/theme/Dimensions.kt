@@ -12,6 +12,7 @@ val Text22 = 22.sp
 val One = 1.dp
 val Two = 2.dp
 val Four = 4.dp
+val Six = 6.dp
 val Eight = 8.dp
 val Twelve = 12.dp
 val Sixteen = 16.dp

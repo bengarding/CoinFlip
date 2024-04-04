@@ -40,10 +40,11 @@ class CreateCoinViewModel @Inject constructor(
     }
 
     fun saveCoin(storeBitmap: (Bitmap?) -> Uri?) {
+        model.name.validate()
         model.headsError = model.headsBitmap == null
         model.tailsError = model.tailsBitmap == null
 
-        if (model.headsError || model.tailsError) {
+        if (model.headsError || model.tailsError || model.name.isError) {
             mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.MissingImages)
             return
         }
@@ -70,6 +71,15 @@ class CreateCoinViewModel @Inject constructor(
         model.tailsError = false
         model.headsBitmap = null
         model.tailsBitmap = null
+    }
+
+    fun onNameChange(name: String) {
+        with (model.name) {
+            value = name
+            if (isError) {
+                validate()
+            }
+        }
     }
 }
 

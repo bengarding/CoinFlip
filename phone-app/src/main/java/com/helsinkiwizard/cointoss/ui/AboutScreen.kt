@@ -64,7 +64,7 @@ fun AboutScreen(
         AppInfo(dateUpdated)
         Spacer(modifier = Modifier.height(Sixty))
         Contact()
-        Buttons(navController)
+        AddCoinDetailsButtons(navController)
     }
 }
 
@@ -131,7 +131,7 @@ private fun Contact() {
 }
 
 @Composable
-private fun Buttons(navController: NavController) {
+private fun AddCoinDetailsButtons(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(Twelve),
         modifier = Modifier.padding(horizontal = TwentyFour)
