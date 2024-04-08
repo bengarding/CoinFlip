@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
@@ -28,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +55,7 @@ import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.DialogState
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
+import com.helsinkiwizard.cointoss.utils.toBitmap
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Eighty
@@ -61,10 +64,13 @@ import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Twenty
 import com.helsinkiwizard.core.theme.TwentyFour
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import kotlin.random.Random
+
+private const val FIRST_ITEM = 0
 
 @Composable
 fun CreateCoinScreen(
@@ -117,6 +123,12 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
                     ).show()
                     viewModel.resetDialogState()
                 }
+
+                is CreateCoinDialogs.DeleteCoin -> {
+                    deleteBitmap(LocalContext.current, type.headsUri)
+                    deleteBitmap(LocalContext.current, type.tailsUri)
+                    viewModel.resetDialogState()
+                }
             }
         }
 
@@ -130,12 +142,14 @@ private fun Content(
     model: CreateCoinModel,
     viewModel: CreateCoinViewModel
 ) {
+    val context = LocalContext.current
     val selectedCoin = model.selectedCoin.collectAsState(initial = null).value
     val customCoins = model.customCoins.collectAsState(initial = emptyList()).value
+    val scope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
 
-    LazyColumn {
+    LazyColumn(state = listState) {
         item {
-            val context = LocalContext.current
             val keyboardController = LocalSoftwareKeyboardController.current
 
             AddCoinDetails(
@@ -155,7 +169,17 @@ private fun Content(
         item(key = selectedCoin?.id) {
             SelectedCoin(
                 selectedCoin = selectedCoin,
-                modifier = Modifier.animateItemPlacement()
+                modifier = Modifier.animateItemPlacement(),
+                onEditClicked = {
+                    viewModel.onEditClicked(
+                        coin = selectedCoin!!,
+                        uriToBitmap = { it.toBitmap(context) }
+                    )
+                    scope.launch {
+                        listState.animateScrollToItem(FIRST_ITEM)
+                    }
+                },
+                onDeleteClicked = {},
             )
         }
         item {
@@ -171,7 +195,17 @@ private fun Content(
             CustomCoinItem(
                 coin = customCoin,
                 modifier = Modifier.animateItemPlacement(),
-                showDivider = true
+                showDivider = true,
+                onEditClicked = {
+                    viewModel.onEditClicked(
+                        coin = customCoin,
+                        uriToBitmap = { it.toBitmap(context) }
+                    )
+                    scope.launch {
+                        listState.animateScrollToItem(FIRST_ITEM)
+                    }
+                },
+                onDeleteClicked = {},
             )
         }
     }
@@ -180,7 +214,9 @@ private fun Content(
 @Composable
 private fun SelectedCoin(
     selectedCoin: CustomCoinUiModel?,
-    modifier: Modifier
+    modifier: Modifier,
+    onEditClicked: () -> Unit,
+    onDeleteClicked: () -> Unit,
 ) {
     if (selectedCoin != null) {
         Column(
@@ -193,7 +229,11 @@ private fun SelectedCoin(
                     .padding(start = Twenty)
                     .semantics { heading() }
             )
-            CustomCoinItem(coin = selectedCoin)
+            CustomCoinItem(
+                coin = selectedCoin,
+                onEditClicked = onEditClicked,
+                onDeleteClicked = onDeleteClicked,
+            )
         }
     }
 }
@@ -202,7 +242,9 @@ private fun SelectedCoin(
 private fun CustomCoinItem(
     coin: CustomCoinUiModel,
     modifier: Modifier = Modifier,
-    showDivider: Boolean = false
+    showDivider: Boolean = false,
+    onEditClicked: () -> Unit,
+    onDeleteClicked: () -> Unit,
 ) {
     Column {
         Column(
@@ -224,8 +266,8 @@ private fun CustomCoinItem(
                     modifier = Modifier.padding()
                 )
                 IconButtons(
-                    onEditClicked = {},
-                    onDeleteClicked = {},
+                    onEditClicked = onEditClicked,
+                    onDeleteClicked = onDeleteClicked,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -307,6 +349,19 @@ private fun storeBitmap(context: Context, bitmap: Bitmap?): Uri? {
         null
     }
 }
+
+fun deleteBitmap(context: Context, uri: Uri): Boolean {
+    return try {
+        val deletedRows = context.contentResolver.delete(uri, null, null)
+        // If delete operation was successful, it returns the number of rows deleted.
+        // In case of a file, it should be 1 if the file was successfully deleted.
+        deletedRows > 0
+    } catch (e: Exception) {
+        Log.e("DeleteFile", "Failed to delete file", e)
+        false
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable

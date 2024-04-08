@@ -1,16 +1,15 @@
 package com.helsinkiwizard.cointoss.utils
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import java.io.IOException
 
-fun Uri.toImageBitmap(context: Context): ImageBitmap? {
+fun Uri.toBitmap(context: Context): Bitmap? {
     return try {
         context.contentResolver.openInputStream(this)?.use { inputStream ->
-            BitmapFactory.decodeStream(inputStream).asImageBitmap()
+            BitmapFactory.decodeStream(inputStream)
         }
     } catch (e: IOException) {
         null

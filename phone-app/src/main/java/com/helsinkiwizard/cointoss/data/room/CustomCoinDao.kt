@@ -15,6 +15,9 @@ interface CustomCoinDao {
     @Delete
     fun delete(customCoin: CustomCoin)
 
+    @Query("DELETE FROM custom_coin WHERE id = :coinId")
+    suspend fun deleteById(coinId: Int)
+
     @Query("SELECT * FROM custom_coin WHERE selected = 0 ORDER BY id DESC")
     fun getAllFlow(): Flow<List<CustomCoin>>
 
@@ -31,5 +34,14 @@ interface CustomCoinDao {
     suspend fun deselectThenInsert(customCoin: CustomCoin) {
         deselectAllCoins()
         insert(customCoin)
+    }
+
+    @Transaction
+    suspend fun updateCoin(
+        newCoin: CustomCoin,
+        oldCoinId: Int
+    ) {
+        deselectThenInsert(newCoin)
+        deleteById(oldCoinId)
     }
 }

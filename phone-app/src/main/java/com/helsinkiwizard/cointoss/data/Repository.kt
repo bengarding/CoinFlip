@@ -49,6 +49,18 @@ class Repository @Inject constructor(
         }
     }
 
+    suspend fun updateCustomCoin(headsUri: Uri, tailsUri: Uri, name: String, oldCoinId: Int) {
+        database?.let {
+            val customCoin = CustomCoin(
+                heads = headsUri.toString(),
+                tails = tailsUri.toString(),
+                name = name,
+                selected = true
+            )
+            it.customCoinDao().updateCoin(customCoin, oldCoinId)
+        }
+    }
+
     fun getSelectedCustomCoin(): Flow<CustomCoinUiModel?> {
         return database?.customCoinDao()?.getSelectedCoin()?.map { it?.toUiModel() } ?: flowOf()
     }

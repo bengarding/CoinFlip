@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
+import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinSide
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -54,12 +55,15 @@ class CreateCoinViewModel @Inject constructor(
 
         if (headsUri != null && tailsUri != null) {
             viewModelScope.launch {
-                repository.storeCustomCoin(headsUri, tailsUri, model.name.value)
-                with(model) {
-                    headsBitmap = null
-                    tailsBitmap = null
-                    name.value = EMPTY_STRING
+                if (model.editingCoin != null) {
+                    repository.updateCustomCoin(headsUri, tailsUri, model.name.value, model.editingCoin!!.id)
+                    mutableDialogStateFlow.value = DialogState.ShowContent(
+                        CreateCoinDialogs.DeleteCoin(model.editingCoin!!.headsUri, model.editingCoin!!.tailsUri)
+                    )
+                } else {
+                    repository.storeCustomCoin(headsUri, tailsUri, model.name.value)
                 }
+                clear()
             }
         } else {
             mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SaveError)
@@ -71,15 +75,28 @@ class CreateCoinViewModel @Inject constructor(
         model.tailsError = false
         model.headsBitmap = null
         model.tailsBitmap = null
+        model.name.value = EMPTY_STRING
+        model.editingCoin = null
     }
 
     fun onNameChange(name: String) {
-        with (model.name) {
+        with(model.name) {
             value = name
             if (isError) {
                 validate()
             }
         }
+    }
+
+    fun onEditClicked(
+        coin: CustomCoinUiModel,
+        uriToBitmap: (Uri) -> Bitmap?
+    ) {
+        clear()
+        model.headsBitmap = uriToBitmap(coin.headsUri)
+        model.tailsBitmap = uriToBitmap(coin.tailsUri)
+        model.name.value = coin.name
+        model.editingCoin = coin
     }
 }
 
@@ -91,4 +108,5 @@ sealed interface CreateCoinDialogs : BaseDialogType {
     data class MediaPicker(val coinSide: CoinSide) : CreateCoinDialogs
     data object MissingImages : CreateCoinDialogs
     data object SaveError : CreateCoinDialogs
+    data class DeleteCoin(val headsUri: Uri, val tailsUri: Uri) : CreateCoinDialogs
 }
