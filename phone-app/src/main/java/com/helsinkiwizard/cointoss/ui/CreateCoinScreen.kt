@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -136,7 +135,6 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class) // animateItemPlacement
 @Composable
 private fun Content(
     model: CreateCoinModel,
@@ -169,7 +167,6 @@ private fun Content(
         item(key = selectedCoin?.id) {
             SelectedCoin(
                 selectedCoin = selectedCoin,
-                modifier = Modifier.animateItemPlacement(),
                 onEditClicked = {
                     viewModel.onEditClicked(
                         coin = selectedCoin!!,
@@ -194,7 +191,6 @@ private fun Content(
         items(items = customCoins, key = { it.id }) { customCoin ->
             CustomCoinItem(
                 coin = customCoin,
-                modifier = Modifier.animateItemPlacement(),
                 showDivider = true,
                 onEditClicked = {
                     viewModel.onEditClicked(
@@ -214,13 +210,12 @@ private fun Content(
 @Composable
 private fun SelectedCoin(
     selectedCoin: CustomCoinUiModel?,
-    modifier: Modifier,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
 ) {
     if (selectedCoin != null) {
         Column(
-            modifier = modifier.padding(top = TwentyFour, bottom = Sixteen)
+            modifier = Modifier.padding(top = TwentyFour, bottom = Sixteen)
         ) {
             Text(
                 text = stringResource(id = R.string.selected_custom_coin),
@@ -241,14 +236,13 @@ private fun SelectedCoin(
 @Composable
 private fun CustomCoinItem(
     coin: CustomCoinUiModel,
-    modifier: Modifier = Modifier,
     showDivider: Boolean = false,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
 ) {
     Column {
         Column(
-            modifier = modifier.padding(start = Twenty, top = Eight, bottom = Eight)
+            modifier = Modifier.padding(start = Twenty, top = Eight, bottom = Eight)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
