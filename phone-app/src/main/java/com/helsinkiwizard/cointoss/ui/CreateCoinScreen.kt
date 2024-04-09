@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -199,10 +199,10 @@ private fun Content(
                     .semantics { heading() }
             )
         }
-        items(items = customCoins, key = { it.id }) { customCoin ->
+        itemsIndexed(items = customCoins, key = { _, item -> item.id }) { index, customCoin ->
             CustomCoinItem(
                 coin = customCoin,
-                showDivider = true,
+                showDivider = index != customCoins.size - 1,
                 onEditClicked = {
                     viewModel.onEditClicked(
                         coin = customCoin,
