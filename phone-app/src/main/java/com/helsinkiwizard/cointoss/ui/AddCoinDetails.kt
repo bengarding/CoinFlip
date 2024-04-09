@@ -25,18 +25,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryOutlinedButton
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryTextField
+import com.helsinkiwizard.cointoss.ui.composable.additionalLayoutSize
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
+import com.helsinkiwizard.core.CoreConstants.VALUE_UNDEFINED
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Twelve
@@ -74,6 +79,9 @@ internal fun AddCoinDetails(
         )
     }
 
+    val density = LocalDensity.current
+    var heightWithOffset by remember { mutableIntStateOf(VALUE_UNDEFINED) }
+
     PrimaryTextField(
         value = model.name.value,
         onValueChange = onNameChange,
@@ -81,7 +89,13 @@ internal fun AddCoinDetails(
         isError = model.name.isError,
         errorText = stringResource(id = R.string.enter_valid_name),
         markOptional = true,
-        modifier = Modifier.padding(start = TwentyFour, top = Sixteen, end = TwentyFour)
+        modifier = Modifier
+            .padding(start = TwentyFour, top = Sixteen, end = TwentyFour)
+            .additionalLayoutSize(
+                additionalHeight = with(density) { Two.roundToPx() },
+                heightWithOffset = heightWithOffset,
+                updateHeightWithOffset = { heightWithOffset = it }
+            )
     )
 
     AddCoinDetailsButtons(
