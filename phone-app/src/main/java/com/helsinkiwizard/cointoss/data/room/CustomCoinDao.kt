@@ -30,6 +30,12 @@ interface CustomCoinDao {
     @Query("UPDATE custom_coin SET selected = 0")
     suspend fun deselectAllCoins()
 
+    @Query("SELECT MAX(id) FROM custom_coin")
+    fun getHighestId(): Int?
+
+    @Query("UPDATE custom_coin SET selected = 1 WHERE id = :id")
+    suspend fun setSelectedById(id: Int)
+
     @Transaction
     suspend fun deselectThenInsert(customCoin: CustomCoin) {
         deselectAllCoins()
@@ -43,5 +49,13 @@ interface CustomCoinDao {
     ) {
         deselectThenInsert(newCoin)
         deleteById(oldCoinId)
+    }
+
+    @Transaction
+    suspend fun selectCoinWithHighestId() {
+        val highestId = getHighestId()
+        highestId?.let {
+            setSelectedById(it)
+        }
     }
 }

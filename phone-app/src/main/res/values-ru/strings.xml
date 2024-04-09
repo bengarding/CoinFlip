@@ -30,6 +30,9 @@
     <string name="select">Выбирать</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
+    <string name="are_you_sure_delete_coin">"Вы уверены, что хотите удалить эту монету?"</string>
+    <string name="ok">"одобрять"</string>
+    <string name="cancel">"Отмена"</string>
     <string name="name">Имя</string>
     <string name="append_optional">" (Необязательный)"</string>
     <string name="enter_valid_name">Введите допустимое имя</string>

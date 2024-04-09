@@ -9,6 +9,7 @@ import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinSide
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -58,7 +59,7 @@ class CreateCoinViewModel @Inject constructor(
                 if (model.editingCoin != null) {
                     repository.updateCustomCoin(headsUri, tailsUri, model.name.value, model.editingCoin!!.id)
                     mutableDialogStateFlow.value = DialogState.ShowContent(
-                        CreateCoinDialogs.DeleteCoin(model.editingCoin!!.headsUri, model.editingCoin!!.tailsUri)
+                        CreateCoinDialogs.DeleteCoinBitmaps(model.editingCoin!!.headsUri, model.editingCoin!!.tailsUri)
                     )
                 } else {
                     repository.storeCustomCoin(headsUri, tailsUri, model.name.value)
@@ -98,6 +99,23 @@ class CreateCoinViewModel @Inject constructor(
         model.name.value = coin.name
         model.editingCoin = coin
     }
+
+    fun onDeleteClicked(coin: CustomCoinUiModel) {
+        mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.DeleteCoinDialog(coin))
+    }
+
+    fun deleteCoin(coin: CustomCoinUiModel) {
+        viewModelScope.launch {
+            val headsUri = coin.headsUri
+            val tailsUri = coin.tailsUri
+            val isSelectedCoin = coin.id == model.selectedCoin.first()?.id
+
+            repository.deleteCustomCoin(coin.id, isSelectedCoin)
+            mutableDialogStateFlow.value = DialogState.ShowContent(
+                CreateCoinDialogs.DeleteCoinBitmaps(headsUri, tailsUri)
+            )
+        }
+    }
 }
 
 sealed interface CreateCoinContent : BaseType {
@@ -108,5 +126,6 @@ sealed interface CreateCoinDialogs : BaseDialogType {
     data class MediaPicker(val coinSide: CoinSide) : CreateCoinDialogs
     data object MissingImages : CreateCoinDialogs
     data object SaveError : CreateCoinDialogs
-    data class DeleteCoin(val headsUri: Uri, val tailsUri: Uri) : CreateCoinDialogs
+    data class DeleteCoinBitmaps(val headsUri: Uri, val tailsUri: Uri) : CreateCoinDialogs
+    data class DeleteCoinDialog(val coin: CustomCoinUiModel) : CreateCoinDialogs
 }

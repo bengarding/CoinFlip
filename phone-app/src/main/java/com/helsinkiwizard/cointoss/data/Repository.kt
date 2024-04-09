@@ -38,26 +38,29 @@ class Repository @Inject constructor(
         }
 
     suspend fun storeCustomCoin(headsUri: Uri, tailsUri: Uri, name: String) {
-        database?.let {
-            val customCoin = CustomCoin(
-                heads = headsUri.toString(),
-                tails = tailsUri.toString(),
-                name = name,
-                selected = true
-            )
-            it.customCoinDao().deselectThenInsert(customCoin)
-        }
+        val customCoin = CustomCoin(
+            heads = headsUri.toString(),
+            tails = tailsUri.toString(),
+            name = name,
+            selected = true
+        )
+        database?.customCoinDao()?.deselectThenInsert(customCoin)
     }
 
     suspend fun updateCustomCoin(headsUri: Uri, tailsUri: Uri, name: String, oldCoinId: Int) {
-        database?.let {
-            val customCoin = CustomCoin(
-                heads = headsUri.toString(),
-                tails = tailsUri.toString(),
-                name = name,
-                selected = true
-            )
-            it.customCoinDao().updateCoin(customCoin, oldCoinId)
+        val customCoin = CustomCoin(
+            heads = headsUri.toString(),
+            tails = tailsUri.toString(),
+            name = name,
+            selected = true
+        )
+        database?.customCoinDao()?.updateCoin(customCoin, oldCoinId)
+    }
+
+    suspend fun deleteCustomCoin(coinId: Int, selectNextCoin: Boolean) {
+        database?.customCoinDao()?.deleteById(coinId)
+        if (selectNextCoin) {
+            database?.customCoinDao()?.selectCoinWithHighestId()
         }
     }
 

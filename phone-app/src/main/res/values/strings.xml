@@ -31,6 +31,9 @@
     <string name="select">Select</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="are_you_sure_delete_coin">"Are you sure you want to delete this coin?"</string>
+    <string name="ok">"OK"</string>
+    <string name="cancel">"Cancel"</string>
     <string name="name">Name</string>
     <string name="append_optional">" (Optional)"</string>
     <string name="enter_valid_name">Enter a valid name</string>

@@ -45,6 +45,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
+import com.helsinkiwizard.cointoss.ui.composable.dialog.CoinTossDialog
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
@@ -123,7 +124,17 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
                     viewModel.resetDialogState()
                 }
 
-                is CreateCoinDialogs.DeleteCoin -> {
+                is CreateCoinDialogs.DeleteCoinDialog -> {
+                    CoinTossDialog(
+                        text = stringResource(id = R.string.are_you_sure_delete_coin),
+                        confirmButtonText = stringResource(id = R.string.delete),
+                        dismissButtonText = stringResource(id = R.string.cancel),
+                        onConfirmButtonClick = { viewModel.deleteCoin(type.coin) },
+                        onDismiss = { viewModel.resetDialogState() },
+                    )
+                }
+
+                is CreateCoinDialogs.DeleteCoinBitmaps -> {
                     deleteBitmap(LocalContext.current, type.headsUri)
                     deleteBitmap(LocalContext.current, type.tailsUri)
                     viewModel.resetDialogState()
@@ -176,7 +187,7 @@ private fun Content(
                         listState.animateScrollToItem(FIRST_ITEM)
                     }
                 },
-                onDeleteClicked = {},
+                onDeleteClicked = { viewModel.onDeleteClicked(selectedCoin!!) },
             )
         }
         item {
@@ -201,7 +212,7 @@ private fun Content(
                         listState.animateScrollToItem(FIRST_ITEM)
                     }
                 },
-                onDeleteClicked = {},
+                onDeleteClicked = { viewModel.onDeleteClicked(customCoin) },
             )
         }
     }
