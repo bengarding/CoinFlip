@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowUpward
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.HorizontalDivider
@@ -70,7 +71,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import kotlin.random.Random
 
-private const val FIRST_ITEM = 0
+private const val INDEX_ADD_COIN = 0
+private const val INDEX_SELECTED_COIN = 1
 
 @Composable
 fun CreateCoinScreen(
@@ -184,7 +186,7 @@ private fun Content(
                         uriToBitmap = { it.toBitmap(context) }
                     )
                     scope.launch {
-                        listState.animateScrollToItem(FIRST_ITEM)
+                        listState.animateScrollToItem(INDEX_ADD_COIN)
                     }
                 },
                 onDeleteClicked = { viewModel.onDeleteClicked(selectedCoin!!) },
@@ -200,19 +202,27 @@ private fun Content(
             )
         }
         itemsIndexed(items = customCoins, key = { _, item -> item.id }) { index, customCoin ->
+            val showDivider = index != customCoins.size - 1
             CustomCoinItem(
                 coin = customCoin,
-                showDivider = index != customCoins.size - 1,
+                showDivider = showDivider,
+                showSelectButton = true,
                 onEditClicked = {
                     viewModel.onEditClicked(
                         coin = customCoin,
                         uriToBitmap = { it.toBitmap(context) }
                     )
                     scope.launch {
-                        listState.animateScrollToItem(FIRST_ITEM)
+                        listState.animateScrollToItem(INDEX_ADD_COIN)
                     }
                 },
                 onDeleteClicked = { viewModel.onDeleteClicked(customCoin) },
+                onSelectClicked = { coin ->
+                    viewModel.setSelectedCoin(coin)
+                    scope.launch {
+                        listState.animateScrollToItem(INDEX_SELECTED_COIN)
+                    }
+                }
             )
         }
     }
@@ -248,8 +258,10 @@ private fun SelectedCoin(
 private fun CustomCoinItem(
     coin: CustomCoinUiModel,
     showDivider: Boolean = false,
+    showSelectButton: Boolean = false,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    onSelectClicked: ((CustomCoinUiModel) -> Unit)? = null
 ) {
     Column {
         Column(
@@ -271,8 +283,10 @@ private fun CustomCoinItem(
                     modifier = Modifier.padding()
                 )
                 IconButtons(
+                    showSelectButton = showSelectButton,
                     onEditClicked = onEditClicked,
                     onDeleteClicked = onDeleteClicked,
+                    onSelectClicked = { onSelectClicked?.invoke(coin) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -309,25 +323,36 @@ private fun CustomCoinSide(
 
 @Composable
 private fun IconButtons(
+    showSelectButton: Boolean,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    onSelectClicked: (() -> Unit)? = null,
     modifier: Modifier
 ) {
     Row(
         horizontalArrangement = Arrangement.End,
         modifier = modifier
     ) {
+        if (showSelectButton) {
+            IconButton(onClick = { onSelectClicked?.invoke() }) {
+                Image(
+                    imageVector = Icons.Outlined.ArrowUpward,
+                    contentDescription = stringResource(id = R.string.select),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                )
+            }
+        }
         IconButton(onClick = onDeleteClicked) {
             Image(
                 imageVector = Icons.Outlined.Delete,
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.delete),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
             )
         }
         IconButton(onClick = onEditClicked) {
             Image(
                 imageVector = Icons.Outlined.Edit,
-                contentDescription = null,
+                contentDescription = stringResource(id = R.string.edit),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
             )
         }

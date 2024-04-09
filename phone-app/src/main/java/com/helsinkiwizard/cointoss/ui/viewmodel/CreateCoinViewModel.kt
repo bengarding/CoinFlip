@@ -116,6 +116,12 @@ class CreateCoinViewModel @Inject constructor(
             )
         }
     }
+
+    fun setSelectedCoin(coin: CustomCoinUiModel) {
+        viewModelScope.launch {
+            repository.selectCustomCoin(coin.id)
+        }
+    }
 }
 
 sealed interface CreateCoinContent : BaseType {

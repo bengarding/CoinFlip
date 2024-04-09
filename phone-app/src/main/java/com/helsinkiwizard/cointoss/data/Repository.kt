@@ -64,6 +64,10 @@ class Repository @Inject constructor(
         }
     }
 
+    suspend fun selectCustomCoin(coinId: Int) {
+        database?.customCoinDao()?.deselectAllThenSelect(coinId)
+    }
+
     fun getSelectedCustomCoin(): Flow<CustomCoinUiModel?> {
         return database?.customCoinDao()?.getSelectedCoin()?.map { it?.toUiModel() } ?: flowOf()
     }

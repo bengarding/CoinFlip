@@ -58,4 +58,10 @@ interface CustomCoinDao {
             setSelectedById(it)
         }
     }
+
+    @Transaction
+    suspend fun deselectAllThenSelect(id: Int) {
+        deselectAllCoins()
+        setSelectedById(id)
+    }
 }
