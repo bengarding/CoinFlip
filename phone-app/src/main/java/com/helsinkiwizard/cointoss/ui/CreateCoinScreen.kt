@@ -174,7 +174,8 @@ private fun Content(
                     )
                 },
                 onClearClicked = { viewModel.clear() },
-                onNameChange = { name -> viewModel.onNameChange(name) }
+                onNameChange = { name -> viewModel.onNameChange(name) },
+                isEditing = model.isEditing
             )
         }
         item(key = selectedCoin?.id) {
@@ -193,15 +194,17 @@ private fun Content(
             )
         }
         item {
-            Text(
-                text = stringResource(id = R.string.custom_coins),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .padding(start = Twenty)
-                    .semantics { heading() }
-            )
+            if (customCoins.isNotEmpty()) {
+                Text(
+                    text = stringResource(id = R.string.custom_coins),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .padding(start = Twenty)
+                        .semantics { heading() }
+                )
+            }
         }
-        itemsIndexed(items = customCoins, key = { _, item -> item.id }) { index, customCoin ->
+        itemsIndexed(items = customCoins) { index, customCoin ->
             val showDivider = index != customCoins.size - 1
             CustomCoinItem(
                 coin = customCoin,
@@ -290,13 +293,11 @@ private fun CustomCoinItem(
                     modifier = Modifier.weight(1f)
                 )
             }
-            if (coin.name.isNotEmpty()) {
-                Text(
-                    text = coin.name,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(start = Eight, top = Four)
-                )
-            }
+            Text(
+                text = coin.name,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(start = Eight, top = Four)
+            )
         }
         if (showDivider) {
             HorizontalDivider()
@@ -338,22 +339,22 @@ private fun IconButtons(
                 Image(
                     imageVector = Icons.Outlined.ArrowUpward,
                     contentDescription = stringResource(id = R.string.select),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
                 )
             }
-        }
-        IconButton(onClick = onDeleteClicked) {
-            Image(
-                imageVector = Icons.Outlined.Delete,
-                contentDescription = stringResource(id = R.string.delete),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-            )
         }
         IconButton(onClick = onEditClicked) {
             Image(
                 imageVector = Icons.Outlined.Edit,
                 contentDescription = stringResource(id = R.string.edit),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
+            )
+        }
+        IconButton(onClick = onDeleteClicked) {
+            Image(
+                imageVector = Icons.Outlined.Delete,
+                contentDescription = stringResource(id = R.string.delete),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
             )
         }
     }

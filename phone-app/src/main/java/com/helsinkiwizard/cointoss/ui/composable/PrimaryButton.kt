@@ -75,7 +75,7 @@ fun PrimaryOutlinedButton(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(ButtonHeight),
-        border = BorderStroke(width = One, color = MaterialTheme.colorScheme.onSecondaryContainer),
+        border = BorderStroke(width = One, color = MaterialTheme.colorScheme.surfaceContainerHighest),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -89,13 +89,14 @@ fun PrimaryOutlinedButton(
                 Image(
                     imageVector = icon,
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest),
                     modifier = Modifier.size(Thirty)
                 )
             }
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.surfaceContainerHighest,
                 fontWeight = FontWeight.Medium
             )
         }

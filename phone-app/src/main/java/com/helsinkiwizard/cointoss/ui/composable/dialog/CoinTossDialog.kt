@@ -42,6 +42,7 @@ fun CoinTossDialog(
                 Text(
                     text = confirmButtonText,
                     style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.surfaceContainerHighest,
                     modifier = Modifier
                         .minimumInteractiveComponentSize()
                         .clickable {
@@ -56,6 +57,7 @@ fun CoinTossDialog(
                     Text(
                         text = dismissButtonText,
                         style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.surfaceContainerHighest,
                         modifier = Modifier
                             .padding(end = Twenty)
                             .minimumInteractiveComponentSize()

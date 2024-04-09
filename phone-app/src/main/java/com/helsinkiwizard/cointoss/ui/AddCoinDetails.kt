@@ -57,7 +57,8 @@ internal fun AddCoinDetails(
     onTailsClicked: () -> Unit,
     onSaveClicked: () -> Unit,
     onClearClicked: () -> Unit,
-    onNameChange: (String) -> Unit
+    onNameChange: (String) -> Unit,
+    isEditing: Boolean
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(TwentyFour),
@@ -100,7 +101,8 @@ internal fun AddCoinDetails(
 
     AddCoinDetailsButtons(
         onSaveClicked = onSaveClicked,
-        onClearClicked = onClearClicked
+        onClearClicked = onClearClicked,
+        isEditing = isEditing
     )
 }
 
@@ -171,15 +173,16 @@ private fun RowScope.AddCoinImage(
 @Composable
 private fun AddCoinDetailsButtons(
     onSaveClicked: () -> Unit,
-    onClearClicked: () -> Unit
+    onClearClicked: () -> Unit,
+    isEditing: Boolean
 ) {
     PrimaryButton(
-        text = stringResource(id = R.string.save),
+        text = stringResource(id = if (isEditing) R.string.edit else R.string.save),
         modifier = Modifier.padding(start = Twenty, top = Twenty, end = Twenty, bottom = Twelve),
         onClick = onSaveClicked
     )
     PrimaryOutlinedButton(
-        text = stringResource(id = R.string.clear),
+        text = stringResource(id = if (isEditing) R.string.cancel else R.string.clear),
         modifier = Modifier.padding(horizontal = Twenty),
         onClick = onClearClicked
     )

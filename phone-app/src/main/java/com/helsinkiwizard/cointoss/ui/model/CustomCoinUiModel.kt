@@ -1,6 +1,8 @@
 package com.helsinkiwizard.cointoss.ui.model
 
 import android.net.Uri
+import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
+import com.helsinkiwizard.core.CoreConstants.VALUE_UNDEFINED
 
 class CustomCoinUiModel(
     val id: Int,
@@ -8,4 +10,8 @@ class CustomCoinUiModel(
     val tailsUri: Uri,
     val name: String,
     val selected: Boolean
-)
+) {
+    companion object {
+        val EMPTY = CustomCoinUiModel(VALUE_UNDEFINED, Uri.EMPTY, Uri.EMPTY, EMPTY_STRING, false)
+    }
+}

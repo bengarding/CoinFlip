@@ -29,8 +29,8 @@ import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import com.helsinkiwizard.cointoss.R
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.DialogTonalOverlay
 import com.helsinkiwizard.core.theme.Twenty
 
@@ -42,26 +42,25 @@ fun MediaPicker(
     var openDialog by remember { mutableStateOf(true) }
     val context = LocalContext.current
 
-    val imageCropLauncher =
-        rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
-            openDialog = false
-            onDismiss()
+    val imageCropLauncher = rememberLauncherForActivityResult(contract = CropImageContract()) { result ->
+        openDialog = false
+        onDismiss()
 
-            if (result.isSuccessful) {
-                result.uriContent?.let {
-                    //getBitmap method is deprecated in Android SDK 29 or above so we need to do this check here
-                    val bitmap = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                        MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-                    } else {
-                        val source = ImageDecoder.createSource(context.contentResolver, it)
-                        ImageDecoder.decodeBitmap(source)
-                    }
-                    onImageCropped(bitmap)
+        if (result.isSuccessful) {
+            result.uriContent?.let {
+                //getBitmap method is deprecated in Android SDK 29 or above so we need to do this check here
+                val bitmap = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                    MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                } else {
+                    val source = ImageDecoder.createSource(context.contentResolver, it)
+                    ImageDecoder.decodeBitmap(source)
                 }
-            } else {
-                Log.e("MediaPicker", "Image crop error", result.error)
+                onImageCropped(bitmap)
             }
+        } else {
+            Log.e("MediaPicker", "Image crop error", result.error)
         }
+    }
 
     if (openDialog) {
         AlertDialog(
@@ -89,6 +88,7 @@ fun MediaPicker(
                         cropMenuCropButtonTitle = "Crop menu",
                         cropperLabelText = "cropper label",
                         cropMenuCropButtonIcon = R.drawable.ic_done,
+                        guidelines = CropImageView.Guidelines.OFF,
                         progressBarColor = MaterialTheme.colorScheme.primary.toArgb(),
                         toolbarColor = MaterialTheme.colorScheme.primary.toArgb(),
                         toolbarBackButtonColor = MaterialTheme.colorScheme.onPrimary.toArgb(),

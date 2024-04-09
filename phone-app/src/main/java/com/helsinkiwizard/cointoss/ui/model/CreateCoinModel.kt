@@ -20,5 +20,7 @@ class CreateCoinModel(
     val name = MutableInputWrapper(EMPTY_STRING).apply {
         validator = xssValidator()
     }
-    var editingCoin: CustomCoinUiModel? = null
+
+    var editingCoin: CustomCoinUiModel = CustomCoinUiModel.EMPTY
+    var isEditing by mutableStateOf(false)
 }

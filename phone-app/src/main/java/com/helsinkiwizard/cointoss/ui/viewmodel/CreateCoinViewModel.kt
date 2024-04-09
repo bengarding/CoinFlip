@@ -56,10 +56,10 @@ class CreateCoinViewModel @Inject constructor(
 
         if (headsUri != null && tailsUri != null) {
             viewModelScope.launch {
-                if (model.editingCoin != null) {
-                    repository.updateCustomCoin(headsUri, tailsUri, model.name.value, model.editingCoin!!.id)
+                if (model.isEditing) {
+                    repository.updateCustomCoin(headsUri, tailsUri, model.name.value, model.editingCoin.id)
                     mutableDialogStateFlow.value = DialogState.ShowContent(
-                        CreateCoinDialogs.DeleteCoinBitmaps(model.editingCoin!!.headsUri, model.editingCoin!!.tailsUri)
+                        CreateCoinDialogs.DeleteCoinBitmaps(model.editingCoin.headsUri, model.editingCoin.tailsUri)
                     )
                 } else {
                     repository.storeCustomCoin(headsUri, tailsUri, model.name.value)
@@ -77,7 +77,8 @@ class CreateCoinViewModel @Inject constructor(
         model.headsBitmap = null
         model.tailsBitmap = null
         model.name.value = EMPTY_STRING
-        model.editingCoin = null
+        model.editingCoin = CustomCoinUiModel.EMPTY
+        model.isEditing = false
     }
 
     fun onNameChange(name: String) {
@@ -98,6 +99,7 @@ class CreateCoinViewModel @Inject constructor(
         model.tailsBitmap = uriToBitmap(coin.tailsUri)
         model.name.value = coin.name
         model.editingCoin = coin
+        model.isEditing = true
     }
 
     fun onDeleteClicked(coin: CustomCoinUiModel) {

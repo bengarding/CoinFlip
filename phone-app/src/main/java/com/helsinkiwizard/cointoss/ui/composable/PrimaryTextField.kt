@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.Icon
@@ -17,6 +18,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -29,6 +32,17 @@ import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.theme.Six
 import com.helsinkiwizard.core.theme.Twelve
+
+@Composable
+fun PrimaryTextFieldColors(): TextFieldColors = TextFieldDefaults.colors(
+    focusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+    focusedLabelColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+    cursorColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+    selectionColors = TextSelectionColors(
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.4f),
+        handleColor = MaterialTheme.colorScheme.surfaceContainerHighest
+    )
+)
 
 @Composable
 fun PrimaryTextField(
@@ -47,6 +61,7 @@ fun PrimaryTextField(
         TextField(
             value = value,
             onValueChange = onValueChange,
+            colors = PrimaryTextFieldColors(),
             label = {
                 val annotatedLabel = if (markOptional) label.appendOptional() else AnnotatedString(label)
                 Text(text = annotatedLabel)
