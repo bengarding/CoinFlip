@@ -9,6 +9,7 @@
     <string name="heads">орёл</string>
     <string name="tails">решка</string>
 
+    <string name="custom_coin">Пользовательская монета</string>
     <string name="bitcoin">Биткойн</string>
     <string name="canada">Канада</string>
     <string name="china">Китай</string>
@@ -31,4 +32,7 @@
     <string name="jordan">Иорда́ния</string>
     <string name="mexico">"Мексика"</string>
     <string name="spain">"Испания"</string>
+    <string name="egypt">Египет</string>
+    <string name="poland">Польша</string>
+    <string name="uruguay">Уругвай</string>
 </resources>

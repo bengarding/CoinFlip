@@ -9,10 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.MonetizationOn
-import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.outlined.AddCircleOutline
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MonetizationOn
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -34,22 +35,27 @@ object DrawerParams {
         DrawerModel(
             NavRoute.Home,
             R.string.home,
-            Icons.Rounded.Home
+            Icons.Outlined.Home
         ),
         DrawerModel(
             NavRoute.CoinList,
             R.string.choose_a_coin,
-            Icons.Rounded.MonetizationOn
+            Icons.Outlined.MonetizationOn
+        ),
+        DrawerModel(
+            NavRoute.CreateCoin,
+            R.string.create_a_coin,
+            Icons.Outlined.AddCircleOutline
         ),
         DrawerModel(
             NavRoute.Settings,
             R.string.settings,
-            Icons.Rounded.Settings
+            Icons.Outlined.Settings
         ),
         DrawerModel(
             NavRoute.About,
             R.string.about,
-            Icons.Rounded.Info
+            Icons.Outlined.Info
         )
     )
 }

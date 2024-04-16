@@ -3,7 +3,9 @@ package com.helsinkiwizard.cointoss.ui
 import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,15 +13,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -28,15 +42,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.R
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.navigation.NavRoute
-import com.helsinkiwizard.cointoss.theme.Mulish
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.theme.Mulish
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
 import com.helsinkiwizard.core.CoreConstants
 import com.helsinkiwizard.core.coin.CoinType
+import com.helsinkiwizard.core.theme.Alpha20
 import com.helsinkiwizard.core.theme.BlackTransparent
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Forty
@@ -45,7 +64,13 @@ import com.helsinkiwizard.core.theme.LargeCoinButtonHeight
 import com.helsinkiwizard.core.theme.Sixty
 import com.helsinkiwizard.core.theme.Text16
 import com.helsinkiwizard.core.theme.Twelve
+import com.helsinkiwizard.core.theme.Two
+import com.helsinkiwizard.core.ui.composable.CoinListShape
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.utils.AutoSizeText
+import com.helsinkiwizard.core.utils.ifNullOrEmpty
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun CoinListScreen(
@@ -54,8 +79,8 @@ internal fun CoinListScreen(
 ) {
     when (val state = viewModel.uiState.collectAsState().value) {
         is UiState.ShowContent -> {
-            when (state.type as CoinListContent) {
-                is CoinListContent.LoadingComplete -> Content(viewModel)
+            when (val type = state.type as CoinListContent) {
+                is CoinListContent.LoadingComplete -> Content(viewModel, type.customCoinFlow, navController)
                 is CoinListContent.CoinSet -> navController.navigate(NavRoute.Home.name)
             }
         }
@@ -65,9 +90,18 @@ internal fun CoinListScreen(
 }
 
 @Composable
-private fun Content(viewModel: CoinListViewModel) {
+private fun Content(
+    viewModel: CoinListViewModel,
+    customCoinFlow: Flow<CustomCoinUiModel?>,
+    navController: NavController
+) {
     val context = LocalContext.current
-    val coinList = remember { CoinType.entries.sortedBy { context.getString(it.nameRes) } }
+    val coinList = remember {
+        CoinType.entries
+            .filterNot { it == CoinType.CUSTOM }
+            .sortedBy { context.getString(it.nameRes) }
+    }
+    val customCoin = customCoinFlow.collectAsState(initial = null).value
 
     LazyColumn(
         contentPadding = PaddingValues(vertical = Forty),
@@ -76,12 +110,121 @@ private fun Content(viewModel: CoinListViewModel) {
             .fillMaxSize()
             .padding(horizontal = Sixty)
     ) {
+        item {
+            CustomCoin(
+                coin = customCoin,
+                onClick = {
+                    if (customCoin == null) {
+                        navController.navigate(NavRoute.CreateCoin.name)
+                    } else {
+                        viewModel.onCoinClick(CoinType.CUSTOM)
+                    }
+                }
+            )
+        }
         items(coinList) { coin ->
             Coin(
                 coin = coin,
                 onClick = { viewModel.onCoinClick(coin) }
             )
         }
+    }
+}
+
+@Composable
+private fun CustomCoin(
+    coin: CustomCoinUiModel?,
+    onClick: () -> Unit
+) {
+    val analytics = FirebaseAnalytics.getInstance(LocalContext.current)
+    val coinName = coin?.name
+    Box(
+        modifier = Modifier
+            .height(LargeCoinButtonHeight)
+            .clip(CoinListShape())
+            .clip(RectangleShape)
+            .clickable {
+                onClick()
+                val name = if (coin == null) "Create a coin" else "Custom coin"
+                val params = Bundle().apply {
+                    putString(CoreConstants.COIN_SELECTED, name)
+                }
+                analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, params)
+            }
+    ) {
+        var showDefault by remember { mutableStateOf(false) }
+
+        AsyncImage(
+            model = coin?.headsUri,
+            contentDescription = coinName.ifNullOrEmpty { stringResource(id = R.string.create_a_coin) },
+            alignment = Alignment.Center,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(if (showDefault) MaterialTheme.colorScheme.surfaceContainerHighest.copy(Alpha20) else MaterialTheme.colorScheme.primary),
+            onState = { state ->
+                showDefault = state is AsyncImagePainter.State.Empty || state is AsyncImagePainter.State.Error
+            }
+        )
+        if (showDefault) {
+            Box(
+                modifier = Modifier
+                    .height(LargeCoinButtonHeight)
+                    .fillMaxWidth()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(color = MaterialTheme.colorScheme.surfaceContainerHighest),
+                        onClick = onClick
+                    )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(LargeCoinButtonHeight)
+                        .fillMaxWidth()
+                        .border(
+                            width = Two,
+                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            shape = RectangleShape
+                        )
+                )
+                Box(
+                    modifier = Modifier
+                        .height(LargeCoinButtonHeight)
+                        .fillMaxWidth()
+                        .border(
+                            width = Two,
+                            color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            shape = CoinListShape()
+                        )
+                )
+                Icon(
+                    imageVector = Icons.Outlined.Add,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(Forty)
+                        .fillMaxSize()
+                )
+            }
+        }
+        val label = when {
+            coinName.isNullOrEmpty().not() -> coinName!!
+            coin != null -> stringResource(id = R.string.custom_coin)
+            else -> stringResource(id = R.string.create_a_coin)
+        }
+        AutoSizeText(
+            text = label,
+            fontFamily = Mulish,
+            fontWeight = FontWeight.Normal,
+            maxFontSize = Text16,
+            color = Color.White,
+            maxLines = 1,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .background(color = BlackTransparent, shape = CircleShape)
+                .padding(vertical = Four, horizontal = Twelve)
+        )
     }
 }
 
@@ -96,7 +239,6 @@ private fun Coin(
             .height(LargeCoinButtonHeight)
             .clickable {
                 onClick()
-
                 val name = coin.name
                     .lowercase()
                     .replaceFirstChar { it.titlecase() }
@@ -132,5 +274,10 @@ private fun Coin(
 @Composable
 private fun CoinListPreview() {
     val viewModel = CoinListViewModel(Repository(LocalContext.current))
-    CoinListScreen(NavController(LocalContext.current), viewModel)
+    val navController = NavController(LocalContext.current)
+    CoinTossTheme {
+        Surface {
+            Content(viewModel, flowOf(), navController)
+        }
+    }
 }

@@ -22,9 +22,11 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,12 +38,12 @@ import com.helsinkiwizard.cointoss.Constants.EXTRA_MATERIAL_YOU
 import com.helsinkiwizard.cointoss.Constants.EXTRA_THEME_MODE
 import com.helsinkiwizard.cointoss.Constants.NAV_TRANSITION_DURATION
 import com.helsinkiwizard.cointoss.R
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.navigation.MAIN_ROUTE
 import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.navigation.mainGraph
-import com.helsinkiwizard.cointoss.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.drawer.DrawerContent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -61,15 +63,17 @@ class MainActivity : ComponentActivity() {
         val initialThemeMode = ThemeMode.valueOf(themeModeName)
 
         setContent {
-            CoinTossTheme(repository, initialThemeMode, initialMaterialYou) {
-                CoinToss()
+            val themeMode = repository.getThemeMode.collectAsState(initial = initialThemeMode).value
+
+            CoinTossTheme(repository, themeMode, initialMaterialYou) {
+                CoinToss(themeMode)
             }
         }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun CoinToss() {
+    private fun CoinToss(themeMode: ThemeMode) {
         val navController: NavHostController = rememberNavController()
         val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val coroutineScope = rememberCoroutineScope()
@@ -91,7 +95,7 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Menu,
-                                contentDescription = "MenuButton"
+                                contentDescription = stringResource(id = R.string.menu)
                             )
                         }
                     },
@@ -148,6 +152,7 @@ class MainActivity : ComponentActivity() {
                 NavRoute.Settings -> R.string.settings
                 NavRoute.About -> R.string.about
                 NavRoute.Attributions -> R.string.attributions
+                NavRoute.CreateCoin -> R.string.create_a_coin
             }
         )
         AnimatedContent(
@@ -160,4 +165,14 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
+
+    @Composable
+    @OptIn(ExperimentalMaterial3Api::class)
+    fun topBarColors(themeMode: ThemeMode): TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        scrolledContainerColor = MaterialTheme.colorScheme.primary,
+        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+        actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+    )
 }

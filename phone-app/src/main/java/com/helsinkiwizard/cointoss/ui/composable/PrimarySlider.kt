@@ -15,13 +15,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.helsinkiwizard.cointoss.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.CoreConstants.SPEED_MAX
 import com.helsinkiwizard.core.CoreConstants.SPEED_MIN
 import com.helsinkiwizard.core.CoreConstants.SPEED_STEPS
 import com.helsinkiwizard.core.theme.Eight
 
 private const val NO_STEPS = 0
+private const val DEFAULT_DECIMAL_PLACES = 1
 
 @Composable
 fun PrimarySlider(
@@ -32,6 +33,7 @@ fun PrimarySlider(
     onValueChange: (Float) -> Unit,
     onValueChangeFinished: () -> Unit,
     modifier: Modifier = Modifier,
+    decimalPlaces: Int = DEFAULT_DECIMAL_PLACES,
     steps: Int = NO_STEPS,
 ) {
     Column(modifier = modifier) {
@@ -42,7 +44,7 @@ fun PrimarySlider(
                 modifier = Modifier.padding(start = Eight)
             )
             Text(
-                text = "$value",
+                text = String.format("%.${decimalPlaces}f", value),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.End,
                 modifier = Modifier

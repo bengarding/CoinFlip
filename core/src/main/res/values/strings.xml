@@ -9,6 +9,7 @@
     <string name="heads">heads</string>
     <string name="tails">tails</string>
 
+    <string name="custom_coin">Custom coin</string>
     <string name="bitcoin">Bitcoin</string>
     <string name="canada">Canada</string>
     <string name="china">China</string>
@@ -17,7 +18,7 @@
     <string name="japan">Japan</string>
     <string name="kuwait">Kuwait</string>
     <string name="thailand">Thailand</string>
-    <string name="turkey">"Turkey"</string>
+    <string name="turkey">Turkey</string>
     <string name="ukraine">Ukraine</string>
     <string name="united_kingdom">United Kingdom</string>
     <string name="united_states">United States</string>
@@ -29,6 +30,9 @@
     <string name="uae">United Arab Emirates</string>
     <string name="saudi_arabia">Saudi Arabia</string>
     <string name="jordan">Jordan</string>
-    <string name="mexico">"Mexico"</string>
-    <string name="spain">"Spain"</string>
+    <string name="mexico">Mexico</string>
+    <string name="spain">Spain</string>
+    <string name="egypt">Egypt</string>
+    <string name="poland">Poland</string>
+    <string name="uruguay">Uruguay</string>
 </resources>

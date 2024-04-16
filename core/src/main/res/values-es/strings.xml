@@ -9,6 +9,7 @@
     <string name="heads">cara</string>
     <string name="tails">cruz</string>
 
+    <string name="custom_coin">Moneda personalizada</string>
     <string name="bitcoin">Bitcoin</string>
     <string name="canada">Canadá</string>
     <string name="china">China</string>
@@ -31,4 +32,7 @@
     <string name="jordan">Jordán</string>
     <string name="mexico">"México"</string>
     <string name="spain">"España"</string>
+    <string name="egypt">Egipto</string>
+    <string name="poland">Polonia</string>
+    <string name="uruguay">Uruguay</string>
 </resources>

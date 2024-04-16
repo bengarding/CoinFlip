@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,10 +17,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.helsinkiwizard.core.R
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.utils.toBitmap
 import java.util.Random
 import kotlin.math.abs
 
@@ -40,6 +47,7 @@ var flipCount = 0
 @Composable
 fun CoinAnimation(
     coinType: CoinType,
+    customCoin: CustomCoinUiModel?,
     modifier: Modifier,
     speed: Float,
     startFlipping: Boolean? = null,
@@ -47,6 +55,21 @@ fun CoinAnimation(
     onFlip: (() -> Unit)? = null,
 ) {
     var flipping by remember { mutableStateOf(startFlipping == true) }
+    val context = LocalContext.current
+    val customHeadsBitmap = remember(customCoin) {
+        if (coinType == CoinType.CUSTOM && customCoin != null) {
+            customCoin.headsUri.toBitmap(context)?.asImageBitmap()
+        } else {
+            null
+        }
+    }
+    val customTailsBitmap = remember(customCoin) {
+        if (coinType == CoinType.CUSTOM && customCoin != null) {
+            customCoin.tailsUri.toBitmap(context)?.asImageBitmap()
+        } else {
+            null
+        }
+    }
 
     LaunchedEffect(startFlipping) {
         if (startFlipping == true) {
@@ -82,29 +105,57 @@ fun CoinAnimation(
         FlipAnimation(
             rotationY = valueFloat * rotationAmount,
             front = {
-                if (currentSide == CoinSide.HEADS) Heads(coinType.heads) else Tails(coinType.tails)
+                if (currentSide == CoinSide.HEADS) {
+                    Heads(coinType.heads, customHeadsBitmap)
+                } else {
+                    Tails(coinType.tails, customTailsBitmap)
+                }
             }, back = {
-                if (currentSide == CoinSide.HEADS) Tails(coinType.tails) else Heads(coinType.heads)
+                if (currentSide == CoinSide.HEADS) {
+                    Tails(coinType.tails, customTailsBitmap)
+                } else {
+                    Heads(coinType.heads, customHeadsBitmap)
+                }
             })
     }
 }
 
 @Composable
-fun Heads(headsRes: Int) {
-    Image(
-        painter = painterResource(headsRes),
-        contentDescription = stringResource(R.string.heads),
-        modifier = Modifier.fillMaxSize()
-    )
+fun Heads(headsRes: Int, customHeadsBitmap: ImageBitmap?) {
+    if (customHeadsBitmap != null) {
+        Image(
+            bitmap = customHeadsBitmap,
+            contentDescription = stringResource(id = R.string.heads),
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+        )
+    } else {
+        Image(
+            painter = painterResource(headsRes),
+            contentDescription = stringResource(R.string.heads),
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }
 
 @Composable
-fun Tails(tailsRes: Int) {
-    Image(
-        painter = painterResource(tailsRes),
-        contentDescription = stringResource(R.string.tails),
-        modifier = Modifier.fillMaxSize()
-    )
+fun Tails(tailsRes: Int, customTailsBitmap: ImageBitmap?) {
+    if (customTailsBitmap != null) {
+        Image(
+            bitmap = customTailsBitmap,
+            contentDescription = stringResource(id = R.string.tails),
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+        )
+    } else {
+        Image(
+            painter = painterResource(tailsRes),
+            contentDescription = stringResource(R.string.tails),
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }
 
 @Composable

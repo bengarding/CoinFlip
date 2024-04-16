@@ -10,6 +10,7 @@ enum class CoinType(
     @DrawableRes val tails: Int,
     @StringRes val nameRes: Int
 ) {
+    CUSTOM(23, R.drawable.bitcoin_heads, R.drawable.bitcoin_tails, R.string.custom_coin),
     BITCOIN(1, R.drawable.bitcoin_heads, R.drawable.bitcoin_tails, R.string.bitcoin),
     CANADA(2, R.drawable.canada_heads, R.drawable.canada_tails, R.string.canada),
     CHINA(3, R.drawable.china_heads, R.drawable.china_tails, R.string.china),
@@ -31,7 +32,11 @@ enum class CoinType(
     JORDAN(19, R.drawable.jordan_heads, R.drawable.jordan_tails, R.string.jordan),
     AUSTRALIA(20, R.drawable.australia_heads, R.drawable.australia_tails, R.string.australia),
     MEXICO(21, R.drawable.mexico_heads, R.drawable.mexico_tails, R.string.mexico),
-    SPAIN(22, R.drawable.spain_heads, R.drawable.spain_tails, R.string.spain);
+    SPAIN(22, R.drawable.spain_heads, R.drawable.spain_tails, R.string.spain),
+    EGYPT(24, R.drawable.egypt_heads, R.drawable.egypt_tails, R.string.egypt),
+    POLAND(25, R.drawable.poland_heads, R.drawable.poland_tails, R.string.poland),
+    URUGUAY(26, R.drawable.uruguay_heads, R.drawable.uruguay_tails, R.string.uruguay)
+    ;
 
     companion object {
         fun parse(value: Int): CoinType {

@@ -1,4 +1,4 @@
-package com.helsinkiwizard.cointoss.theme
+package com.helsinkiwizard.cointoss.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography

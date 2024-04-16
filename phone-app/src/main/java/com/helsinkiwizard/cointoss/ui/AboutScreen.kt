@@ -29,9 +29,9 @@ import androidx.navigation.NavController
 import com.helsinkiwizard.cointoss.BuildConfig
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.navigation.NavRoute
-import com.helsinkiwizard.cointoss.theme.BodyMediumSpan
-import com.helsinkiwizard.cointoss.theme.CoinTossTheme
-import com.helsinkiwizard.cointoss.theme.LinkText
+import com.helsinkiwizard.cointoss.ui.theme.BodyMediumSpan
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.theme.LinkText
 import com.helsinkiwizard.cointoss.ui.composable.AppIconPainterResource
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
 import com.helsinkiwizard.core.CoreConstants.PACKAGE_NAME
@@ -64,7 +64,7 @@ fun AboutScreen(
         AppInfo(dateUpdated)
         Spacer(modifier = Modifier.height(Sixty))
         Contact()
-        Buttons(navController)
+        AddCoinDetailsButtons(navController)
     }
 }
 
@@ -131,7 +131,7 @@ private fun Contact() {
 }
 
 @Composable
-private fun Buttons(navController: NavController) {
+private fun AddCoinDetailsButtons(navController: NavController) {
     Column(
         verticalArrangement = Arrangement.spacedBy(Twelve),
         modifier = Modifier.padding(horizontal = TwentyFour)

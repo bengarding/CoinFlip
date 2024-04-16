@@ -12,6 +12,7 @@ val Text22 = 22.sp
 val One = 1.dp
 val Two = 2.dp
 val Four = 4.dp
+val Six = 6.dp
 val Eight = 8.dp
 val Twelve = 12.dp
 val Sixteen = 16.dp
@@ -27,4 +28,9 @@ val ButtonHeight = 48.dp
 val CoinButtonHeight = 60.dp
 val LargeCoinButtonHeight = 80.dp
 
+val DialogTonalOverlay = 75.dp
+
 const val PercentEighty = .8f
+
+const val Alpha20 = .2f
+const val Alpha40 = .4f

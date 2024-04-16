@@ -15,8 +15,8 @@ android {
         applicationId "com.helsinkiwizard.cointoss"
         minSdk 26
         targetSdk 34
-        versionCode 106
-        versionName "v1.0.0"
+        versionCode 107
+        versionName "v1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -67,8 +67,15 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.8.2'
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
+    implementation "io.coil-kt:coil-compose:$compose_coil_version"
+    implementation "com.vanniktech:android-image-cropper:4.5.0"
+
     implementation("androidx.compose.material:material-icons-core:$material_icons_version")
     implementation("androidx.compose.material:material-icons-extended:$material_icons_version")
+
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"

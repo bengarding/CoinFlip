@@ -1,7 +1,7 @@
 package com.helsinkiwizard.cointoss.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.core.coin.CoinType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filterNotNull
@@ -16,6 +16,7 @@ internal class HomeViewModel @Inject constructor(
 
     val coinTypeFlow = repository.getCoinType
     val speedFlow = repository.getSpeed
+    val customCoinFlow = repository.getSelectedCustomCoin()
 
     init {
         viewModelScope.launch {

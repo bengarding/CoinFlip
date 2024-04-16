@@ -1,17 +1,40 @@
 <resources>
-    <string name="empty_string" translatable="false">""</string>
-    <string name="home">"Home"</string>
-    <string name="settings">"Settings"</string>
-    <string name="about">"About"</string>
-    <string name="theme">"Theme"</string>
-    <string name="theme_light">"Light"</string>
-    <string name="theme_dark">"Dark"</string>
-    <string name="theme_system">"System"</string>
-    <string name="use_device_color_scheme">"Use device color scheme"</string>
-    <string name="contact">"Questions? Comments? Shoot me an email at cointossrequest@gmail.com"</string>
-    <string name="app_owner" translatable="false">"Helsinki Wizard"</string>
-    <string name="copyright">"Copyright © %d %s"</string>
-    <string name="attributions">"Attributions"</string>
-    <string name="rate_on_google_play">"Rate on Google Play"</string>
-    <string name="install_on_watch">"Install on watch (Wear OS)"</string>
+    <string name="back">Back</string>
+    <string name="confirm">Confirm crop</string>
+    <string name="menu">Menu</string>
+    <string name="crop_image">Crop image</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="create_a_coin">Create a coin</string>
+    <string name="image_cropper">Image cropper</string>
+    <string name="theme">Theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">System</string>
+    <string name="use_device_color_scheme">Use device color scheme</string>
+    <string name="contact">Questions? Comments? Shoot me an email at cointossrequest@gmail.com</string>
+    <string name="app_owner" translatable="false">Helsinki Wizard</string>
+    <string name="copyright">Copyright © %d %s</string>
+    <string name="attributions">Attributions</string>
+    <string name="rate_on_google_play">Rate on Google Play</string>
+    <string name="install_on_watch">Install on watch (Wear OS)</string>
+    <string name="get_picture_from">Get picture from</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="save">Save</string>
+    <string name="clear">Clear</string>
+    <string name="add_both_images_to_save">Add both images to save</string>
+    <string name="save_error">An error occurred while saving</string>
+    <string name="selected_custom_coin">Selected</string>
+    <string name="custom_coins">Custom coins</string>
+    <string name="select">Select</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="are_you_sure_delete_coin">"Are you sure you want to delete this coin?"</string>
+    <string name="ok">"OK"</string>
+    <string name="cancel">"Cancel"</string>
+    <string name="name">Name</string>
+    <string name="append_optional">" (Optional)"</string>
+    <string name="enter_valid_name">Enter a valid name</string>
 </resources>

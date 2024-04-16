@@ -1,7 +1,7 @@
 package com.helsinkiwizard.cointoss.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
-import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.ui.model.SettingsModel
 import dagger.hilt.android.lifecycle.HiltViewModel

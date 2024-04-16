@@ -6,10 +6,10 @@ object CoreConstants {
     const val VALUE_UNDEFINED = -1
     const val EMPTY_STRING = ""
 
-    const val SPEED_MIN = 0f
+    const val SPEED_MIN = 0.5f
     const val SPEED_MAX = 6f
     const val SPEED_DEFAULT = 3f
-    const val SPEED_STEPS = 11
+    const val SPEED_STEPS = 10
 
     // Analytics
     const val COIN_SELECTED = "coin_selected"
