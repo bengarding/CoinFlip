@@ -31,3 +31,6 @@ val LargeCoinButtonHeight = 80.dp
 val DialogTonalOverlay = 75.dp
 
 const val PercentEighty = .8f
+
+const val Alpha20 = .2f
+const val Alpha40 = .4f

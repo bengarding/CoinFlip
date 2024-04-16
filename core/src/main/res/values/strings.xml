@@ -9,6 +9,7 @@
     <string name="heads">heads</string>
     <string name="tails">tails</string>
 
+    <string name="custom_coin">Custom coin</string>
     <string name="bitcoin">Bitcoin</string>
     <string name="canada">Canada</string>
     <string name="china">China</string>

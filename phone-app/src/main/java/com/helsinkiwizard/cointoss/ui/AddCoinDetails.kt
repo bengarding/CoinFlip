@@ -177,7 +177,7 @@ private fun AddCoinDetailsButtons(
     isEditing: Boolean
 ) {
     PrimaryButton(
-        text = stringResource(id = if (isEditing) R.string.edit else R.string.save),
+        text = stringResource(id = R.string.save),
         modifier = Modifier.padding(start = Twenty, top = Twenty, end = Twenty, bottom = Twelve),
         onClick = onSaveClicked
     )

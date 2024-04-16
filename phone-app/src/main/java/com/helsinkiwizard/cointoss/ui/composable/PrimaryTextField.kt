@@ -30,6 +30,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
+import com.helsinkiwizard.core.theme.Alpha40
 import com.helsinkiwizard.core.theme.Six
 import com.helsinkiwizard.core.theme.Twelve
 
@@ -39,7 +40,7 @@ fun PrimaryTextFieldColors(): TextFieldColors = TextFieldDefaults.colors(
     focusedLabelColor = MaterialTheme.colorScheme.surfaceContainerHighest,
     cursorColor = MaterialTheme.colorScheme.surfaceContainerHighest,
     selectionColors = TextSelectionColors(
-        backgroundColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.4f),
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = Alpha40),
         handleColor = MaterialTheme.colorScheme.surfaceContainerHighest
     )
 )
