@@ -49,7 +49,6 @@ import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.composable.dialog.CoinTossDialog
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
-import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
@@ -61,8 +60,9 @@ import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Eighty
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.Sixteen
+import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
-import com.helsinkiwizard.core.theme.TwentyFour
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.utils.toBitmap
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -239,7 +239,7 @@ private fun SelectedCoin(
 ) {
     if (selectedCoin != null) {
         Column(
-            modifier = Modifier.padding(top = TwentyFour, bottom = Sixteen)
+            modifier = Modifier.padding(top = Twelve, bottom = Sixteen)
         ) {
             Text(
                 text = stringResource(id = R.string.selected_custom_coin),

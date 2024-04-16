@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +45,7 @@ import com.helsinkiwizard.cointoss.ui.composable.PrimaryTextField
 import com.helsinkiwizard.cointoss.ui.composable.additionalLayoutSize
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.core.CoreConstants.VALUE_UNDEFINED
+import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Twelve
@@ -104,6 +108,16 @@ internal fun AddCoinDetails(
         onClearClicked = onClearClicked,
         isEditing = isEditing
     )
+
+    if (model.saveInProgress) {
+        LinearProgressIndicator(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = Eight)
+        )
+    } else {
+        Spacer(modifier = Modifier.height(Twelve))
+    }
 }
 
 @Composable

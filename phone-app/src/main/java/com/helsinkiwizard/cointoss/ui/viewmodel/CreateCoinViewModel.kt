@@ -5,10 +5,11 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
-import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinSide
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,20 +43,24 @@ class CreateCoinViewModel @Inject constructor(
     }
 
     fun saveCoin(storeBitmap: (Bitmap?) -> Uri?) {
+        if (model.saveInProgress) return
+
         model.name.validate()
         model.headsError = model.headsBitmap == null
         model.tailsError = model.tailsBitmap == null
 
         if (model.headsError || model.tailsError || model.name.isError) {
             mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.MissingImages)
+            model.saveInProgress = false
             return
         }
 
-        val headsUri = storeBitmap(model.headsBitmap)
-        val tailsUri = storeBitmap(model.tailsBitmap)
+        viewModelScope.launch(Dispatchers.IO) {
+            model.saveInProgress = true
+            val headsUri = storeBitmap(model.headsBitmap)
+            val tailsUri = storeBitmap(model.tailsBitmap)
 
-        if (headsUri != null && tailsUri != null) {
-            viewModelScope.launch {
+            if (headsUri != null && tailsUri != null) {
                 if (model.isEditing) {
                     repository.updateCustomCoin(headsUri, tailsUri, model.name.value, model.editingCoin.id)
                     mutableDialogStateFlow.value = DialogState.ShowContent(
@@ -65,9 +70,10 @@ class CreateCoinViewModel @Inject constructor(
                     repository.storeCustomCoin(headsUri, tailsUri, model.name.value)
                 }
                 clear()
+            } else {
+                mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SaveError)
             }
-        } else {
-            mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SaveError)
+            model.saveInProgress = false
         }
     }
 

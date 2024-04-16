@@ -24,4 +24,5 @@ class CreateCoinModel(
 
     var editingCoin: CustomCoinUiModel = CustomCoinUiModel.EMPTY
     var isEditing by mutableStateOf(false)
+    var saveInProgress by mutableStateOf(false)
 }
