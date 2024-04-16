@@ -96,7 +96,11 @@ private fun Content(
     navController: NavController
 ) {
     val context = LocalContext.current
-    val coinList = remember { CoinType.entries.sortedBy { context.getString(it.nameRes) } }
+    val coinList = remember {
+        CoinType.entries
+            .filterNot { it == CoinType.CUSTOM }
+            .sortedBy { context.getString(it.nameRes) }
+    }
     val customCoin = customCoinFlow.collectAsState(initial = null).value
 
     LazyColumn(

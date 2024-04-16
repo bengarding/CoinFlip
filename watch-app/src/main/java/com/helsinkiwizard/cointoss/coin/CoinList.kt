@@ -46,6 +46,7 @@ import com.helsinkiwizard.core.CoreConstants.COIN_SELECTED
 import com.helsinkiwizard.core.R
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.coin.CoinType.BITCOIN
+import com.helsinkiwizard.core.coin.CoinType.CUSTOM
 import com.helsinkiwizard.core.theme.BlackTransparent
 import com.helsinkiwizard.core.theme.CoinButtonHeight
 import com.helsinkiwizard.core.theme.Eight
@@ -72,7 +73,11 @@ fun CoinList() {
         val focusRequester = rememberActiveFocusRequester()
         val coroutineScope = rememberCoroutineScope()
         val context = LocalContext.current
-        val sortedCoins = remember { CoinType.entries.sortedBy { context.getString(it.nameRes) } }
+        val sortedCoins = remember {
+            CoinType.entries
+                .filterNot { it == CUSTOM }
+                .sortedBy { context.getString(it.nameRes) }
+        }
 
         ScalingLazyColumn(
             state = listState,
