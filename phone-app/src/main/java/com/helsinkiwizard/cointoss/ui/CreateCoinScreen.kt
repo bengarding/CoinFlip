@@ -49,14 +49,13 @@ import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.composable.dialog.CoinTossDialog
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
-import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.DialogState
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
-import com.helsinkiwizard.cointoss.utils.toBitmap
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Eighty
@@ -64,6 +63,7 @@ import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Twenty
 import com.helsinkiwizard.core.theme.TwentyFour
+import com.helsinkiwizard.core.utils.toBitmap
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.io.File
@@ -398,11 +398,11 @@ fun deleteBitmap(context: Context, uri: Uri): Boolean {
 @Composable
 private fun CreateCoinScreenPreview() {
     val model = CreateCoinModel(
-        selectedCoin = flowOf(CustomCoinUiModel(1, Uri.EMPTY, Uri.EMPTY, "Name", true)),
+        selectedCoin = flowOf(CustomCoinUiModel(1, Uri.EMPTY, Uri.EMPTY, "Name")),
         customCoins = flowOf(
             listOf(
-                CustomCoinUiModel(2, Uri.EMPTY, Uri.EMPTY, "Second", false),
-                CustomCoinUiModel(3, Uri.EMPTY, Uri.EMPTY, "Third", false)
+                CustomCoinUiModel(2, Uri.EMPTY, Uri.EMPTY, "Second"),
+                CustomCoinUiModel(3, Uri.EMPTY, Uri.EMPTY, "Third")
             )
         )
     )

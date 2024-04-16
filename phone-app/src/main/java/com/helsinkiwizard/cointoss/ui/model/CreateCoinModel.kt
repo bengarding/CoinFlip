@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.helsinkiwizard.cointoss.ui.composable.xssValidator
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

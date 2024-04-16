@@ -48,7 +48,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.navigation.NavRoute
-import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.theme.Mulish
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent
@@ -67,6 +66,7 @@ import com.helsinkiwizard.core.theme.Text16
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Two
 import com.helsinkiwizard.core.ui.composable.CoinListShape
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.utils.AutoSizeText
 import com.helsinkiwizard.core.utils.ifNullOrEmpty
 import kotlinx.coroutines.flow.Flow
@@ -80,7 +80,7 @@ internal fun CoinListScreen(
     when (val state = viewModel.uiState.collectAsState().value) {
         is UiState.ShowContent -> {
             when (val type = state.type as CoinListContent) {
-                is CoinListContent.LoadingComplete -> Content(viewModel, type.customCoinFlow)
+                is CoinListContent.LoadingComplete -> Content(viewModel, type.customCoinFlow, navController)
                 is CoinListContent.CoinSet -> navController.navigate(NavRoute.Home.name)
             }
         }
@@ -90,9 +90,14 @@ internal fun CoinListScreen(
 }
 
 @Composable
-private fun Content(viewModel: CoinListViewModel, customCoinFlow: Flow<CustomCoinUiModel?>) {
+private fun Content(
+    viewModel: CoinListViewModel,
+    customCoinFlow: Flow<CustomCoinUiModel?>,
+    navController: NavController
+) {
     val context = LocalContext.current
     val coinList = remember { CoinType.entries.sortedBy { context.getString(it.nameRes) } }
+    val customCoin = customCoinFlow.collectAsState(initial = null).value
 
     LazyColumn(
         contentPadding = PaddingValues(vertical = Forty),
@@ -102,10 +107,15 @@ private fun Content(viewModel: CoinListViewModel, customCoinFlow: Flow<CustomCoi
             .padding(horizontal = Sixty)
     ) {
         item {
-            val customCoin = customCoinFlow.collectAsState(initial = null).value
             CustomCoin(
                 coin = customCoin,
-                onClick = {}
+                onClick = {
+                    if (customCoin == null) {
+                        navController.navigate(NavRoute.CreateCoin.name)
+                    } else {
+                        viewModel.onCoinClick(CoinType.CUSTOM)
+                    }
+                }
             )
         }
         items(coinList) { coin ->
@@ -143,9 +153,11 @@ private fun CustomCoin(
         AsyncImage(
             model = coin?.headsUri,
             contentDescription = coinName.ifNullOrEmpty { stringResource(id = R.string.create_a_coin) },
-            modifier = Modifier.fillMaxWidth(),
             alignment = Alignment.Center,
             contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(if (showDefault) MaterialTheme.colorScheme.surfaceContainerHighest.copy(Alpha20) else MaterialTheme.colorScheme.primary),
             onState = { state ->
                 showDefault = state is AsyncImagePainter.State.Empty || state is AsyncImagePainter.State.Error
             }
@@ -155,7 +167,6 @@ private fun CustomCoin(
                 modifier = Modifier
                     .height(LargeCoinButtonHeight)
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(Alpha20))
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = rememberRipple(color = MaterialTheme.colorScheme.surfaceContainerHighest),
@@ -259,9 +270,10 @@ private fun Coin(
 @Composable
 private fun CoinListPreview() {
     val viewModel = CoinListViewModel(Repository(LocalContext.current))
+    val navController = NavController(LocalContext.current)
     CoinTossTheme {
         Surface {
-            Content(viewModel, flowOf())
+            Content(viewModel, flowOf(), navController)
         }
     }
 }

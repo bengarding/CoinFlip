@@ -16,6 +16,7 @@ internal class HomeViewModel @Inject constructor(
 
     val coinTypeFlow = repository.getCoinType
     val speedFlow = repository.getSpeed
+    val customCoinFlow = repository.getSelectedCustomCoin()
 
     init {
         viewModelScope.launch {

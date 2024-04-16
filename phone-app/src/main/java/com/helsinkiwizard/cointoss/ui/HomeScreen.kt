@@ -15,6 +15,7 @@ import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
 import com.helsinkiwizard.core.coin.CoinAnimation
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.PercentEighty
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 
 @Composable
 internal fun HomeScreen(
@@ -30,7 +31,8 @@ internal fun HomeScreen(
                     is HomeScreenContent.LoadingComplete -> {
                         val coinType = viewModel.coinTypeFlow.collectAsState(initial = type.initialCoinType).value
                         val speed = viewModel.speedFlow.collectAsState(initial = type.initialSpeed).value
-                        Content(coinType, speed)
+                        val customCoin = viewModel.customCoinFlow.collectAsState(initial = null).value
+                        Content(coinType, speed, customCoin)
                     }
                 }
             }
@@ -43,10 +45,12 @@ internal fun HomeScreen(
 @Composable
 private fun Content(
     coinType: CoinType,
-    speed: Float
+    speed: Float,
+    customCoinUiModel: CustomCoinUiModel?
 ) {
     CoinAnimation(
         coinType = coinType,
+        customCoin = customCoinUiModel,
         speed = speed,
         modifier = Modifier
             .fillMaxWidth(PercentEighty)

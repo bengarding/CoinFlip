@@ -38,6 +38,7 @@ fun Coin(
 
         CoinAnimation(
             coinType = coinType,
+            customCoin = null,
             startFlipping = startFlipping,
             onStartFlipping = onStartFlipping,
             onFlip = { showChevron = false },

@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 
 @Entity(tableName = "custom_coin")
 class CustomCoin(
@@ -15,6 +15,6 @@ class CustomCoin(
     @ColumnInfo(name = "selected") val selected: Boolean,
 ) {
     fun toUiModel(): CustomCoinUiModel {
-        return CustomCoinUiModel(id, Uri.parse(heads), Uri.parse(tails), name, selected)
+        return CustomCoinUiModel(id, Uri.parse(heads), Uri.parse(tails), name)
     }
 }

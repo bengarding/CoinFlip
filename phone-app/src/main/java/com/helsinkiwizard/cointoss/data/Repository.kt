@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.helsinkiwizard.cointoss.data.room.CoinTossDatabase
 import com.helsinkiwizard.cointoss.data.room.CustomCoin
-import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.BaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

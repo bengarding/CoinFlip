@@ -2,8 +2,8 @@ package com.helsinkiwizard.cointoss.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.helsinkiwizard.cointoss.data.Repository
-import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.coin.CoinType
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

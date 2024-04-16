@@ -1,5 +1,10 @@
 package com.helsinkiwizard.core.utils
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import java.io.IOException
 import java.util.Locale
 
 /**
@@ -16,4 +21,14 @@ fun String.sentenceCase(): String {
  */
 inline fun String?.ifNullOrEmpty(defaultValue: () -> String): String {
     return if (this.isNullOrEmpty()) defaultValue() else this
+}
+
+fun Uri.toBitmap(context: Context): Bitmap? {
+    return try {
+        context.contentResolver.openInputStream(this)?.use { inputStream ->
+            BitmapFactory.decodeStream(inputStream)
+        }
+    } catch (e: IOException) {
+        null
+    }
 }

@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
-import com.helsinkiwizard.cointoss.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinSide
 import dagger.hilt.android.lifecycle.HiltViewModel

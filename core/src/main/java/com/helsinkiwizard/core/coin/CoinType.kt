@@ -10,6 +10,7 @@ enum class CoinType(
     @DrawableRes val tails: Int,
     @StringRes val nameRes: Int
 ) {
+    CUSTOM(23, R.drawable.bitcoin_heads, R.drawable.bitcoin_tails, R.string.custom_coin),
     BITCOIN(1, R.drawable.bitcoin_heads, R.drawable.bitcoin_tails, R.string.bitcoin),
     CANADA(2, R.drawable.canada_heads, R.drawable.canada_tails, R.string.canada),
     CHINA(3, R.drawable.china_heads, R.drawable.china_tails, R.string.china),
