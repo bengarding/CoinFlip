@@ -68,5 +68,25 @@ object AttributionParams {
             name = "Monetka",
             source = UCoin
         ),
+        AttributionModel(
+            coin = CoinType.NEW_ZEALAND,
+            name = "Resurs",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.IRAN,
+            name = "Руслан Николаевич",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.CZECH_REPUBLIC,
+            name = "agpanich",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.UNITED_KINGDOM_2,
+            name = "Safan",
+            source = UCoin
+        ),
     )
 }

@@ -35,7 +35,13 @@ enum class CoinType(
     SPAIN(22, R.drawable.spain_heads, R.drawable.spain_tails, R.string.spain),
     EGYPT(24, R.drawable.egypt_heads, R.drawable.egypt_tails, R.string.egypt),
     POLAND(25, R.drawable.poland_heads, R.drawable.poland_tails, R.string.poland),
-    URUGUAY(26, R.drawable.uruguay_heads, R.drawable.uruguay_tails, R.string.uruguay)
+    URUGUAY(26, R.drawable.uruguay_heads, R.drawable.uruguay_tails, R.string.uruguay),
+    CZECH_REPUBLIC(27, R.drawable.czech_republic_heads, R.drawable.czech_republic_tails, R.string.czech_republic),
+    IRAN(28, R.drawable.iran_heads, R.drawable.iran_tails, R.string.iran),
+    NEW_ZEALAND(29, R.drawable.new_zealand_heads, R.drawable.new_zealand_tails, R.string.new_zealand),
+    PIKE_PLACE(30, R.drawable.pike_place_heads, R.drawable.pike_place_tails, R.string.pike_place_market),
+    EURO_2(31, R.drawable.euro_2_heads, R.drawable.euro_2_tails, R.string.euro),
+    UNITED_KINGDOM_2(32, R.drawable.uk_2_heads, R.drawable.uk_2_tails, R.string.united_kingdom),
     ;
 
     companion object {
