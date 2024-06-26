@@ -39,4 +39,15 @@
     <string name="czech_republic">República Checa</string>
     <string name="new_zealand">Nueva Zelanda</string>
     <string name="pike_place_market">Mercado de Pike Place</string>
+    <string name="azerbaijan">Azerbaiyán</string>
+    <string name="brazil">Brasil</string>
+    <string name="czechoslovakia">Checoslovaquia</string>
+    <string name="denmark">Dinamarca</string>
+    <string name="germany">Alemania</string>
+    <string name="indonesia">Indonesia</string>
+    <string name="israel">Israel</string>
+    <string name="lebanon">Líbano</string>
+    <string name="norway">Noruega</string>
+    <string name="switzerland">Suiza</string>
+    <string name="colombia">Colombia</string>
 </resources>
