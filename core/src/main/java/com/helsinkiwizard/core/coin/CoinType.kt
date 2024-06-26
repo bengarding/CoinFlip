@@ -42,6 +42,17 @@ enum class CoinType(
     PIKE_PLACE(30, R.drawable.pike_place_heads, R.drawable.pike_place_tails, R.string.pike_place_market),
     EURO_2(31, R.drawable.euro_2_heads, R.drawable.euro_2_tails, R.string.euro),
     UNITED_KINGDOM_2(32, R.drawable.uk_2_heads, R.drawable.uk_2_tails, R.string.united_kingdom),
+    AZERBAIJAN(33, R.drawable.azerbaijan_heads, R.drawable.azerbaijan_tails, R.string.azerbaijan),
+    BRAZIL(34, R.drawable.brazil_heads, R.drawable.brazil_tails, R.string.brazil),
+    CZECHOSLOVAKIA(35, R.drawable.czechoslovakia_heads, R.drawable.czechoslovakia_tails, R.string.czechoslovakia),
+    DENMARK(36, R.drawable.denmark_heads, R.drawable.denmark_tails, R.string.denmark),
+    GERMANY(37, R.drawable.germany_heads, R.drawable.germany_tails, R.string.germany),
+    INDONESIA(38, R.drawable.indonesia_heads, R.drawable.indonesia_tails, R.string.indonesia),
+    ISRAEL(39, R.drawable.israel_heads, R.drawable.israel_tails, R.string.israel),
+    LEBANON(40, R.drawable.lebanon_heads, R.drawable.lebanon_tails, R.string.lebanon),
+    NORWAY(41, R.drawable.norway_heads, R.drawable.norway_tails, R.string.norway),
+    SWITZERLAND(42, R.drawable.switzerland_heads, R.drawable.switzerland_tails, R.string.switzerland),
+    COLOMBIA(43, R.drawable.colombia_heads, R.drawable.colombia_tails, R.string.colombia),
     ;
 
     companion object {

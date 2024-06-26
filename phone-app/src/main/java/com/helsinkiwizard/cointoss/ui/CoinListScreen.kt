@@ -23,6 +23,7 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,7 +39,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -49,7 +51,6 @@ import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
-import com.helsinkiwizard.cointoss.ui.theme.Mulish
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
@@ -62,12 +63,10 @@ import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.LargeCoinButtonHeight
 import com.helsinkiwizard.core.theme.Sixty
-import com.helsinkiwizard.core.theme.Text16
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Two
 import com.helsinkiwizard.core.ui.composable.CoinListShape
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
-import com.helsinkiwizard.core.utils.AutoSizeText
 import com.helsinkiwizard.core.utils.ifNullOrEmpty
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -213,13 +212,13 @@ private fun CustomCoin(
             coin != null -> stringResource(id = R.string.custom_coin)
             else -> stringResource(id = R.string.create_a_coin)
         }
-        AutoSizeText(
+        Text(
             text = label,
-            fontFamily = Mulish,
-            fontWeight = FontWeight.Normal,
-            maxFontSize = Text16,
+            style = MaterialTheme.typography.bodyMedium,
             color = Color.White,
-            maxLines = 1,
+            textAlign = TextAlign.Center,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .background(color = BlackTransparent, shape = CircleShape)
@@ -255,13 +254,13 @@ private fun Coin(
             alignment = Alignment.Center,
             contentScale = ContentScale.Crop
         )
-        AutoSizeText(
+        Text(
             text = stringResource(id = coin.nameRes),
-            fontFamily = Mulish,
-            fontWeight = FontWeight.Normal,
-            maxFontSize = Text16,
+            style = MaterialTheme.typography.bodyMedium,
             color = Color.White,
-            maxLines = 1,
+            textAlign = TextAlign.Center,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .background(color = BlackTransparent, shape = CircleShape)

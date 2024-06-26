@@ -39,4 +39,15 @@
     <string name="czech_republic">Чешская Республика</string>
     <string name="new_zealand">Новая Зеландия</string>
     <string name="pike_place_market">Рынок Пайк-Плейс</string>
+    <string name="azerbaijan">Азербайджан</string>
+    <string name="brazil">Бразилия</string>
+    <string name="czechoslovakia">Чехословакия</string>
+    <string name="denmark">Дания</string>
+    <string name="germany">Германия</string>
+    <string name="indonesia">Индонезия</string>
+    <string name="israel">Израиль</string>
+    <string name="lebanon">Ливан</string>
+    <string name="norway">Норвегия</string>
+    <string name="switzerland">Швейцария</string>
+    <string name="colombia">Колумбия</string>
 </resources>

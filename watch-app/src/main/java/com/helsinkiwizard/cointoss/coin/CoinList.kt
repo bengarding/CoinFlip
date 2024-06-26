@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -53,11 +54,10 @@ import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.PercentEighty
-import com.helsinkiwizard.core.theme.Text16
+import com.helsinkiwizard.core.theme.Text14
 import com.helsinkiwizard.core.theme.Text20
 import com.helsinkiwizard.core.theme.Thirty
 import com.helsinkiwizard.core.theme.Twelve
-import com.helsinkiwizard.core.utils.AutoSizeText
 import com.helsinkiwizard.core.utils.buildTextWithLink
 import com.helsinkiwizard.core.utils.getEmailIntent
 import com.helsinkiwizard.core.utils.onLinkClick
@@ -149,12 +149,14 @@ fun CoinButton(coin: CoinType) {
                 alignment = Alignment.Center,
                 contentScale = ContentScale.Crop
             )
-            AutoSizeText(
+            Text(
                 text = stringResource(id = coin.nameRes),
+                fontSize = Text14,
                 fontWeight = FontWeight.Normal,
-                maxFontSize = Text16,
                 color = Color.White,
+                textAlign = TextAlign.Center,
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .background(color = BlackTransparent, shape = CircleShape)
