@@ -43,8 +43,8 @@ import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.navigation.MAIN_ROUTE
 import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.navigation.mainGraph
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.drawer.DrawerContent
+import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -161,7 +161,7 @@ class MainActivity : ComponentActivity() {
         ) {
             Text(
                 text = it,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.displayMedium,
             )
         }
     }

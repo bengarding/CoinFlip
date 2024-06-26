@@ -74,7 +74,7 @@ fun CoinTossDialog(
                 if (title != null) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.displayMedium
                     )
                 }
             },
@@ -95,6 +95,7 @@ private fun CoinTossDialogPreview() {
         Surface {
             CoinTossDialog(
                 onDismiss = { },
+                title = "This is a title",
                 text = stringResource(id = R.string.are_you_sure_delete_coin),
                 confirmButtonText = "Delete",
                 dismissButtonText = "Cancel"
