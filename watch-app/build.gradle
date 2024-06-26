@@ -15,7 +15,7 @@ android {
         applicationId "com.helsinkiwizard.cointoss"
         minSdk 26
         targetSdk 33
-        versionCode 110
+        versionCode 112
         versionName "1.2.2"
         vectorDrawables {
             useSupportLibrary true
