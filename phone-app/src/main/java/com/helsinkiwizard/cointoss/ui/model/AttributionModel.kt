@@ -88,5 +88,55 @@ object AttributionParams {
             name = "Safan",
             source = UCoin
         ),
+        AttributionModel(
+            coin = CoinType.BRAZIL,
+            name = "moedamoeda",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.NORWAY,
+            name = "Khufu",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.COLOMBIA,
+            name = "Khufu",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.AZERBAIJAN,
+            name = "Фанис 67",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.ISRAEL,
+            name = "Фанис 67",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.SWITZERLAND,
+            name = "Фанис 67",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.INDONESIA,
+            name = "Andra",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.DENMARK,
+            name = "Дмитрий Казаков",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.LEBANON,
+            name = "kirina",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.CZECHOSLOVAKIA,
+            name = "Zetko",
+            source = UCoin
+        ),
     )
 }
