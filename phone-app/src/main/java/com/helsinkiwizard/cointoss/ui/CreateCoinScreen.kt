@@ -1,10 +1,7 @@
 package com.helsinkiwizard.cointoss.ui
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -22,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowUpward
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,10 +38,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.android.gms.wearable.Wearable
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.composable.dialog.CoinTossDialog
@@ -63,13 +61,10 @@ import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.utils.storeBitmap
 import com.helsinkiwizard.core.utils.toBitmap
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import kotlin.random.Random
 
 private const val INDEX_ADD_COIN = 0
 private const val INDEX_SELECTED_COIN = 1
@@ -159,6 +154,10 @@ private fun Content(
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
 
+    val messageClient by lazy { Wearable.getMessageClient(context) }
+    val capabilityClient by lazy { Wearable.getCapabilityClient(context) }
+    val channelClient by lazy { Wearable.getChannelClient(context) }
+
     LazyColumn(state = listState) {
         item {
             val keyboardController = LocalSoftwareKeyboardController.current
@@ -191,6 +190,15 @@ private fun Content(
                     }
                 },
                 onDeleteClicked = { viewModel.onDeleteClicked(selectedCoin!!) },
+                onSendToWatchClicked = {
+                    viewModel.sendCoinToWatch(
+                        coin = selectedCoin!!,
+                        messageClient = messageClient,
+                        capabilityClient = capabilityClient,
+                        channelClient = channelClient,
+                        uriToBitmap = { it.toBitmap(context) }
+                    )
+                }
             )
         }
         item {
@@ -225,6 +233,15 @@ private fun Content(
                     scope.launch {
                         listState.animateScrollToItem(INDEX_SELECTED_COIN)
                     }
+                },
+                onSendToWatchClicked = {
+                    viewModel.sendCoinToWatch(
+                        coin = selectedCoin!!,
+                        messageClient = messageClient,
+                        capabilityClient = capabilityClient,
+                        channelClient = channelClient,
+                        uriToBitmap = { it.toBitmap(context) }
+                    )
                 }
             )
         }
@@ -236,6 +253,7 @@ private fun SelectedCoin(
     selectedCoin: CustomCoinUiModel?,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    onSendToWatchClicked: () -> Unit,
 ) {
     if (selectedCoin != null) {
         Column(
@@ -252,6 +270,7 @@ private fun SelectedCoin(
                 coin = selectedCoin,
                 onEditClicked = onEditClicked,
                 onDeleteClicked = onDeleteClicked,
+                onSendToWatchClicked = onSendToWatchClicked
             )
         }
     }
@@ -264,6 +283,7 @@ private fun CustomCoinItem(
     showSelectButton: Boolean = false,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    onSendToWatchClicked: () -> Unit,
     onSelectClicked: ((CustomCoinUiModel) -> Unit)? = null
 ) {
     Column {
@@ -289,6 +309,7 @@ private fun CustomCoinItem(
                     showSelectButton = showSelectButton,
                     onEditClicked = onEditClicked,
                     onDeleteClicked = onDeleteClicked,
+                    onSendToWatchClicked = onSendToWatchClicked,
                     onSelectClicked = { onSelectClicked?.invoke(coin) },
                     modifier = Modifier.weight(1f)
                 )
@@ -327,6 +348,7 @@ private fun IconButtons(
     showSelectButton: Boolean,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    onSendToWatchClicked: () -> Unit,
     onSelectClicked: (() -> Unit)? = null,
     modifier: Modifier
 ) {
@@ -334,6 +356,13 @@ private fun IconButtons(
         horizontalArrangement = Arrangement.End,
         modifier = modifier
     ) {
+        IconButton(onClick = onSendToWatchClicked) {
+            Image(
+                imageVector = Icons.Outlined.Watch,
+                contentDescription = "Send to watch",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
+            )
+        }
         if (showSelectButton) {
             IconButton(onClick = { onSelectClicked?.invoke() }) {
                 Image(
@@ -357,27 +386,6 @@ private fun IconButtons(
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
             )
         }
-    }
-}
-
-private fun storeBitmap(context: Context, bitmap: Bitmap?): Uri? {
-    val compressFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        Bitmap.CompressFormat.WEBP_LOSSY
-    } else {
-        Bitmap.CompressFormat.JPEG
-    }
-    val fileType = if (compressFormat == Bitmap.CompressFormat.JPEG) "jpg" else "webp"
-    val imageName = Random.nextInt()
-    val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "$imageName.$fileType")
-
-    return try {
-        FileOutputStream(file).use { out ->
-            bitmap?.compress(compressFormat, 100, out)
-        }
-        FileProvider.getUriForFile(context, "${context.packageName}.file-provider", file)
-    } catch (e: IOException) {
-        Log.e("CreateCoinScreen", "storeBitmap", e)
-        null
     }
 }
 
