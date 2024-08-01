@@ -89,7 +89,7 @@ class DataLayerListenerService : WearableListenerService() {
         val tailsUri = storeBitmap(applicationContext, tails, TAILS_IMAGE_NAME)
 
         if (headsUri != null && tailsUri != null) {
-            repo.setCustomCoin(headsUri, tailsUri, name)
+            repo.setCustomCoinName( name)
             repo.setCoinType(CoinType.CUSTOM)
         }
     }
