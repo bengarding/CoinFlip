@@ -21,6 +21,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("$rootProject.projectDir/debug.keystore")
+        }
+    }
+
     buildTypes {
         debug {
             manifestPlaceholders = [crashlyticsCollectionEnabled: "false"]
