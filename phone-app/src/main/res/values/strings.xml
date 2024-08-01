@@ -37,4 +37,6 @@
     <string name="name">Name</string>
     <string name="append_optional">" (Optional)"</string>
     <string name="enter_valid_name">Enter a valid name</string>
+    <string name="select_watch">Select watch</string>
+    <string name="select_watch_description">"Select the device to send the custom coin to"</string>
 </resources>

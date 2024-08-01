@@ -36,4 +36,6 @@
     <string name="name">Nombre</string>
     <string name="append_optional">" (Opcional)"</string>
     <string name="enter_valid_name">Introduzca un nombre válido</string>
+    <string name="select_watch">Seleccionar reloj</string>
+    <string name="select_watch_description">"Seleccione el dispositivo al que enviar la moneda personalizada"</string>
 </resources>

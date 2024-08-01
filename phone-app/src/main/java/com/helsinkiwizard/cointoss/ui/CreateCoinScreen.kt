@@ -46,6 +46,7 @@ import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.composable.dialog.CoinTossDialog
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
+import com.helsinkiwizard.cointoss.ui.composable.dialog.SelectWatchDialog
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
@@ -135,6 +136,22 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
                     deleteBitmap(LocalContext.current, type.headsUri)
                     deleteBitmap(LocalContext.current, type.tailsUri)
                     viewModel.resetDialogState()
+                }
+
+                is CreateCoinDialogs.SelectNodesDialog -> {
+                    SelectWatchDialog(
+                        nodes = type.nodes,
+                        onDismiss = { viewModel.resetDialogState() },
+                        onNodeClick = { selectedNodeId ->
+                            viewModel.sendCoinToNode(
+                                coin = type.coin,
+                                node = type.nodes.first { it.id == selectedNodeId },
+                                channelClient = type.channelClient,
+                                messageClient = type.messageClient,
+                                uriToBitmap = type.uriToBitmap
+                            )
+                        }
+                    )
                 }
             }
         }

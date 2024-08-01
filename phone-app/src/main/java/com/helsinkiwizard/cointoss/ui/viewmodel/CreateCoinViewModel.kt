@@ -16,8 +16,6 @@ import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -35,8 +33,6 @@ class CreateCoinViewModel @Inject constructor(
     companion object {
         private const val START_ACTIVITY_PATH = "/start-activity"
         private const val IMAGE_PATH = "/image"
-        private const val IMAGE_KEY = "photo"
-        private const val TIME_KEY = "time"
         private const val WEAR_CAPABILITY = "wear"
     }
 
@@ -160,22 +156,31 @@ class CreateCoinViewModel @Inject constructor(
         uriToBitmap: (Uri) -> Bitmap?
     ) {
         viewModelScope.launch {
-            val nodes = mutableSetOf<Node>()
-            try {
-                nodes.addAll(
-                    capabilityClient
-                        .getCapability(WEAR_CAPABILITY, FILTER_REACHABLE)
-                        .await()
-                        .nodes
-                )
+            val nodes = capabilityClient
+                .getCapability(WEAR_CAPABILITY, FILTER_REACHABLE)
+                .await()
+                .nodes
 
-                // Send a message to all nodes in parallel
-                nodes.map { node ->
-                    async {
-                        messageClient.sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf())
-                            .await()
-                    }
-                }.awaitAll()
+            when (nodes.size) {
+                0 -> {}
+                1 -> sendCoinToNode(nodes.first(), coin, messageClient, channelClient, uriToBitmap)
+                else -> mutableDialogStateFlow.value = DialogState.ShowContent(
+                    CreateCoinDialogs.SelectNodesDialog(coin, nodes, messageClient, channelClient, uriToBitmap)
+                )
+            }
+        }
+    }
+
+    fun sendCoinToNode(
+        node: Node,
+        coin: CustomCoinUiModel,
+        messageClient: MessageClient,
+        channelClient: ChannelClient,
+        uriToBitmap: (Uri) -> Bitmap?
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                messageClient.sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf()).await()
 
             } catch (cancellationException: CancellationException) {
                 return@launch
@@ -192,7 +197,7 @@ class CreateCoinViewModel @Inject constructor(
                 val nameByteArray = coin.name.toPrefixedByteArray()
                 val combinedData = headsByteArray + tailsByteArray + nameByteArray
 
-                val channel = channelClient.openChannel(nodes.first().id, IMAGE_PATH).await()
+                val channel = channelClient.openChannel(node.id, IMAGE_PATH).await()
                 val outputStream = channelClient.getOutputStream(channel).await()
 
                 outputStream.apply {
@@ -242,4 +247,11 @@ sealed interface CreateCoinDialogs : BaseDialogType {
     data object SaveError : CreateCoinDialogs
     data class DeleteCoinBitmaps(val headsUri: Uri, val tailsUri: Uri) : CreateCoinDialogs
     data class DeleteCoinDialog(val coin: CustomCoinUiModel) : CreateCoinDialogs
+    data class SelectNodesDialog(
+        val coin: CustomCoinUiModel,
+        val nodes: Set<Node>,
+        val messageClient: MessageClient,
+        val channelClient: ChannelClient,
+        val uriToBitmap: (Uri) -> Bitmap?
+    ) : CreateCoinDialogs
 }

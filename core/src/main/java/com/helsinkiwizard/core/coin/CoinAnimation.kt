@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -127,6 +128,7 @@ fun Heads(headsRes: Int, customHeadsBitmap: ImageBitmap?) {
             bitmap = customHeadsBitmap,
             contentDescription = stringResource(id = R.string.heads),
             modifier = Modifier
+                .aspectRatio(1f)
                 .fillMaxSize()
                 .clip(CircleShape)
         )
@@ -146,6 +148,7 @@ fun Tails(tailsRes: Int, customTailsBitmap: ImageBitmap?) {
             bitmap = customTailsBitmap,
             contentDescription = stringResource(id = R.string.tails),
             modifier = Modifier
+                .aspectRatio(1f)
                 .fillMaxSize()
                 .clip(CircleShape)
         )

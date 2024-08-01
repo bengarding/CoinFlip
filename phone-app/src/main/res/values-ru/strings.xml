@@ -36,4 +36,6 @@
     <string name="name">Имя</string>
     <string name="append_optional">" (Необязательный)"</string>
     <string name="enter_valid_name">Введите допустимое имя</string>
+    <string name="select_watch">Выберите часы</string>
+    <string name="select_watch_description">"Выберите устройство, на которое будет отправлена пользовательская монета."</string>
 </resources>
