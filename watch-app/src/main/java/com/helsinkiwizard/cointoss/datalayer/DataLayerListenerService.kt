@@ -9,6 +9,7 @@ import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.ui.MainActivity
+import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
 import com.helsinkiwizard.core.CoreConstants.START_ACTIVITY_PATH
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.utils.storeBitmap
@@ -20,6 +21,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.nio.ByteBuffer
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -72,22 +74,54 @@ class DataLayerListenerService : WearableListenerService() {
     private fun receiveImage(channel: ChannelClient.Channel) {
         CoroutineScope(Dispatchers.IO).launch {
             val inputStream = channelClient.getInputStream(channel).await()
-            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val byteArray = inputStream.readBytes()
+            val (heads, tails, name) = byteArray.toBitmapAndString()
             inputStream.close()
 
             withContext(Dispatchers.Main) {
-                updateImage(bitmap)
+                updateImage(heads, tails, name)
             }
         }
     }
 
-    private suspend fun updateImage(bitmap: Bitmap) {
-        val headsUri = storeBitmap(applicationContext, bitmap, HEADS_IMAGE_NAME)
-        val tailsUri = storeBitmap(applicationContext, bitmap, TAILS_IMAGE_NAME)
+    private suspend fun updateImage(heads: Bitmap, tails: Bitmap, name: String) {
+        val headsUri = storeBitmap(applicationContext, heads, HEADS_IMAGE_NAME)
+        val tailsUri = storeBitmap(applicationContext, tails, TAILS_IMAGE_NAME)
 
         if (headsUri != null && tailsUri != null) {
-            repo.setCustomCoin(headsUri, tailsUri)
+            repo.setCustomCoin(headsUri, tailsUri, name)
             repo.setCoinType(CoinType.CUSTOM)
         }
     }
+
+    private fun ByteArray.toBitmapAndString(): Triple<Bitmap, Bitmap, String> {
+        var offset = 0
+
+        fun readInt(): Int {
+            val intBytes = this.copyOfRange(offset, offset + BYTE_BUFFER_CAPACITY)
+            offset += BYTE_BUFFER_CAPACITY
+            return ByteBuffer.wrap(intBytes).int
+        }
+
+        fun readByteArray(size: Int): ByteArray {
+            val byteArray = this.copyOfRange(offset, offset + size)
+            offset += size
+            return byteArray
+        }
+
+        val headsSize = readInt()
+        val headsData = readByteArray(headsSize)
+        val headsBitmap = BitmapFactory.decodeByteArray(headsData, 0, headsSize)
+
+        val tailsSize = readInt()
+        val tailsData = readByteArray(tailsSize)
+        val tailsBitmap = BitmapFactory.decodeByteArray(tailsData, 0, tailsSize)
+
+        val nameSize = readInt()
+        val nameData = readByteArray(nameSize)
+        val name = String(nameData)
+
+        return Triple(headsBitmap, tailsBitmap, name)
+    }
+
 }

@@ -14,11 +14,13 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.helsinkiwizard.core.coin.CoinAnimation
 import com.helsinkiwizard.core.coin.CoinType
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 
 @OptIn(ExperimentalPagerApi::class) // pager
 @Composable
 fun Coin(
     coinType: CoinType,
+    customCoin: CustomCoinUiModel?,
     pagerState: PagerState,
     startFlipping: Boolean,
     onStartFlipping: () -> Unit
@@ -38,7 +40,7 @@ fun Coin(
 
         CoinAnimation(
             coinType = coinType,
-            customCoin = null,
+            customCoin = customCoin,
             startFlipping = startFlipping,
             onStartFlipping = onStartFlipping,
             onFlip = { showChevron = false },

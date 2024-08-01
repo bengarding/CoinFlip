@@ -10,6 +10,7 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Node
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
+import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -183,13 +185,18 @@ class CreateCoinViewModel @Inject constructor(
             }
 
             try {
-                val image = uriToBitmap(coin.headsUri) ?: return@launch
-                val byteArray = image.toByteArray()
+                val heads = uriToBitmap(coin.headsUri) ?: return@launch
+                val tails = uriToBitmap(coin.tailsUri) ?: return@launch
+                val headsByteArray = heads.toPrefixedByteArray()
+                val tailsByteArray = tails.toPrefixedByteArray()
+                val nameByteArray = coin.name.toPrefixedByteArray()
+                val combinedData = headsByteArray + tailsByteArray + nameByteArray
+
                 val channel = channelClient.openChannel(nodes.first().id, IMAGE_PATH).await()
                 val outputStream = channelClient.getOutputStream(channel).await()
 
                 outputStream.apply {
-                    write(byteArray)
+                    write(combinedData)
                     flush()
                     close()
                 }
@@ -205,12 +212,23 @@ class CreateCoinViewModel @Inject constructor(
     /**
      * Converts the [Bitmap] to a byte array, compress it to a png image in a background thread.
      */
-    private suspend fun Bitmap.toByteArray(): ByteArray =
+    private suspend fun Bitmap.toPrefixedByteArray(): ByteArray =
         withContext(Dispatchers.Default) {
             ByteArrayOutputStream().use { byteStream ->
                 compress(Bitmap.CompressFormat.PNG, 100, byteStream)
-                byteStream.toByteArray()
+                val bitmapData = byteStream.toByteArray()
+                val size = bitmapData.size
+                val sizeBytes = ByteBuffer.allocate(BYTE_BUFFER_CAPACITY).putInt(size).array()
+                sizeBytes + bitmapData
             }
+        }
+
+    private suspend fun String.toPrefixedByteArray(): ByteArray =
+        withContext(Dispatchers.Default) {
+            val stringData = toByteArray()
+            val size = stringData.size
+            val sizeBytes = ByteBuffer.allocate(BYTE_BUFFER_CAPACITY).putInt(size).array()
+            sizeBytes + stringData
         }
 }
 

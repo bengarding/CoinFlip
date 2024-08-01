@@ -64,6 +64,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun CoinFlip(initialCoinType: CoinType, startFlippingIntent: Boolean) {
         val coinType = repo.getCoinType.collectAsState(initial = initialCoinType).value
+        val customCoin = repo.getCustomCoin.collectAsState(initial = null).value
 
         val pagerState = rememberPagerState()
         var startFlipping by remember { mutableStateOf(startFlippingIntent) }
@@ -78,6 +79,7 @@ class MainActivity : ComponentActivity() {
                 when (page) {
                     0 -> Coin(
                         coinType = coinType,
+                        customCoin = customCoin,
                         pagerState = pagerState,
                         startFlipping = startFlipping,
                         onStartFlipping = {

@@ -236,7 +236,7 @@ private fun Content(
                 },
                 onSendToWatchClicked = {
                     viewModel.sendCoinToWatch(
-                        coin = selectedCoin!!,
+                        coin = customCoin,
                         messageClient = messageClient,
                         capabilityClient = capabilityClient,
                         channelClient = channelClient,
