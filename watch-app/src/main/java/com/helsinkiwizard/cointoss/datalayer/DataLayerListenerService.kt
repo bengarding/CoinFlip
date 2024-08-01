@@ -1,13 +1,16 @@
 package com.helsinkiwizard.cointoss.datalayer
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import com.google.android.gms.wearable.ChannelClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
 import com.helsinkiwizard.cointoss.Repository
+import com.helsinkiwizard.cointoss.WatchApplication
 import com.helsinkiwizard.cointoss.ui.MainActivity
 import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
 import com.helsinkiwizard.core.CoreConstants.START_ACTIVITY_PATH
@@ -23,6 +26,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.nio.ByteBuffer
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class DataLayerListenerService : WearableListenerService() {
@@ -42,6 +46,7 @@ class DataLayerListenerService : WearableListenerService() {
 
     private val channelCallback = object : ChannelClient.ChannelCallback() {
         override fun onChannelOpened(channel: ChannelClient.Channel) {
+            Log.d("blart", "onChannelOpened(): ")
             if (channel.path == IMAGE_PATH) {
                 receiveImage(channel)
             }
@@ -59,14 +64,19 @@ class DataLayerListenerService : WearableListenerService() {
         scope.cancel()
     }
 
+    // Suppressed because MainActivity is set to "singleTop" in manifest
+    @SuppressLint("WearRecents")
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
         when (messageEvent.path) {
             START_ACTIVITY_PATH -> {
-                startActivity(
-                    Intent(this, MainActivity::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                )
+                val isAppInForeground = (application as WatchApplication).lifecycleObserver.isAppInForeground
+                if (isAppInForeground.not()) {
+                    startActivity(
+                        Intent(this, MainActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    )
+                }
             }
         }
     }
@@ -89,7 +99,7 @@ class DataLayerListenerService : WearableListenerService() {
         val tailsUri = storeBitmap(applicationContext, tails, TAILS_IMAGE_NAME)
 
         if (headsUri != null && tailsUri != null) {
-            repo.setCustomCoinName( name)
+            repo.setCustomCoinName(name)
             repo.setCoinType(CoinType.CUSTOM)
         }
     }
@@ -123,5 +133,4 @@ class DataLayerListenerService : WearableListenerService() {
 
         return Triple(headsBitmap, tailsBitmap, name)
     }
-
 }
