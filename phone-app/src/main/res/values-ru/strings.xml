@@ -30,12 +30,14 @@
     <string name="select">Выбирать</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
-    <string name="are_you_sure_delete_coin">"Вы уверены, что хотите удалить эту монету?"</string>
-    <string name="ok">"одобрять"</string>
-    <string name="cancel">"Отмена"</string>
+    <string name="are_you_sure_delete_coin">Вы уверены, что хотите удалить эту монету?</string>
+    <string name="ok">одобрять</string>
+    <string name="cancel">Отмена</string>
     <string name="name">Имя</string>
-    <string name="append_optional">" (Необязательный)"</string>
+    <string name="append_optional"> (Необязательный)</string>
     <string name="enter_valid_name">Введите допустимое имя</string>
     <string name="select_watch">Выберите часы</string>
-    <string name="select_watch_description">"Выберите устройство, на которое будет отправлена пользовательская монета."</string>
+    <string name="select_watch_message">Выберите устройство, на которое будет отправлена пользовательская монета.</string>
+    <string name="watch_not_found">Часы не найдены</string>
+    <string name="watch_not_found_message">Подключенные устройства не обнаружены. Убедитесь, что ваше устройство Wear OS находится поблизости, включено и сопряжено с телефоном.</string>
 </resources>

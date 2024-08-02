@@ -138,6 +138,14 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
                     viewModel.resetDialogState()
                 }
 
+                is CreateCoinDialogs.NoNodesFoundDialog -> {
+                    CoinTossDialog(
+                        title = stringResource(id = R.string.watch_not_found),
+                        text = stringResource(id = R.string.watch_not_found_message),
+                        onDismiss = { viewModel.resetDialogState() }
+                    )
+                }
+
                 is CreateCoinDialogs.SelectNodesDialog -> {
                     SelectWatchDialog(
                         nodes = type.nodes,

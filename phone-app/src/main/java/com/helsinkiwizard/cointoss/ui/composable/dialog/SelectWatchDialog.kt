@@ -65,7 +65,7 @@ fun SelectWatchDialog(
                 ) {
                     item {
                         Text(
-                            text = stringResource(id = R.string.select_watch_description),
+                            text = stringResource(id = R.string.select_watch_message),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(bottom = Twelve)
                         )

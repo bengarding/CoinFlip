@@ -162,7 +162,7 @@ class CreateCoinViewModel @Inject constructor(
                 .nodes
 
             when (nodes.size) {
-                0 -> {}
+                0 -> mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.NoNodesFoundDialog)
                 1 -> sendCoinToNode(nodes.first(), coin, messageClient, channelClient, uriToBitmap)
                 else -> mutableDialogStateFlow.value = DialogState.ShowContent(
                     CreateCoinDialogs.SelectNodesDialog(coin, nodes, messageClient, channelClient, uriToBitmap)
@@ -247,6 +247,7 @@ sealed interface CreateCoinDialogs : BaseDialogType {
     data object SaveError : CreateCoinDialogs
     data class DeleteCoinBitmaps(val headsUri: Uri, val tailsUri: Uri) : CreateCoinDialogs
     data class DeleteCoinDialog(val coin: CustomCoinUiModel) : CreateCoinDialogs
+    data object NoNodesFoundDialog : CreateCoinDialogs
     data class SelectNodesDialog(
         val coin: CustomCoinUiModel,
         val nodes: Set<Node>,

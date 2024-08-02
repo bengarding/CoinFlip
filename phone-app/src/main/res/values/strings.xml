@@ -31,12 +31,14 @@
     <string name="select">Select</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="are_you_sure_delete_coin">"Are you sure you want to delete this coin?"</string>
-    <string name="ok">"OK"</string>
-    <string name="cancel">"Cancel"</string>
+    <string name="are_you_sure_delete_coin">Are you sure you want to delete this coin?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="name">Name</string>
-    <string name="append_optional">" (Optional)"</string>
+    <string name="append_optional"> (Optional)</string>
     <string name="enter_valid_name">Enter a valid name</string>
     <string name="select_watch">Select watch</string>
-    <string name="select_watch_description">"Select the device to send the custom coin to"</string>
+    <string name="select_watch_message">Select the device to send the custom coin to</string>
+    <string name="watch_not_found">Watch not found</string>
+    <string name="watch_not_found_message">No connected devices detected. Make sure your Wear OS device is nearby, powered on, and paired with your phone.</string>
 </resources>
