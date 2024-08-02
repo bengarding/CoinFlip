@@ -38,7 +38,8 @@ class CreateCoinViewModel @Inject constructor(
 
     private val model = CreateCoinModel(
         selectedCoin = repository.getSelectedCustomCoin(),
-        customCoins = repository.getCustomCoins()
+        customCoins = repository.getCustomCoins(),
+        showSendToWatchButton = repository.getShowSendToWatchButton
     )
 
     init {

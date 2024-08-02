@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,8 +18,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowUpward
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -31,9 +30,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -176,6 +175,7 @@ private fun Content(
     val context = LocalContext.current
     val selectedCoin = model.selectedCoin.collectAsState(initial = null).value
     val customCoins = model.customCoins.collectAsState(initial = emptyList()).value
+    val showSendToWatchButton = model.showSendToWatchButton.collectAsState(initial = false).value
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
 
@@ -205,6 +205,7 @@ private fun Content(
         item(key = selectedCoin?.id) {
             SelectedCoin(
                 selectedCoin = selectedCoin,
+                showSendToWatchButton = showSendToWatchButton,
                 onEditClicked = {
                     viewModel.onEditClicked(
                         coin = selectedCoin!!,
@@ -243,6 +244,7 @@ private fun Content(
                 coin = customCoin,
                 showDivider = showDivider,
                 showSelectButton = true,
+                showSendToWatchButton = showSendToWatchButton,
                 onEditClicked = {
                     viewModel.onEditClicked(
                         coin = customCoin,
@@ -276,6 +278,7 @@ private fun Content(
 @Composable
 private fun SelectedCoin(
     selectedCoin: CustomCoinUiModel?,
+    showSendToWatchButton: Boolean,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
     onSendToWatchClicked: () -> Unit,
@@ -293,6 +296,7 @@ private fun SelectedCoin(
             )
             CustomCoinItem(
                 coin = selectedCoin,
+                showSendToWatchButton = showSendToWatchButton,
                 onEditClicked = onEditClicked,
                 onDeleteClicked = onDeleteClicked,
                 onSendToWatchClicked = onSendToWatchClicked
@@ -306,6 +310,7 @@ private fun CustomCoinItem(
     coin: CustomCoinUiModel,
     showDivider: Boolean = false,
     showSelectButton: Boolean = false,
+    showSendToWatchButton: Boolean,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
     onSendToWatchClicked: () -> Unit,
@@ -332,6 +337,7 @@ private fun CustomCoinItem(
                 )
                 IconButtons(
                     showSelectButton = showSelectButton,
+                    showSendToWatchButton = showSendToWatchButton,
                     onEditClicked = onEditClicked,
                     onDeleteClicked = onDeleteClicked,
                     onSendToWatchClicked = onSendToWatchClicked,
@@ -371,6 +377,7 @@ private fun CustomCoinSide(
 @Composable
 private fun IconButtons(
     showSelectButton: Boolean,
+    showSendToWatchButton: Boolean,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
     onSendToWatchClicked: () -> Unit,
@@ -381,34 +388,36 @@ private fun IconButtons(
         horizontalArrangement = Arrangement.End,
         modifier = modifier
     ) {
-        IconButton(onClick = onSendToWatchClicked) {
-            Image(
-                imageVector = Icons.Outlined.Watch,
-                contentDescription = "Send to watch",
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
-            )
+        if (showSendToWatchButton) {
+            IconButton(onClick = onSendToWatchClicked) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_send_to_watch),
+                    contentDescription = stringResource(id = R.string.send_to_watch),
+                    tint = MaterialTheme.colorScheme.surfaceContainerHighest
+                )
+            }
         }
         if (showSelectButton) {
             IconButton(onClick = { onSelectClicked?.invoke() }) {
-                Image(
+                Icon(
                     imageVector = Icons.Outlined.ArrowUpward,
                     contentDescription = stringResource(id = R.string.select),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
+                    tint = MaterialTheme.colorScheme.surfaceContainerHighest
                 )
             }
         }
         IconButton(onClick = onEditClicked) {
-            Image(
+            Icon(
                 imageVector = Icons.Outlined.Edit,
                 contentDescription = stringResource(id = R.string.edit),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
+                tint = MaterialTheme.colorScheme.surfaceContainerHighest
             )
         }
         IconButton(onClick = onDeleteClicked) {
-            Image(
+            Icon(
                 imageVector = Icons.Outlined.Delete,
                 contentDescription = stringResource(id = R.string.delete),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
+                tint = MaterialTheme.colorScheme.surfaceContainerHighest
             )
         }
     }

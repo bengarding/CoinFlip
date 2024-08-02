@@ -27,6 +27,7 @@
     <string name="save_error">Произошла ошибка при сохранении</string>
     <string name="selected_custom_coin">Выбрано</string>
     <string name="custom_coins">Пользовательские монеты</string>
+    <string name="send_to_watch">Отправить на просмотр</string>
     <string name="select">Выбирать</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
@@ -40,4 +41,5 @@
     <string name="select_watch_message">Выберите устройство, на которое будет отправлена пользовательская монета.</string>
     <string name="watch_not_found">Часы не найдены</string>
     <string name="watch_not_found_message">Подключенные устройства не обнаружены. Убедитесь, что ваше устройство Wear OS находится поблизости, включено и сопряжено с телефоном.</string>
+    <string name="show_send_to_watch_button">Показать кнопку Отправить пользовательскую монету для просмотра</string>
 </resources>

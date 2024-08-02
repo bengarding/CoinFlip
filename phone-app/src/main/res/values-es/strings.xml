@@ -27,6 +27,7 @@
     <string name="save_error">Ocurrió un error al guardar</string>
     <string name="selected_custom_coin">Seleccionado</string>
     <string name="custom_coins">Monedas personalizadas</string>
+    <string name="send_to_watch">Enviar a mirar</string>
     <string name="select">Seleccionar</string>
     <string name="edit">Editar</string>
     <string name="delete">Borrar</string>
@@ -40,4 +41,5 @@
     <string name="select_watch_message">Seleccione el dispositivo al que enviar la moneda personalizada</string>
     <string name="watch_not_found">Reloj no encontrado</string>
     <string name="watch_not_found_message">No se detectaron dispositivos conectados. Asegúrese de que su dispositivo Wear OS esté cerca, encendido y emparejado con su teléfono.</string>
+    <string name="show_send_to_watch_button">Mostrar botón de enviar moneda personalizada para mirar</string>
 </resources>
