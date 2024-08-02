@@ -23,7 +23,6 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 
 @HiltViewModel
 class CreateCoinViewModel @Inject constructor(
@@ -179,39 +178,30 @@ class CreateCoinViewModel @Inject constructor(
         channelClient: ChannelClient,
         uriToBitmap: (Uri) -> Bitmap?
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                messageClient.sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf()).await()
+        viewModelScope.safeLaunch(
+            context = Dispatchers.IO,
+            typeOfError = CreateCoinError.SendToWatchError(
+                retry = { sendCoinToNode(node, coin, messageClient, channelClient, uriToBitmap) }
+            )
+        ) {
+            messageClient.sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf()).await()
+            val heads = uriToBitmap(coin.headsUri) ?: return@safeLaunch
+            val tails = uriToBitmap(coin.tailsUri) ?: return@safeLaunch
+            val headsByteArray = heads.toPrefixedByteArray()
+            val tailsByteArray = tails.toPrefixedByteArray()
+            val nameByteArray = coin.name.toPrefixedByteArray()
+            val combinedData = headsByteArray + tailsByteArray + nameByteArray
 
-            } catch (cancellationException: CancellationException) {
-                return@launch
-            } catch (e: Exception) {
-                onError(e)
-                return@launch
+            val channel = channelClient.openChannel(node.id, IMAGE_PATH).await()
+            val outputStream = channelClient.getOutputStream(channel).await()
+
+            outputStream.apply {
+                write(combinedData)
+                flush()
+                close()
             }
 
-            try {
-                val heads = uriToBitmap(coin.headsUri) ?: return@launch
-                val tails = uriToBitmap(coin.tailsUri) ?: return@launch
-                val headsByteArray = heads.toPrefixedByteArray()
-                val tailsByteArray = tails.toPrefixedByteArray()
-                val nameByteArray = coin.name.toPrefixedByteArray()
-                val combinedData = headsByteArray + tailsByteArray + nameByteArray
-
-                val channel = channelClient.openChannel(node.id, IMAGE_PATH).await()
-                val outputStream = channelClient.getOutputStream(channel).await()
-
-                outputStream.apply {
-                    write(combinedData)
-                    flush()
-                    close()
-                }
-
-            } catch (cancellationException: CancellationException) {
-                // do nothing
-            } catch (e: Exception) {
-                onError(e)
-            }
+            mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
         }
     }
 
@@ -256,4 +246,8 @@ sealed interface CreateCoinDialogs : BaseDialogType {
         val channelClient: ChannelClient,
         val uriToBitmap: (Uri) -> Bitmap?
     ) : CreateCoinDialogs
+}
+
+sealed interface CreateCoinError : BaseErrorType {
+    data class SendToWatchError(val retry: () -> Unit) : BaseErrorType
 }

@@ -43,6 +43,8 @@ import coil.compose.AsyncImage
 import com.google.android.gms.wearable.Wearable
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
+import com.helsinkiwizard.cointoss.ui.composable.ErrorScreen
+import com.helsinkiwizard.cointoss.ui.composable.ProgressIndicator
 import com.helsinkiwizard.cointoss.ui.composable.dialog.CoinTossDialog
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
 import com.helsinkiwizard.cointoss.ui.composable.dialog.SelectWatchDialog
@@ -50,6 +52,7 @@ import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
+import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinError
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.DialogState
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
@@ -87,7 +90,16 @@ private fun CreateCoinContent(viewModel: CreateCoinViewModel) {
             }
         }
 
-        else -> {}
+        is UiState.Loading -> {
+            ProgressIndicator()
+        }
+
+        is UiState.Error -> {
+            ErrorScreen(
+                message = stringResource(id = R.string.error_sending_coin_to_watch),
+                retry = (state.type as CreateCoinError.SendToWatchError).retry
+            )
+        }
     }
 }
 

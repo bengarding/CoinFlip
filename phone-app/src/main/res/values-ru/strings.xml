@@ -42,4 +42,7 @@
     <string name="watch_not_found">Часы не найдены</string>
     <string name="watch_not_found_message">Подключенные устройства не обнаружены. Убедитесь, что ваше устройство Wear OS находится поблизости, включено и сопряжено с телефоном.</string>
     <string name="show_send_to_watch_button">Показать кнопку Отправить пользовательскую монету для просмотра</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="error_sending_coin_to_watch">Упс! Произошла ошибка при отправке монеты на часы. Убедитесь, что ваши часы находятся поблизости и подключены, а затем повторите попытку.</string>
+    <string name="retry">ПОВТОРИТЬ</string>
 </resources>

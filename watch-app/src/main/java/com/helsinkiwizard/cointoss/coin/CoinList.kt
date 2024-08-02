@@ -56,8 +56,8 @@ import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.PercentEighty
 import com.helsinkiwizard.core.theme.Text14
 import com.helsinkiwizard.core.theme.Text20
-import com.helsinkiwizard.core.theme.Thirty
 import com.helsinkiwizard.core.theme.Twelve
+import com.helsinkiwizard.core.theme.ThirtyTwo
 import com.helsinkiwizard.core.utils.buildTextWithLink
 import com.helsinkiwizard.core.utils.getEmailIntent
 import com.helsinkiwizard.core.utils.onLinkClick
@@ -176,7 +176,7 @@ private fun RequestCoin() {
     )
     ClickableText(
         text = annotatedString,
-        modifier = Modifier.padding(start = Twelve, top = Thirty, end = Twelve, bottom = Forty),
+        modifier = Modifier.padding(start = Twelve, top = ThirtyTwo, end = Twelve, bottom = Forty),
         onClick = { offset ->
             annotatedString.onLinkClick(
                 offset = offset,

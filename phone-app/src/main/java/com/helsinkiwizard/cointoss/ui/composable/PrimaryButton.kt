@@ -28,7 +28,7 @@ import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.ButtonHeight
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.One
-import com.helsinkiwizard.core.theme.Thirty
+import com.helsinkiwizard.core.theme.ThirtyTwo
 import com.helsinkiwizard.core.theme.Twenty
 
 @Composable
@@ -52,7 +52,7 @@ fun PrimaryButton(
                     imageVector = icon,
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-                    modifier = Modifier.size(Thirty)
+                    modifier = Modifier.size(ThirtyTwo)
                 )
             }
             Text(
@@ -90,7 +90,7 @@ fun PrimaryOutlinedButton(
                     imageVector = icon,
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest),
-                    modifier = Modifier.size(Thirty)
+                    modifier = Modifier.size(ThirtyTwo)
                 )
             }
             Text(

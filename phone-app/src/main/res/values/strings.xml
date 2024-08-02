@@ -43,4 +43,7 @@
     <string name="watch_not_found">Watch not found</string>
     <string name="watch_not_found_message">No connected devices detected. Make sure your Wear OS device is nearby, powered on, and paired with your phone.</string>
     <string name="show_send_to_watch_button">Show send custom coin to watch button</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="error_sending_coin_to_watch">Oops! An error occurred while sending your coin to the watch. Please make sure your watch is nearby and connected, then try again.</string>
+    <string name="retry">RETRY</string>
 </resources>

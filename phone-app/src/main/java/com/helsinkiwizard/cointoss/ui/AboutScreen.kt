@@ -29,17 +29,17 @@ import androidx.navigation.NavController
 import com.helsinkiwizard.cointoss.BuildConfig
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.navigation.NavRoute
+import com.helsinkiwizard.cointoss.ui.composable.AppIconPainterResource
+import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
 import com.helsinkiwizard.cointoss.ui.theme.BodyMediumSpan
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.theme.LinkText
-import com.helsinkiwizard.cointoss.ui.composable.AppIconPainterResource
-import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
 import com.helsinkiwizard.core.CoreConstants.PACKAGE_NAME
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.Sixty
-import com.helsinkiwizard.core.theme.Thirty
 import com.helsinkiwizard.core.theme.Twelve
+import com.helsinkiwizard.core.theme.ThirtyTwo
 import com.helsinkiwizard.core.theme.TwentyFour
 import com.helsinkiwizard.core.utils.buildTextWithLink
 import com.helsinkiwizard.core.utils.getEmailIntent
@@ -118,7 +118,7 @@ private fun Contact() {
     )
     ClickableText(
         text = annotatedString,
-        modifier = Modifier.padding(horizontal = Twelve, vertical = Thirty),
+        modifier = Modifier.padding(horizontal = Twelve, vertical = ThirtyTwo),
         onClick = { offset ->
             annotatedString.onLinkClick(
                 offset = offset,

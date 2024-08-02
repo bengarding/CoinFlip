@@ -42,4 +42,7 @@
     <string name="watch_not_found">Reloj no encontrado</string>
     <string name="watch_not_found_message">No se detectaron dispositivos conectados. Asegúrese de que su dispositivo Wear OS esté cerca, encendido y emparejado con su teléfono.</string>
     <string name="show_send_to_watch_button">Mostrar botón de enviar moneda personalizada para mirar</string>
+    <string name="something_went_wrong">Algo salió mal</string>
+    <string name="error_sending_coin_to_watch">¡Ups! Se produjo un error al enviar su moneda al reloj. Asegúrate de que tu reloj esté cerca y conectado y vuelve a intentarlo.</string>
+    <string name="retry">REVER</string>
 </resources>
