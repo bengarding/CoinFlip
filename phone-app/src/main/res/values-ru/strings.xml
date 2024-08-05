@@ -40,9 +40,15 @@
     <string name="select_watch">Выберите часы</string>
     <string name="select_watch_message">Выберите устройство, на которое будет отправлена пользовательская монета.</string>
     <string name="watch_not_found">Часы не найдены</string>
-    <string name="watch_not_found_message">Подключенные устройства не обнаружены. Убедитесь, что ваше устройство Wear OS находится поблизости, включено и сопряжено с телефоном.</string>
+    <string name="watch_not_found_message">Подключенные устройства не обнаружены. Убедитесь, что ваше устройство Wear OS находится поблизости, включено и сопряжено с телефоном.\nInstala la aplicación Coin Toss en tu reloj.</string>
     <string name="show_send_to_watch_button">Показать кнопку Отправить пользовательскую монету для просмотра</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="error_sending_coin_to_watch">Упс! Произошла ошибка при отправке монеты на часы. Убедитесь, что ваши часы находятся поблизости и подключены, а затем повторите попытку.</string>
     <string name="retry">ПОВТОРИТЬ</string>
+    <string name="new_feature_alert">Оповещение о новой функции!</string>
+    <string name="send_custom_coins_message">Теперь вы можете отправлять персонализированные монеты на свои часы!</string>
+    <string name="send_custom_coins_step_1">Загрузите и установите приложение Coin Toss на свое устройство Wear OS</string>
+    <string name="send_custom_coins_step_2">Выберите «Создать монету» в меню, затем создайте свою собственную монету</string>
+    <string name="send_custom_coins_step_3_start">Нажмите кнопку</string>
+    <string name="send_custom_coins_step_3_end">, чтобы отправить монету на ваши часы</string>
 </resources>

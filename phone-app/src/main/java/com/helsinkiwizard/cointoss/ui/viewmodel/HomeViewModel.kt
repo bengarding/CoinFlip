@@ -25,10 +25,19 @@ internal class HomeViewModel @Inject constructor(
             mutableUiStateFlow.value = UiState.ShowContent(
                 HomeScreenContent.LoadingComplete(initialCoinType, initialSpeed)
             )
+
+            val showSendToWatchDialog = repository.getShowSendToWatchDialog.filterNotNull().first()
+            if (showSendToWatchDialog) {
+                mutableDialogStateFlow.value = DialogState.ShowContent(HomeScreenDialogs.ShowSendToWatchDialog)
+            }
         }
     }
 }
 
+
+internal sealed interface HomeScreenDialogs : BaseDialogType {
+    data object ShowSendToWatchDialog : HomeScreenDialogs
+}
 
 internal sealed interface HomeScreenContent : BaseType {
     data class LoadingComplete(val initialCoinType: CoinType, val initialSpeed: Float) : HomeScreenContent
