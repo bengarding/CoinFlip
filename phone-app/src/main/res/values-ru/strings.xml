@@ -51,4 +51,6 @@
     <string name="send_custom_coins_step_2">2. Выберите «Создать монету» в меню, затем создайте свою собственную монету</string>
     <string name="send_custom_coins_step_3_start">3. Нажмите кнопку</string>
     <string name="send_custom_coins_step_3_end">, чтобы отправить монету на ваши часы</string>
+    <string name="send_custom_coins_i_dont_have_watch">У меня нет устройства Wear OS, скройте кнопку</string>
+    <string name="send_custom_coins_got_it">Понятно</string>
 </resources>

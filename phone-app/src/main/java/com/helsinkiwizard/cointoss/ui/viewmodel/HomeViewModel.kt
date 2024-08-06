@@ -32,6 +32,19 @@ internal class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun onHideButtonClicked() {
+        viewModelScope.launch {
+            repository.setShowSendToWatchButton(false)
+        }
+    }
+
+    fun dismissDialog() {
+        resetDialogState()
+        viewModelScope.launch {
+            repository.disableShowSendToWatchDialog()
+        }
+    }
 }
 
 

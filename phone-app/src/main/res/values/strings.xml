@@ -49,7 +49,9 @@
     <string name="new_feature_alert">New feature alert!</string>
     <string name="send_custom_coins_message">You can now send custom coins to your watch!</string>
     <string name="send_custom_coins_step_1">1. Download and install the Coin Toss app on your Wear OS device</string>
-    <string name="send_custom_coins_step_2">2. Select "Create a coin" in the menu, then create your very own coin</string>
+    <string name="send_custom_coins_step_2">2. Select \"Create a coin\" in the menu, then create your very own coin</string>
     <string name="send_custom_coins_step_3_start">3. Press the</string>
     <string name="send_custom_coins_step_3_end">button to send the coin to your watch</string>
+    <string name="send_custom_coins_i_dont_have_watch">I don\'t have a Wear OS device, hide the button</string>
+    <string name="send_custom_coins_got_it">Got it</string>
 </resources>
