@@ -80,9 +80,11 @@ dependencies {
     implementation "com.google.android.horologist:horologist-compose-tools:$horologist_version"
 
     implementation "com.google.accompanist:accompanist-pager:0.25.1"
+    implementation "io.coil-kt:coil-compose:$compose_coil_version"
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_version"
 
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"

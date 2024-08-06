@@ -1,6 +1,8 @@
 package com.helsinkiwizard.cointoss.coin
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
@@ -14,8 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
@@ -29,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
@@ -40,10 +48,13 @@ import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
 import androidx.wear.tiles.TileService
 import androidx.wear.tooling.preview.devices.WearDevices
+import coil.compose.AsyncImage
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.tile.CoinTileService
 import com.helsinkiwizard.core.CoreConstants.COIN_SELECTED
+import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
+import com.helsinkiwizard.core.CoreConstants.VALUE_UNDEFINED
 import com.helsinkiwizard.core.R
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.coin.CoinType.BITCOIN
@@ -56,8 +67,8 @@ import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.PercentEighty
 import com.helsinkiwizard.core.theme.Text14
 import com.helsinkiwizard.core.theme.Text20
-import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.ThirtyTwo
+import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.utils.buildTextWithLink
 import com.helsinkiwizard.core.utils.getEmailIntent
 import com.helsinkiwizard.core.utils.onLinkClick
@@ -65,8 +76,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalWearFoundationApi::class)
 @Composable
-fun CoinList() {
+fun CoinList(
+    viewModel: CoinListViewModel = hiltViewModel()
+) {
+    val customCoin = viewModel.customCoinFlow.collectAsState(initial = null).value
     val listState = rememberScalingLazyListState()
+
     Scaffold(
         positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
     ) {
@@ -95,6 +110,16 @@ fun CoinList() {
                 .focusable()
         ) {
             item { ListTitle() }
+            if (customCoin != null) {
+                item {
+                    CoinButton(
+                        coin = CUSTOM,
+                        name = customCoin.name,
+                        customCoinHeadsUri = customCoin.headsUri,
+                        customCoinId = customCoin.id
+                    )
+                }
+            }
             items(sortedCoins) { coin ->
                 CoinButton(coin)
             }
@@ -117,7 +142,12 @@ fun ListTitle() {
 }
 
 @Composable
-fun CoinButton(coin: CoinType) {
+fun CoinButton(
+    coin: CoinType,
+    name: String = EMPTY_STRING,
+    customCoinHeadsUri: Uri? = null,
+    customCoinId: Int = VALUE_UNDEFINED
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val dataStore = Repository(context)
@@ -126,9 +156,9 @@ fun CoinButton(coin: CoinType) {
     Button(
         onClick = {
             scope.launch {
-                val name = coin.name.lowercase().replaceFirstChar { it.titlecase() }
+                val coinTypeName = coin.name.lowercase().replaceFirstChar { it.titlecase() }
                 val params = Bundle().apply {
-                    putString(COIN_SELECTED, name)
+                    putString(COIN_SELECTED, coinTypeName)
                 }
                 analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, params)
                 dataStore.setCoinType(coin)
@@ -140,17 +170,35 @@ fun CoinButton(coin: CoinType) {
             .height(CoinButtonHeight)
     ) {
         Box {
-            Image(
-                painter = painterResource(id = coin.heads),
-                contentDescription = stringResource(id = coin.nameRes),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.Black),
-                alignment = Alignment.Center,
-                contentScale = ContentScale.Crop
-            )
+            if (coin == CUSTOM) {
+                var imageUri by mutableStateOf(customCoinHeadsUri)
+                LaunchedEffect(key1 = customCoinId) {
+                    Log.d("blart", "CoinButton(): $customCoinId")
+                    imageUri = Uri.EMPTY
+//                    imageUri = customCoinHeadsUri
+                }
+                AsyncImage(
+                    model = imageUri,
+                    contentDescription = name.ifEmpty { stringResource(id = R.string.custom_coin) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = Color.Black),
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = coin.heads),
+                    contentDescription = stringResource(id = coin.nameRes),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = Color.Black),
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.Crop
+                )
+            }
             Text(
-                text = stringResource(id = coin.nameRes),
+                text = name.ifEmpty { stringResource(id = coin.nameRes) },
                 fontSize = Text14,
                 fontWeight = FontWeight.Normal,
                 color = Color.White,

@@ -46,7 +46,6 @@ class DataLayerListenerService : WearableListenerService() {
 
     private val channelCallback = object : ChannelClient.ChannelCallback() {
         override fun onChannelOpened(channel: ChannelClient.Channel) {
-            Log.d("blart", "onChannelOpened(): ")
             if (channel.path == IMAGE_PATH) {
                 receiveImage(channel)
             }
