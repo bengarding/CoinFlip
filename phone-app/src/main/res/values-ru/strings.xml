@@ -47,8 +47,8 @@
     <string name="retry">ПОВТОРИТЬ</string>
     <string name="new_feature_alert">Оповещение о новой функции!</string>
     <string name="send_custom_coins_message">Теперь вы можете отправлять персонализированные монеты на свои часы!</string>
-    <string name="send_custom_coins_step_1">Загрузите и установите приложение Coin Toss на свое устройство Wear OS</string>
-    <string name="send_custom_coins_step_2">Выберите «Создать монету» в меню, затем создайте свою собственную монету</string>
-    <string name="send_custom_coins_step_3_start">Нажмите кнопку</string>
+    <string name="send_custom_coins_step_1">1. Загрузите и установите приложение Coin Toss на свое устройство Wear OS</string>
+    <string name="send_custom_coins_step_2">2. Выберите «Создать монету» в меню, затем создайте свою собственную монету</string>
+    <string name="send_custom_coins_step_3_start">3. Нажмите кнопку</string>
     <string name="send_custom_coins_step_3_end">, чтобы отправить монету на ваши часы</string>
 </resources>

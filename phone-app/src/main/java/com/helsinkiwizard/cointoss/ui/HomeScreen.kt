@@ -1,6 +1,8 @@
 package com.helsinkiwizard.cointoss.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +33,7 @@ import com.helsinkiwizard.cointoss.ui.viewmodel.HomeViewModel
 import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
 import com.helsinkiwizard.core.coin.CoinAnimation
 import com.helsinkiwizard.core.coin.CoinType
+import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.PercentEighty
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
@@ -90,21 +93,48 @@ private fun Dialogs(
         is DialogState.ShowContent -> {
             when (state.type as HomeScreenDialogs) {
                 is HomeScreenDialogs.ShowSendToWatchDialog -> {
-                    val stepThreeStart = stringResource(id = R.string.send_custom_coins_step_3_start)
-                    val stepThreeEnd = stringResource(id = R.string.send_custom_coins_step_3_end)
+                    val bodyMedium = MaterialTheme.typography.bodyMedium.toSpanStyle()
+                    val bodyMediumSemiBold = MaterialTheme.typography.bodyMedium.toSpanStyle()
+
+                    val stepOne = buildAnnotatedString {
+                        withStyle(bodyMedium) {
+                            append(stringResource(id = R.string.send_custom_coins_step_1))
+                        }
+                        addStyle(bodyMediumSemiBold, 0, 1)
+                    }
+
+                    val stepTwo = buildAnnotatedString {
+                        withStyle(bodyMedium) {
+                            append(stringResource(id = R.string.send_custom_coins_step_2))
+                        }
+                        addStyle(bodyMediumSemiBold, 0, 1)
+                    }
+
                     val stepThreeFull = buildAnnotatedString {
-                        withStyle(MaterialTheme.typography.bodyMedium.toSpanStyle()) {
-                            append(stepThreeStart)
+                        withStyle(bodyMedium) {
+                            append(stringResource(id = R.string.send_custom_coins_step_3_start))
                         }
                         appendInlineContent(SEND_TO_WATCH_ICON_ID)
-                        withStyle(MaterialTheme.typography.bodyMedium.toSpanStyle()) {
-                            append(stepThreeEnd)
+                        withStyle(bodyMedium) {
+                            append(stringResource(id = R.string.send_custom_coins_step_3_end))
                         }
+                        addStyle(bodyMediumSemiBold, 0, 1)
                     }
+
                     CoinTossDialog(
                         title = stringResource(id = R.string.new_feature_alert),
                         content = {
-                            Text(text = stepThreeFull, inlineContent = inlineIconMap)
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(Eight)
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.send_custom_coins_message),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                                Text(text = stepOne)
+                                Text(text = stepTwo)
+                                Text(text = stepThreeFull, inlineContent = inlineIconMap)
+                            }
                         },
                         onDismiss = onDismiss
                     )

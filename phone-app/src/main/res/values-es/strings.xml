@@ -47,8 +47,8 @@
     <string name="retry">REVER</string>
     <string name="new_feature_alert">¡Alerta de nueva función!</string>
     <string name="send_custom_coins_message">¡Ahora puedes enviar monedas personalizadas a tu reloj!</string>
-    <string name="send_custom_coins_step_1">Descargue e instale la aplicación Coin Toss en su dispositivo Wear OS</string>
-    <string name="send_custom_coins_step_2">Selecciona "Crear una moneda" en el menú y luego crea tu propia moneda</string>
-    <string name="send_custom_coins_step_3_start">Presiona el botón</string>
+    <string name="send_custom_coins_step_1">1. Descargue e instale la aplicación Coin Toss en su dispositivo Wear OS</string>
+    <string name="send_custom_coins_step_2">2. Selecciona "Crear una moneda" en el menú y luego crea tu propia moneda</string>
+    <string name="send_custom_coins_step_3_start">3. Presiona el botón</string>
     <string name="send_custom_coins_step_3_end">para enviar la moneda a tu reloj</string>
 </resources>
