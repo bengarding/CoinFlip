@@ -1,4 +1,4 @@
-package com.helsinkiwizard.cointoss.ui.viewmodel
+package com.helsinkiwizard.core.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

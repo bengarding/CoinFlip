@@ -3,6 +3,11 @@ package com.helsinkiwizard.cointoss.ui.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.core.coin.CoinType
+import com.helsinkiwizard.core.viewmodel.AbstractViewModel
+import com.helsinkiwizard.core.viewmodel.BaseDialogType
+import com.helsinkiwizard.core.viewmodel.BaseType
+import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first

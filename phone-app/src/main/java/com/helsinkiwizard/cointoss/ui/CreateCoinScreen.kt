@@ -54,8 +54,8 @@ import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinError
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
-import com.helsinkiwizard.cointoss.ui.viewmodel.DialogState
-import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
+import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Eighty

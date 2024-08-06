@@ -5,6 +5,9 @@ import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.ui.model.MutableInputWrapper
 import com.helsinkiwizard.cointoss.ui.model.SettingsModel
+import com.helsinkiwizard.core.viewmodel.AbstractViewModel
+import com.helsinkiwizard.core.viewmodel.BaseType
+import com.helsinkiwizard.core.viewmodel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first

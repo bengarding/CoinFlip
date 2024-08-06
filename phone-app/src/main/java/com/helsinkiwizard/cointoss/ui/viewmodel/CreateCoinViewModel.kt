@@ -14,6 +14,12 @@ import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.viewmodel.AbstractViewModel
+import com.helsinkiwizard.core.viewmodel.BaseDialogType
+import com.helsinkiwizard.core.viewmodel.BaseErrorType
+import com.helsinkiwizard.core.viewmodel.BaseType
+import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

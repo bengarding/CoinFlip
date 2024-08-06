@@ -53,7 +53,6 @@ import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListViewModel
-import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
 import com.helsinkiwizard.core.CoreConstants
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.Alpha20
@@ -68,6 +67,7 @@ import com.helsinkiwizard.core.theme.Two
 import com.helsinkiwizard.core.ui.composable.CoinListShape
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.utils.ifNullOrEmpty
+import com.helsinkiwizard.core.viewmodel.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

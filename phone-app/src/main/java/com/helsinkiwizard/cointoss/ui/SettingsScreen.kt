@@ -31,7 +31,7 @@ import com.helsinkiwizard.cointoss.ui.model.SettingsModel
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsViewModel
-import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
+import com.helsinkiwizard.core.viewmodel.UiState
 import com.helsinkiwizard.core.CoreConstants.SPEED_MAX
 import com.helsinkiwizard.core.CoreConstants.SPEED_MIN
 import com.helsinkiwizard.core.CoreConstants.SPEED_STEPS
