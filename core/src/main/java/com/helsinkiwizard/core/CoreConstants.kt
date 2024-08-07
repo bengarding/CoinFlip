@@ -9,6 +9,7 @@ object CoreConstants {
     // Device communication
     const val WEAR_CAPABILITY = "wear"
     const val START_ACTIVITY_PATH = "/start-activity"
+    const val IMAGE_PATH = "/image"
     const val BYTE_BUFFER_CAPACITY = 4
 
     const val SPEED_MIN = 0.5f

@@ -12,6 +12,9 @@ import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
+import com.helsinkiwizard.core.CoreConstants.IMAGE_PATH
+import com.helsinkiwizard.core.CoreConstants.START_ACTIVITY_PATH
+import com.helsinkiwizard.core.CoreConstants.WEAR_CAPABILITY
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.viewmodel.AbstractViewModel
@@ -34,12 +37,6 @@ import javax.inject.Inject
 class CreateCoinViewModel @Inject constructor(
     private val repository: Repository
 ) : AbstractViewModel() {
-
-    companion object {
-        private const val START_ACTIVITY_PATH = "/start-activity"
-        private const val IMAGE_PATH = "/image"
-        private const val WEAR_CAPABILITY = "wear"
-    }
 
     private val model = CreateCoinModel(
         selectedCoin = repository.getSelectedCustomCoin(),

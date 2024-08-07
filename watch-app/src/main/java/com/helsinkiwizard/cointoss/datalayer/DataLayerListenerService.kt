@@ -14,6 +14,7 @@ import com.helsinkiwizard.cointoss.WatchApplication
 import com.helsinkiwizard.cointoss.tile.CoinTileService
 import com.helsinkiwizard.cointoss.ui.MainActivity
 import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
+import com.helsinkiwizard.core.CoreConstants.IMAGE_PATH
 import com.helsinkiwizard.core.CoreConstants.START_ACTIVITY_PATH
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.utils.deleteBitmap
@@ -26,7 +27,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.nio.ByteBuffer
 import javax.inject.Inject
 
@@ -34,16 +34,12 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DataLayerListenerService : WearableListenerService() {
 
-    companion object {
-        const val IMAGE_PATH = "/image"
-    }
-
     @Inject
     lateinit var repo: Repository
 
     private val channelClient by lazy { Wearable.getChannelClient(this) }
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val channelCallback = object : ChannelClient.ChannelCallback() {
         override fun onChannelOpened(channel: ChannelClient.Channel) {
@@ -82,15 +78,13 @@ class DataLayerListenerService : WearableListenerService() {
     }
 
     private fun receiveImage(channel: ChannelClient.Channel) {
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             val inputStream = channelClient.getInputStream(channel).await()
             val byteArray = inputStream.readBytes()
             val (heads, tails, name) = byteArray.toBitmapAndString()
             inputStream.close()
 
-            withContext(Dispatchers.Main) {
-                updateImage(heads, tails, name)
-            }
+            updateImage(heads, tails, name)
         }
     }
 
