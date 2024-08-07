@@ -40,7 +40,7 @@
     <string name="select_watch">Выберите часы</string>
     <string name="select_watch_message">Выберите устройство, на которое будет отправлена пользовательская монета.</string>
     <string name="watch_not_found">Часы не найдены</string>
-    <string name="watch_not_found_message">Подключенные устройства не обнаружены. Убедитесь, что ваше устройство Wear OS находится поблизости, включено и сопряжено с телефоном.\nInstala la aplicación Coin Toss en tu reloj.</string>
+    <string name="watch_not_found_message">Подключенные устройства не обнаружены. Убедитесь, что ваше устройство Wear OS находится поблизости, включено, сопряжено с телефоном и приложение обновлено до последней версии.\nInstala la aplicación Coin Toss en tu reloj.</string>
     <string name="show_send_to_watch_button">Показать кнопку Отправить пользовательскую монету для просмотра</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="error_sending_coin_to_watch">Упс! Произошла ошибка при отправке монеты на часы. Убедитесь, что ваши часы находятся поблизости и подключены, а затем повторите попытку.</string>

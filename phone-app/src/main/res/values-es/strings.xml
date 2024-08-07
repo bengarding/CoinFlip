@@ -40,7 +40,7 @@
     <string name="select_watch">Seleccionar reloj</string>
     <string name="select_watch_message">Seleccione el dispositivo al que enviar la moneda personalizada</string>
     <string name="watch_not_found">Reloj no encontrado</string>
-    <string name="watch_not_found_message">No se detectaron dispositivos conectados. Asegúrese de que su dispositivo Wear OS esté cerca, encendido y emparejado con su teléfono.\nInstala la aplicación Coin Toss en tu reloj.</string>
+    <string name="watch_not_found_message">No se detectaron dispositivos conectados. Asegúrese de que su dispositivo Wear OS esté cerca, encendido, emparejado con su teléfono y que la aplicación se haya actualizado a la última versión.\nInstala la aplicación Coin Toss en tu reloj.</string>
     <string name="show_send_to_watch_button">Mostrar botón de enviar moneda personalizada para mirar</string>
     <string name="something_went_wrong">Algo salió mal</string>
     <string name="error_sending_coin_to_watch">¡Ups! Se produjo un error al enviar su moneda al reloj. Asegúrate de que tu reloj esté cerca y conectado y vuelve a intentarlo.</string>
