@@ -44,7 +44,7 @@
     <string name="show_send_to_watch_button">Показать кнопку Отправить пользовательскую монету для просмотра</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="error_sending_coin_to_watch">Упс! Произошла ошибка при отправке монеты на часы. Убедитесь, что ваши часы находятся поблизости и подключены, а затем повторите попытку.</string>
-    <string name="retry">ПОВТОРИТЬ</string>
+    <string name="retry">Повторить попытку</string>
     <string name="new_feature_alert">Оповещение о новой функции!</string>
     <string name="send_custom_coins_message">Теперь вы можете отправлять персонализированные монеты на свои часы!</string>
     <string name="send_custom_coins_step_1">1. Загрузите и установите приложение Coin Toss на свое устройство Wear OS</string>

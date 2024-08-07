@@ -45,7 +45,7 @@
     <string name="show_send_to_watch_button">Show send custom coin to watch button</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="error_sending_coin_to_watch">Oops! An error occurred while sending your coin to the watch. Please make sure your watch is nearby and connected, then try again.</string>
-    <string name="retry">RETRY</string>
+    <string name="retry">Retry</string>
     <string name="new_feature_alert">New feature alert!</string>
     <string name="send_custom_coins_message">You can now send custom coins to your watch!</string>
     <string name="send_custom_coins_step_1">1. Download and install the Coin Toss app on your Wear OS device</string>
