@@ -2,7 +2,6 @@ package com.helsinkiwizard.cointoss.coin
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
@@ -16,13 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusRequester
@@ -54,7 +49,6 @@ import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.tile.CoinTileService
 import com.helsinkiwizard.core.CoreConstants.COIN_SELECTED
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
-import com.helsinkiwizard.core.CoreConstants.VALUE_UNDEFINED
 import com.helsinkiwizard.core.R
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.coin.CoinType.BITCOIN
@@ -115,8 +109,7 @@ fun CoinList(
                     CoinButton(
                         coin = CUSTOM,
                         name = customCoin.name,
-                        customCoinHeadsUri = customCoin.headsUri,
-                        customCoinId = customCoin.id
+                        customCoinHeadsUri = customCoin.headsUri
                     )
                 }
             }
@@ -145,8 +138,7 @@ fun ListTitle() {
 fun CoinButton(
     coin: CoinType,
     name: String = EMPTY_STRING,
-    customCoinHeadsUri: Uri? = null,
-    customCoinId: Int = VALUE_UNDEFINED
+    customCoinHeadsUri: Uri? = null
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -171,14 +163,8 @@ fun CoinButton(
     ) {
         Box {
             if (coin == CUSTOM) {
-                var imageUri by mutableStateOf(customCoinHeadsUri)
-                LaunchedEffect(key1 = customCoinId) {
-                    Log.d("blart", "CoinButton(): $customCoinId")
-                    imageUri = Uri.EMPTY
-//                    imageUri = customCoinHeadsUri
-                }
                 AsyncImage(
-                    model = imageUri,
+                    model = customCoinHeadsUri,
                     contentDescription = name.ifEmpty { stringResource(id = R.string.custom_coin) },
                     modifier = Modifier
                         .fillMaxWidth()

@@ -5,7 +5,7 @@ import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.CoreConstants.VALUE_UNDEFINED
 
 class CustomCoinUiModel(
-    val id: Int,
+    val id: Int = VALUE_UNDEFINED,
     val headsUri: Uri,
     val tailsUri: Uri,
     val name: String

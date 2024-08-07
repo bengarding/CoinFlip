@@ -1,8 +1,6 @@
 package com.helsinkiwizard.cointoss.ui
 
-import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -54,8 +52,6 @@ import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinError
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
-import com.helsinkiwizard.core.viewmodel.DialogState
-import com.helsinkiwizard.core.viewmodel.UiState
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Eighty
@@ -64,8 +60,11 @@ import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.utils.deleteBitmap
 import com.helsinkiwizard.core.utils.storeBitmap
 import com.helsinkiwizard.core.utils.toBitmap
+import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
@@ -434,19 +433,6 @@ private fun IconButtons(
         }
     }
 }
-
-fun deleteBitmap(context: Context, uri: Uri): Boolean {
-    return try {
-        val deletedRows = context.contentResolver.delete(uri, null, null)
-        // If delete operation was successful, it returns the number of rows deleted.
-        // In case of a file, it should be 1 if the file was successfully deleted.
-        deletedRows > 0
-    } catch (e: Exception) {
-        Log.e("DeleteFile", "Failed to delete file", e)
-        false
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable

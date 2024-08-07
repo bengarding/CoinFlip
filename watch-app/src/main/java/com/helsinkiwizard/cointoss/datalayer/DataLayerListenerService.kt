@@ -4,23 +4,26 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
+import androidx.wear.tiles.TileService
 import com.google.android.gms.wearable.ChannelClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.WatchApplication
+import com.helsinkiwizard.cointoss.tile.CoinTileService
 import com.helsinkiwizard.cointoss.ui.MainActivity
 import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
 import com.helsinkiwizard.core.CoreConstants.START_ACTIVITY_PATH
 import com.helsinkiwizard.core.coin.CoinType
+import com.helsinkiwizard.core.utils.deleteBitmap
 import com.helsinkiwizard.core.utils.storeBitmap
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -33,8 +36,6 @@ class DataLayerListenerService : WearableListenerService() {
 
     companion object {
         const val IMAGE_PATH = "/image"
-        const val HEADS_IMAGE_NAME = 0
-        const val TAILS_IMAGE_NAME = 1
     }
 
     @Inject
@@ -94,12 +95,19 @@ class DataLayerListenerService : WearableListenerService() {
     }
 
     private suspend fun updateImage(heads: Bitmap, tails: Bitmap, name: String) {
-        val headsUri = storeBitmap(applicationContext, heads, HEADS_IMAGE_NAME)
-        val tailsUri = storeBitmap(applicationContext, tails, TAILS_IMAGE_NAME)
+        val headsUri = storeBitmap(applicationContext, heads)
+        val tailsUri = storeBitmap(applicationContext, tails)
 
         if (headsUri != null && tailsUri != null) {
-            repo.setCustomCoinName(name)
+            val oldCoin = repo.getCustomCoin.firstOrNull()
+            repo.setCustomCoin(headsUri, tailsUri, name)
             repo.setCoinType(CoinType.CUSTOM)
+            TileService.getUpdater(applicationContext).requestUpdate(CoinTileService::class.java)
+
+            if (oldCoin != null) {
+                deleteBitmap(applicationContext, oldCoin.headsUri)
+                deleteBitmap(applicationContext, oldCoin.tailsUri)
+            }
         }
     }
 

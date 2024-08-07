@@ -20,7 +20,8 @@ fun getEmailIntent(email: String): Intent {
     }
 }
 
-fun storeBitmap(context: Context,
+fun storeBitmap(
+    context: Context,
     bitmap: Bitmap?,
     name: Int? = null
 ): Uri? {
@@ -39,7 +40,19 @@ fun storeBitmap(context: Context,
         }
         FileProvider.getUriForFile(context, "${context.packageName}.file-provider", file)
     } catch (e: IOException) {
-        Log.e("Utils", "storeBitmap", e)
+        Log.e("Utils", "Failed to store bitmap", e)
         null
+    }
+}
+
+fun deleteBitmap(context: Context, uri: Uri): Boolean {
+    return try {
+        val deletedRows = context.contentResolver.delete(uri, null, null)
+        // If delete operation was successful, it returns the number of rows deleted.
+        // In case of a file, it should be 1 if the file was successfully deleted.
+        deletedRows > 0
+    } catch (e: Exception) {
+        Log.e("Utils", "Failed to delete bitmap", e)
+        false
     }
 }
