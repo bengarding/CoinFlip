@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.Eighty
+import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.ThirtyTwo
 import com.helsinkiwizard.core.theme.TwentyFour
 
@@ -28,7 +29,8 @@ private const val IMAGE_WIDTH_PERCENT = .8f
 @Composable
 fun ErrorScreen(
     message: String,
-    retry: () -> Unit
+    onCancelClicked: () -> Unit,
+    onRetryClicked: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,10 +57,15 @@ fun ErrorScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = TwentyFour)
         )
+        PrimaryOutlinedButton(
+            text = stringResource(id = R.string.cancel),
+            modifier = Modifier.padding(top = ThirtyTwo),
+            onClick = onCancelClicked
+        )
         PrimaryButton(
             text = stringResource(id = R.string.retry),
-            modifier = Modifier.padding(top = TwentyFour),
-            onClick = retry
+            modifier = Modifier.padding(top = Sixteen),
+            onClick = onRetryClicked
         )
     }
 }
@@ -70,7 +77,8 @@ private fun ErrorScreenPreview() {
         CoinTossTheme {
             ErrorScreen(
                 message = stringResource(id = R.string.error_sending_coin_to_watch),
-                retry = {}
+                onCancelClicked = {},
+                onRetryClicked = {}
             )
         }
     }

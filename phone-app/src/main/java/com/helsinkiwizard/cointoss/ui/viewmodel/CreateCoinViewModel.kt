@@ -40,6 +40,10 @@ class CreateCoinViewModel @Inject constructor(
     )
 
     init {
+        showContent()
+    }
+
+    fun showContent() {
         mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
     }
 
@@ -179,7 +183,7 @@ class CreateCoinViewModel @Inject constructor(
         viewModelScope.safeLaunch(context = Dispatchers.IO) {
             val onSuccess: (SendCustomCoinHelper.FinishedResult) -> Unit = { result ->
                 if (result == SendCustomCoinHelper.FinishedResult.SUCCESS) {
-                    mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
+                    showContent()
                     mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SendToWatchSuccess)
                 } else {
                     onError(
