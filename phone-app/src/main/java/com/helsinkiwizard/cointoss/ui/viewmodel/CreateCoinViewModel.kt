@@ -180,6 +180,7 @@ class CreateCoinViewModel @Inject constructor(
             val onSuccess: (SendCustomCoinHelper.FinishedResult) -> Unit = { result ->
                 if (result == SendCustomCoinHelper.FinishedResult.SUCCESS) {
                     mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
+                    mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SendToWatchSuccess)
                 } else {
                     onError(
                         e = (result as SendCustomCoinHelper.FinishedResult.FAILURE).exception,
@@ -208,6 +209,7 @@ sealed interface CreateCoinDialogs : BaseDialogType {
     data object SaveError : CreateCoinDialogs
     data class DeleteCoinBitmaps(val headsUri: Uri, val tailsUri: Uri) : CreateCoinDialogs
     data class DeleteCoinDialog(val coin: CustomCoinUiModel) : CreateCoinDialogs
+    data object SendToWatchSuccess : CreateCoinDialogs
     data object NoNodesFoundDialog : CreateCoinDialogs
     data class SelectNodesDialog(
         val coin: CustomCoinUiModel,

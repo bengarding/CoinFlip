@@ -54,4 +54,5 @@
     <string name="send_custom_coins_step_3_end">button to send the coin to your watch</string>
     <string name="send_custom_coins_i_dont_have_watch">I don\'t have a Wear OS device, hide the button</string>
     <string name="send_custom_coins_got_it">Got it</string>
+    <string name="success">Success!</string>
 </resources>

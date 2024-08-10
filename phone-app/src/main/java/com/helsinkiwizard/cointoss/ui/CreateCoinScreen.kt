@@ -148,6 +148,15 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
                     viewModel.resetDialogState()
                 }
 
+                is CreateCoinDialogs.SendToWatchSuccess -> {
+                    Toast.makeText(
+                        LocalContext.current,
+                        stringResource(id = R.string.success),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    viewModel.resetDialogState()
+                }
+
                 is CreateCoinDialogs.NoNodesFoundDialog -> {
                     CoinTossDialog(
                         title = stringResource(id = R.string.watch_not_found),

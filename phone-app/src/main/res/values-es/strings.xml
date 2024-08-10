@@ -53,4 +53,5 @@
     <string name="send_custom_coins_step_3_end">para enviar la moneda a tu reloj</string>
     <string name="send_custom_coins_i_dont_have_watch">No tengo un dispositivo Wear OS, ocultar el botón</string>
     <string name="send_custom_coins_got_it">Entiendo</string>
+    <string name="success">¡Éxito!</string>
 </resources>
