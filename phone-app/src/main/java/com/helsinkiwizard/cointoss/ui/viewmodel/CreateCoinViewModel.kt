@@ -10,10 +10,8 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Node
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
-import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
+import com.helsinkiwizard.cointoss.utils.SendCustomCoinHelper
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
-import com.helsinkiwizard.core.CoreConstants.IMAGE_PATH
-import com.helsinkiwizard.core.CoreConstants.START_ACTIVITY_PATH
 import com.helsinkiwizard.core.CoreConstants.WEAR_CAPABILITY
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
@@ -28,9 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
-import java.nio.ByteBuffer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -181,54 +176,26 @@ class CreateCoinViewModel @Inject constructor(
         channelClient: ChannelClient,
         uriToBitmap: (Uri) -> Bitmap?
     ) {
-        viewModelScope.safeLaunch(
-            context = Dispatchers.IO,
-            typeOfError = CreateCoinError.SendToWatchError(
-                retry = { sendCoinToNode(node, coin, messageClient, channelClient, uriToBitmap) }
-            )
-        ) {
-            messageClient.sendMessage(node.id, START_ACTIVITY_PATH, byteArrayOf()).await()
-            val heads = uriToBitmap(coin.headsUri) ?: return@safeLaunch
-            val tails = uriToBitmap(coin.tailsUri) ?: return@safeLaunch
-            val headsByteArray = heads.toPrefixedByteArray()
-            val tailsByteArray = tails.toPrefixedByteArray()
-            val nameByteArray = coin.name.toPrefixedByteArray()
-            val combinedData = headsByteArray + tailsByteArray + nameByteArray
-
-            val channel = channelClient.openChannel(node.id, IMAGE_PATH).await()
-            val outputStream = channelClient.getOutputStream(channel).await()
-
-            outputStream.apply {
-                write(combinedData)
-                flush()
-                close()
+        viewModelScope.safeLaunch(context = Dispatchers.IO) {
+            val onSuccess: (SendCustomCoinHelper.FinishedResult) -> Unit = { result ->
+                if (result == SendCustomCoinHelper.FinishedResult.SUCCESS) {
+                    mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
+                } else {
+                    onError(
+                        e = (result as SendCustomCoinHelper.FinishedResult.FAILURE).exception,
+                        errorType = CreateCoinError.SendToWatchError(
+                            retry = { sendCoinToNode(node, coin, messageClient, channelClient, uriToBitmap) }
+                        )
+                    )
+                }
             }
 
-            mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
+            val helper = SendCustomCoinHelper(
+                node, coin, messageClient, channelClient, viewModelScope, uriToBitmap, onSuccess
+            )
+            helper.sendCoin()
         }
     }
-
-    /**
-     * Converts the [Bitmap] to a byte array, compress it to a png image in a background thread.
-     */
-    private suspend fun Bitmap.toPrefixedByteArray(): ByteArray =
-        withContext(Dispatchers.Default) {
-            ByteArrayOutputStream().use { byteStream ->
-                compress(Bitmap.CompressFormat.PNG, 100, byteStream)
-                val bitmapData = byteStream.toByteArray()
-                val size = bitmapData.size
-                val sizeBytes = ByteBuffer.allocate(BYTE_BUFFER_CAPACITY).putInt(size).array()
-                sizeBytes + bitmapData
-            }
-        }
-
-    private suspend fun String.toPrefixedByteArray(): ByteArray =
-        withContext(Dispatchers.Default) {
-            val stringData = toByteArray()
-            val size = stringData.size
-            val sizeBytes = ByteBuffer.allocate(BYTE_BUFFER_CAPACITY).putInt(size).array()
-            sizeBytes + stringData
-        }
 }
 
 sealed interface CreateCoinContent : BaseType {

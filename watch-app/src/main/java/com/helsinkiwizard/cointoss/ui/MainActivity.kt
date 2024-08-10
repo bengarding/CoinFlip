@@ -34,10 +34,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    companion object {
-        private const val PAGE_COUNT = 2
-    }
-
     @Inject
     lateinit var repo: Repository
 

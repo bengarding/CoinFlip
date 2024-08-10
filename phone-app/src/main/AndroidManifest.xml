@@ -25,7 +25,15 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.CoinToss" />
+            android:theme="@style/Theme.CoinToss" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data
+                    android:host="*"
+                    android:pathPrefix="/ready-for-coin-transfer"
+                    android:scheme="wear" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
