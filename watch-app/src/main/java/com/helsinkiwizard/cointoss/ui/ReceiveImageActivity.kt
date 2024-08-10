@@ -6,11 +6,19 @@ import android.os.Bundle
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Text
 import androidx.wear.tiles.TileService
 import com.google.android.gms.wearable.ChannelClient
 import com.google.android.gms.wearable.Wearable
+import com.google.android.horologist.compose.layout.fillMaxRectangle
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.tile.CoinTileService
@@ -21,6 +29,8 @@ import com.helsinkiwizard.core.CoreConstants.NODE_ID
 import com.helsinkiwizard.core.CoreConstants.READY_FOR_COIN_TRANSFER
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.CoinTossTheme
+import com.helsinkiwizard.core.theme.Forty
+import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.utils.deleteBitmap
 import com.helsinkiwizard.core.utils.storeBitmap
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,7 +80,19 @@ class ReceiveImageActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CoinTossTheme {
-                Text(text = stringResource(id = R.string.receiving_custom_coin))
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxRectangle()
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.receiving_custom_coin),
+                        modifier = Modifier.padding(bottom = Twelve)
+                    )
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(Forty)
+                    )
+                }
             }
         }
     }

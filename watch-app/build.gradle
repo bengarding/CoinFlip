@@ -78,6 +78,7 @@ dependencies {
     implementation "androidx.wear.protolayout:protolayout:1.1.0"
 
     implementation "com.google.android.horologist:horologist-compose-tools:$horologist_version"
+    implementation "com.google.android.horologist:horologist-compose-layout:$horologist_version"
 
     implementation "com.google.accompanist:accompanist-pager:0.25.1"
     implementation "io.coil-kt:coil-compose:$compose_coil_version"
