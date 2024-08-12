@@ -38,18 +38,19 @@ import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.foundation.rememberActiveFocusRequester
 import androidx.wear.compose.material.Button
+import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
 import androidx.wear.tiles.TileService
 import androidx.wear.tooling.preview.devices.WearDevices
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.tile.CoinTileService
 import com.helsinkiwizard.core.CoreConstants.COIN_SELECTED
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
-import com.helsinkiwizard.core.R
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.coin.CoinType.BITCOIN
 import com.helsinkiwizard.core.coin.CoinType.CUSTOM
@@ -163,14 +164,24 @@ fun CoinButton(
     ) {
         Box {
             if (coin == CUSTOM) {
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = customCoinHeadsUri,
                     contentDescription = name.ifEmpty { stringResource(id = R.string.custom_coin) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(color = Color.Black),
                     alignment = Alignment.Center,
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    loading = {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Black)
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
                 )
             } else {
                 Image(
