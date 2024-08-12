@@ -3,7 +3,7 @@ package com.helsinkiwizard.cointoss.tile
 import androidx.wear.protolayout.ActionBuilders
 import androidx.wear.protolayout.ModifiersBuilders
 import com.helsinkiwizard.cointoss.Constants.EXTRA_START_FLIPPING
-import com.helsinkiwizard.cointoss.ui.SplashActivity
+import com.helsinkiwizard.cointoss.ui.MainActivity
 import com.helsinkiwizard.core.CoreConstants.PACKAGE_NAME
 
 /**
@@ -31,5 +31,5 @@ internal fun openCoin() = ActionBuilders.AndroidActivity.Builder()
 
 private fun ActionBuilders.AndroidActivity.Builder.setMessagingActivity(): ActionBuilders.AndroidActivity.Builder {
     return setPackageName(PACKAGE_NAME)
-        .setClassName(PACKAGE_NAME.plus(".ui.").plus(SplashActivity.TAG))
+        .setClassName(PACKAGE_NAME.plus(".ui.").plus(MainActivity.TAG))
 }

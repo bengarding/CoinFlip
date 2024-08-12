@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material.MaterialTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -25,35 +26,40 @@ import com.helsinkiwizard.cointoss.Constants.TILE
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.coin.Coin
 import com.helsinkiwizard.cointoss.coin.CoinList
-import com.helsinkiwizard.core.CoreConstants.EXTRA_COIN_TYPE
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.CoinTossTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        const val TAG = "MainActivity"
+    }
+
     @Inject
     lateinit var repo: Repository
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(applicationContext)
-        val startFlippingIntent = intent.extras?.getBoolean(EXTRA_START_FLIPPING) ?: false
 
-        val initialCoinType = CoinType.parse(intent.extras?.getInt(EXTRA_COIN_TYPE) ?: CoinType.BITCOIN.value)
+        val startFlipping = intent.extras?.getBoolean(EXTRA_START_FLIPPING) ?: false
+        val initialCoinType = runBlocking { repo.getCoinType.firstOrNull() ?: CoinType.BITCOIN }
+
         setContent {
             CoinTossTheme {
-                CoinFlip(initialCoinType, startFlippingIntent)
+                CoinFlip(initialCoinType, startFlipping)
             }
         }
+
         val params = Bundle().apply {
-            putString(FirebaseAnalytics.Param.ORIGIN, if (startFlippingIntent) TILE else APP_DRAWER)
+            putString(FirebaseAnalytics.Param.ORIGIN, if (startFlipping) TILE else APP_DRAWER)
         }
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
+        FirebaseAnalytics.getInstance(applicationContext).logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
     }
 
     @OptIn(ExperimentalPagerApi::class)
