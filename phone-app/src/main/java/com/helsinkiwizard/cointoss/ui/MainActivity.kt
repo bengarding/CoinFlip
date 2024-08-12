@@ -30,12 +30,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.helsinkiwizard.cointoss.Constants.EXTRA_MATERIAL_YOU
-import com.helsinkiwizard.cointoss.Constants.EXTRA_THEME_MODE
 import com.helsinkiwizard.cointoss.Constants.NAV_TRANSITION_DURATION
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
@@ -46,7 +45,9 @@ import com.helsinkiwizard.cointoss.navigation.mainGraph
 import com.helsinkiwizard.cointoss.ui.drawer.DrawerContent
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -56,11 +57,16 @@ class MainActivity : ComponentActivity() {
     lateinit var repository: Repository
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        val themeModeName = intent.extras?.getString(EXTRA_THEME_MODE) ?: ThemeMode.SYSTEM.name
-        val initialMaterialYou = intent.extras?.getBoolean(EXTRA_MATERIAL_YOU) ?: true
-        val initialThemeMode = ThemeMode.valueOf(themeModeName)
+        var initialThemeMode: ThemeMode
+        var initialMaterialYou: Boolean
+
+        runBlocking {
+            initialThemeMode = repository.getThemeMode.firstOrNull() ?: ThemeMode.SYSTEM
+            initialMaterialYou = repository.getMaterialYou.firstOrNull() ?: true
+        }
 
         setContent {
             val themeMode = repository.getThemeMode.collectAsState(initial = initialThemeMode).value

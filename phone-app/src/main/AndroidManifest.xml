@@ -14,18 +14,13 @@
             android:value="${crashlyticsCollectionEnabled}" />
 
         <activity
-            android:name=".ui.SplashActivity"
-            android:exported="true">
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:theme="@style/SplashTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".ui.MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CoinToss" >
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data
