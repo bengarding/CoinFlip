@@ -6,6 +6,7 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 import androidx.activity.ComponentActivity
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.lifecycleScope
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Text
 import androidx.wear.tiles.TileService
@@ -44,7 +46,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.nio.ByteBuffer
 import javax.inject.Inject
@@ -74,13 +75,17 @@ class ReceiveImageActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setTurnScreenOn(true)
+        }
         window.addFlags(FLAG_KEEP_SCREEN_ON)
         channelClient.registerChannelCallback(channelCallback)
 
-        val nodeId = intent.getStringExtra(NODE_ID) ?: EMPTY_STRING
-        runBlocking {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val nodeId = intent.getStringExtra(NODE_ID) ?: EMPTY_STRING
             messageClient.sendMessage(nodeId, READY_FOR_COIN_TRANSFER, byteArrayOf())
         }
+
         super.onCreate(savedInstanceState)
         setContent {
             CoinTossTheme {

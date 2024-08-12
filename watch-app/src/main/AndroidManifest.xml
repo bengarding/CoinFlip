@@ -39,7 +39,7 @@
             android:exported="false"
             android:taskAffinity="com.helsinkiwizard.cointoss"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/MainTheme" >
+            android:theme="@style/DeviceDefault" >
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.CHANNEL_EVENT" />
                 <data android:scheme="wear" />

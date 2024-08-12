@@ -1,6 +1,5 @@
 package com.helsinkiwizard.core.coin
 
-import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -124,7 +123,6 @@ fun CoinAnimation(
 
 @Composable
 fun Heads(headsRes: Int, customHeadsBitmap: ImageBitmap?) {
-    Log.d("blart", "Heads(): $customHeadsBitmap")
     if (customHeadsBitmap != null) {
         Image(
             bitmap = customHeadsBitmap,
