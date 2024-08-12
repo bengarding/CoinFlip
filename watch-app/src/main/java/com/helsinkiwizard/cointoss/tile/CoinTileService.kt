@@ -44,7 +44,7 @@ class CoinTileService : SuspendingTileService() {
 
     private lateinit var coinTypeFlow: Flow<CoinType>
     private lateinit var resourceVersionFlow: Flow<Int>
-    private lateinit var customCoinFlow: Flow<CustomCoinUiModel>
+    private lateinit var customCoinFlow: Flow<CustomCoinUiModel?>
 
     override fun onCreate() {
         super.onCreate()

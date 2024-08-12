@@ -32,13 +32,20 @@ class Repository(context: Context) : BaseRepository(context) {
         savePreference(CUSTOM_COIN_NAME, name)
     }
 
-    val getCustomCoin: Flow<CustomCoinUiModel> = context.dataStore.data
+    val getCustomCoin: Flow<CustomCoinUiModel?> = context.dataStore.data
         .map { preferences ->
-            CustomCoinUiModel(
-                headsUri = Uri.parse(preferences[CUSTOM_COIN_HEADS]),
-                tailsUri = Uri.parse(preferences[CUSTOM_COIN_TAILS]),
-                name = preferences[CUSTOM_COIN_NAME] ?: EMPTY_STRING
-            )
+            val headsUri = preferences[CUSTOM_COIN_HEADS]
+            val tailsUri = preferences[CUSTOM_COIN_TAILS]
+
+            if (headsUri == null || tailsUri == null) {
+                null
+            } else {
+                CustomCoinUiModel(
+                    headsUri = Uri.parse(headsUri),
+                    tailsUri = Uri.parse(tailsUri),
+                    name = preferences[CUSTOM_COIN_NAME] ?: EMPTY_STRING
+                )
+            }
         }
 
     suspend fun setResourceVersion(value: Int) = savePreference(TILE_RESOURCE_VERSION, value)

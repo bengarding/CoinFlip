@@ -13,4 +13,6 @@ class CustomCoinUiModel(
     companion object {
         val EMPTY = CustomCoinUiModel(VALUE_UNDEFINED, Uri.EMPTY, Uri.EMPTY, EMPTY_STRING)
     }
+
+    fun isEmpty() = headsUri == Uri.EMPTY
 }
