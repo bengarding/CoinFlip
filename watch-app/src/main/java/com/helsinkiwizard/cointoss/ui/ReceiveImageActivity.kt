@@ -1,5 +1,9 @@
 package com.helsinkiwizard.cointoss.ui
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -103,6 +107,7 @@ class ReceiveImageActivity : ComponentActivity() {
         scope.cancel()
     }
 
+    @SuppressLint("WearRecents") // ignore because MainActivity is set to singleTop in the manifest
     private fun receiveImage(channel: ChannelClient.Channel) {
         scope.launch {
             val inputStream = channelClient.getInputStream(channel).await()
@@ -111,6 +116,10 @@ class ReceiveImageActivity : ComponentActivity() {
             inputStream.close()
 
             updateImage(heads, tails, name)
+            val intent = Intent(this@ReceiveImageActivity, MainActivity::class.java).apply {
+                flags = FLAG_ACTIVITY_CLEAR_TOP or FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
             finish()
         }
     }
