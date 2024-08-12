@@ -1,11 +1,13 @@
 package com.helsinkiwizard.cointoss.tile
 
+import android.graphics.Bitmap
 import androidx.wear.protolayout.DeviceParametersBuilders
 import androidx.wear.protolayout.DimensionBuilders
 import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.ResourceBuilders
+import androidx.wear.protolayout.ResourceBuilders.ImageResource
 import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.RequestBuilders.TileRequest
@@ -13,12 +15,16 @@ import androidx.wear.tiles.TileBuilders.Tile
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.tiles.SuspendingTileService
 import com.google.android.horologist.tiles.images.drawableResToImageResource
+import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.core.coin.CoinType
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.utils.toBitmap
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 @OptIn(ExperimentalHorologistApi::class)
@@ -27,29 +33,60 @@ class CoinTileService : SuspendingTileService() {
 
     companion object {
         private const val SELECTED_COIN = "selected_coin"
+        private const val APP_ICON = "app_icon"
+        private const val SCALED_BITMAP_SIZE = 500
+        private const val ICON_SIZE = 50f
+        private const val ICON_BOTTOM_PADDING = 8f
     }
 
     @Inject
     lateinit var repo: Repository
 
-    private lateinit var tileStateFlow: Flow<CoinType>
+    private lateinit var coinTypeFlow: Flow<CoinType>
     private lateinit var resourceVersionFlow: Flow<Int>
+    private lateinit var customCoinFlow: Flow<CustomCoinUiModel>
 
     override fun onCreate() {
         super.onCreate()
-        tileStateFlow = repo.getCoinType
+        coinTypeFlow = repo.getCoinType
         resourceVersionFlow = repo.getResourceVersion
+        customCoinFlow = repo.getCustomCoin
     }
 
     override suspend fun resourcesRequest(
         requestParams: ResourcesRequest
     ): ResourceBuilders.Resources {
-        val headsRes = latestTileState().heads
-        val resourceVersion = getResourceVersion()
+        val headsImageResource = if (coinTypeFlow.get() == CoinType.CUSTOM) {
+            val bitmap = customCoinFlow.get().headsUri.toBitmap(applicationContext)
+            bitmapToImageResource(bitmap)
+        } else {
+            drawableResToImageResource(coinTypeFlow.get().heads)
+        }
+
+        val resourceVersion = resourceVersionFlow.get()
         return ResourceBuilders.Resources.Builder().setVersion(resourceVersion.toString())
             .addIdToImageMapping(
                 SELECTED_COIN,
-                drawableResToImageResource(headsRes)
+                headsImageResource
+            )
+            .addIdToImageMapping(
+                APP_ICON,
+                drawableResToImageResource(R.mipmap.ic_launcher_round)
+            )
+            .build()
+    }
+
+    private fun bitmapToImageResource(bitmap: Bitmap?): ImageResource {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        return ImageResource.Builder()
+            .setInlineResource(
+                ResourceBuilders.InlineImageResource.Builder()
+                    .setData(byteArray)
+                    .setWidthPx(SCALED_BITMAP_SIZE)
+                    .setHeightPx(SCALED_BITMAP_SIZE)
+                    .build()
             )
             .build()
     }
@@ -70,7 +107,7 @@ class CoinTileService : SuspendingTileService() {
             .build()
 
         // Bump the version number to refresh the coin image
-        var resourceVersion = getResourceVersion()
+        var resourceVersion = resourceVersionFlow.get()
         resourceVersion++
         repo.setResourceVersion(resourceVersion)
 
@@ -83,9 +120,9 @@ class CoinTileService : SuspendingTileService() {
     private fun tileLayout(deviceParams: DeviceParametersBuilders.DeviceParameters): LayoutElementBuilders.LayoutElement {
         val clickable = launchActivityClickable("coin_button", openCoin())
         return LayoutElementBuilders.Box.Builder()
-            .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
             .setWidth(DimensionBuilders.expand())
             .setHeight(DimensionBuilders.expand())
+            .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
             .addContent(
                 LayoutElementBuilders.Image.Builder()
                     .apply {
@@ -97,9 +134,28 @@ class CoinTileService : SuspendingTileService() {
                         setWidth(dp(deviceParams.screenWidthDp.toFloat()))
                     }.build()
             )
-            .build()
+            .addContent(
+                LayoutElementBuilders.Box.Builder()
+                    .setWidth(DimensionBuilders.expand())
+                    .setHeight(DimensionBuilders.expand())
+                    .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_BOTTOM)
+                    .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
+                    .addContent(
+                        LayoutElementBuilders.Image.Builder().apply {
+                            setResourceId(APP_ICON)
+                            setHeight(dp(ICON_SIZE))
+                            setWidth(dp(ICON_SIZE))
+                            setModifiers(
+                                ModifiersBuilders.Modifiers.Builder()
+                                    .setPadding(
+                                        ModifiersBuilders.Padding.Builder()
+                                            .setBottom(dp(ICON_BOTTOM_PADDING)).build()
+                                    ).build()
+                            )
+                        }.build()
+                    ).build()
+            ).build()
     }
 
-    private suspend fun latestTileState() = tileStateFlow.filterNotNull().first()
-    private suspend fun getResourceVersion() = resourceVersionFlow.filterNotNull().first()
+    private suspend fun <T> Flow<T>.get() = this.filterNotNull().first()
 }
