@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="receiving_custom_coin">Receiving custom coin</string>
+    <string name="new_feature_alert">New feature alert!</string>
+    <string name="custom_coin_dialog_message">Create custom coins by downloading the Coin Toss app on your phone.</string>
+    <string name="custom_coin_dialog_got_it">Got it</string>
 </resources>

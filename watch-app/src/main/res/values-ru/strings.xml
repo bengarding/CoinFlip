@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="receiving_custom_coin">Получение пользовательской монеты</string>
+    <string name="new_feature_alert">Оповещение о новой функции!</string>
+    <string name="custom_coin_dialog_message">Создавайте собственные монеты, загрузив приложение Coin Toss на свой телефон.</string>
+    <string name="custom_coin_dialog_got_it">Понятно</string>
 </resources>
