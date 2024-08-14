@@ -1,6 +1,6 @@
-package com.helsinkiwizard.cointoss.ui.viewmodel
+package com.helsinkiwizard.core.viewmodel
 
-import com.helsinkiwizard.cointoss.ui.viewmodel.UiState.ShowContent
+import com.helsinkiwizard.core.viewmodel.UiState.ShowContent
 
 /**
  * Interface outlines three basic ViewModel states that are getting observed in a Fragment.

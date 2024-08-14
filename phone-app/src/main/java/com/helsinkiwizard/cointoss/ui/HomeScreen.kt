@@ -9,9 +9,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.helsinkiwizard.cointoss.ui.composable.dialog.SendCustomCoinsDialog
+import com.helsinkiwizard.core.viewmodel.DialogState
 import com.helsinkiwizard.cointoss.ui.viewmodel.HomeScreenContent
+import com.helsinkiwizard.cointoss.ui.viewmodel.HomeScreenDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.HomeViewModel
-import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
+import com.helsinkiwizard.core.viewmodel.UiState
 import com.helsinkiwizard.core.coin.CoinAnimation
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.PercentEighty
@@ -39,6 +42,33 @@ internal fun HomeScreen(
 
             else -> {}
         }
+        Dialogs(
+            state = viewModel.dialogState.collectAsState().value,
+            onDismiss = { viewModel.dismissDialog() },
+            onHideButtonClicked = { viewModel.onHideButtonClicked() }
+        )
+    }
+}
+
+@Composable
+private fun Dialogs(
+    state: DialogState,
+    onDismiss: () -> Unit,
+    onHideButtonClicked: () -> Unit
+) {
+    when (state) {
+        is DialogState.ShowContent -> {
+            when (state.type as HomeScreenDialogs) {
+                is HomeScreenDialogs.ShowSendToWatchDialog -> {
+                    SendCustomCoinsDialog(
+                        onDismiss = onDismiss,
+                        onHideButtonClicked = onHideButtonClicked
+                    )
+                }
+            }
+        }
+
+        else -> {}
     }
 }
 

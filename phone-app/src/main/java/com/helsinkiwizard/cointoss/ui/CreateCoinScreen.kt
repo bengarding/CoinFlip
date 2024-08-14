@@ -1,13 +1,7 @@
 package com.helsinkiwizard.cointoss.ui
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +17,7 @@ import androidx.compose.material.icons.outlined.ArrowUpward
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -33,28 +28,30 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.android.gms.wearable.Wearable
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
+import com.helsinkiwizard.cointoss.ui.composable.ErrorScreen
+import com.helsinkiwizard.cointoss.ui.composable.ProgressIndicator
 import com.helsinkiwizard.cointoss.ui.composable.dialog.CoinTossDialog
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
+import com.helsinkiwizard.cointoss.ui.composable.dialog.SelectWatchDialog
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
+import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinError
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
-import com.helsinkiwizard.cointoss.ui.viewmodel.DialogState
-import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Eighty
@@ -63,13 +60,13 @@ import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.utils.deleteBitmap
+import com.helsinkiwizard.core.utils.storeBitmap
 import com.helsinkiwizard.core.utils.toBitmap
+import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import kotlin.random.Random
 
 private const val INDEX_ADD_COIN = 0
 private const val INDEX_SELECTED_COIN = 1
@@ -92,7 +89,17 @@ private fun CreateCoinContent(viewModel: CreateCoinViewModel) {
             }
         }
 
-        else -> {}
+        is UiState.Loading -> {
+            ProgressIndicator()
+        }
+
+        is UiState.Error -> {
+            ErrorScreen(
+                message = stringResource(id = R.string.error_sending_coin_to_watch),
+                onCancelClicked = { viewModel.showContent() },
+                onRetryClicked = (state.type as CreateCoinError.SendToWatchError).retry
+            )
+        }
     }
 }
 
@@ -141,6 +148,39 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
                     deleteBitmap(LocalContext.current, type.tailsUri)
                     viewModel.resetDialogState()
                 }
+
+                is CreateCoinDialogs.SendToWatchSuccess -> {
+                    Toast.makeText(
+                        LocalContext.current,
+                        stringResource(id = R.string.success),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    viewModel.resetDialogState()
+                }
+
+                is CreateCoinDialogs.NoNodesFoundDialog -> {
+                    CoinTossDialog(
+                        title = stringResource(id = R.string.watch_not_found),
+                        text = stringResource(id = R.string.watch_not_found_message),
+                        onDismiss = { viewModel.resetDialogState() }
+                    )
+                }
+
+                is CreateCoinDialogs.SelectNodesDialog -> {
+                    SelectWatchDialog(
+                        nodes = type.nodes,
+                        onDismiss = { viewModel.resetDialogState() },
+                        onNodeClick = { selectedNodeId ->
+                            viewModel.sendCoinToNode(
+                                coin = type.coin,
+                                node = type.nodes.first { it.id == selectedNodeId },
+                                channelClient = type.channelClient,
+                                messageClient = type.messageClient,
+                                uriToBitmap = type.uriToBitmap
+                            )
+                        }
+                    )
+                }
             }
         }
 
@@ -156,8 +196,13 @@ private fun Content(
     val context = LocalContext.current
     val selectedCoin = model.selectedCoin.collectAsState(initial = null).value
     val customCoins = model.customCoins.collectAsState(initial = emptyList()).value
+    val showSendToWatchButton = model.showSendToWatchButton.collectAsState(initial = false).value
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+
+    val messageClient by lazy { Wearable.getMessageClient(context) }
+    val capabilityClient by lazy { Wearable.getCapabilityClient(context) }
+    val channelClient by lazy { Wearable.getChannelClient(context) }
 
     LazyColumn(state = listState) {
         item {
@@ -181,6 +226,7 @@ private fun Content(
         item(key = selectedCoin?.id) {
             SelectedCoin(
                 selectedCoin = selectedCoin,
+                showSendToWatchButton = showSendToWatchButton,
                 onEditClicked = {
                     viewModel.onEditClicked(
                         coin = selectedCoin!!,
@@ -191,6 +237,15 @@ private fun Content(
                     }
                 },
                 onDeleteClicked = { viewModel.onDeleteClicked(selectedCoin!!) },
+                onSendToWatchClicked = {
+                    viewModel.sendCoinToWatch(
+                        coin = selectedCoin!!,
+                        messageClient = messageClient,
+                        capabilityClient = capabilityClient,
+                        channelClient = channelClient,
+                        uriToBitmap = { it.toBitmap(context) }
+                    )
+                }
             )
         }
         item {
@@ -210,6 +265,7 @@ private fun Content(
                 coin = customCoin,
                 showDivider = showDivider,
                 showSelectButton = true,
+                showSendToWatchButton = showSendToWatchButton,
                 onEditClicked = {
                     viewModel.onEditClicked(
                         coin = customCoin,
@@ -225,6 +281,15 @@ private fun Content(
                     scope.launch {
                         listState.animateScrollToItem(INDEX_SELECTED_COIN)
                     }
+                },
+                onSendToWatchClicked = {
+                    viewModel.sendCoinToWatch(
+                        coin = customCoin,
+                        messageClient = messageClient,
+                        capabilityClient = capabilityClient,
+                        channelClient = channelClient,
+                        uriToBitmap = { it.toBitmap(context) }
+                    )
                 }
             )
         }
@@ -234,8 +299,10 @@ private fun Content(
 @Composable
 private fun SelectedCoin(
     selectedCoin: CustomCoinUiModel?,
+    showSendToWatchButton: Boolean,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    onSendToWatchClicked: () -> Unit,
 ) {
     if (selectedCoin != null) {
         Column(
@@ -250,8 +317,10 @@ private fun SelectedCoin(
             )
             CustomCoinItem(
                 coin = selectedCoin,
+                showSendToWatchButton = showSendToWatchButton,
                 onEditClicked = onEditClicked,
                 onDeleteClicked = onDeleteClicked,
+                onSendToWatchClicked = onSendToWatchClicked
             )
         }
     }
@@ -262,8 +331,10 @@ private fun CustomCoinItem(
     coin: CustomCoinUiModel,
     showDivider: Boolean = false,
     showSelectButton: Boolean = false,
+    showSendToWatchButton: Boolean,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    onSendToWatchClicked: () -> Unit,
     onSelectClicked: ((CustomCoinUiModel) -> Unit)? = null
 ) {
     Column {
@@ -287,8 +358,10 @@ private fun CustomCoinItem(
                 )
                 IconButtons(
                     showSelectButton = showSelectButton,
+                    showSendToWatchButton = showSendToWatchButton,
                     onEditClicked = onEditClicked,
                     onDeleteClicked = onDeleteClicked,
+                    onSendToWatchClicked = onSendToWatchClicked,
                     onSelectClicked = { onSelectClicked?.invoke(coin) },
                     modifier = Modifier.weight(1f)
                 )
@@ -325,8 +398,10 @@ private fun CustomCoinSide(
 @Composable
 private fun IconButtons(
     showSelectButton: Boolean,
+    showSendToWatchButton: Boolean,
     onEditClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
+    onSendToWatchClicked: () -> Unit,
     onSelectClicked: (() -> Unit)? = null,
     modifier: Modifier
 ) {
@@ -334,65 +409,40 @@ private fun IconButtons(
         horizontalArrangement = Arrangement.End,
         modifier = modifier
     ) {
+        if (showSendToWatchButton) {
+            IconButton(onClick = onSendToWatchClicked) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_send_to_watch),
+                    contentDescription = stringResource(id = R.string.send_to_watch),
+                    tint = MaterialTheme.colorScheme.surfaceContainerHighest
+                )
+            }
+        }
         if (showSelectButton) {
             IconButton(onClick = { onSelectClicked?.invoke() }) {
-                Image(
+                Icon(
                     imageVector = Icons.Outlined.ArrowUpward,
                     contentDescription = stringResource(id = R.string.select),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
+                    tint = MaterialTheme.colorScheme.surfaceContainerHighest
                 )
             }
         }
         IconButton(onClick = onEditClicked) {
-            Image(
+            Icon(
                 imageVector = Icons.Outlined.Edit,
                 contentDescription = stringResource(id = R.string.edit),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
+                tint = MaterialTheme.colorScheme.surfaceContainerHighest
             )
         }
         IconButton(onClick = onDeleteClicked) {
-            Image(
+            Icon(
                 imageVector = Icons.Outlined.Delete,
                 contentDescription = stringResource(id = R.string.delete),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceContainerHighest)
+                tint = MaterialTheme.colorScheme.surfaceContainerHighest
             )
         }
     }
 }
-
-private fun storeBitmap(context: Context, bitmap: Bitmap?): Uri? {
-    val compressFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        Bitmap.CompressFormat.WEBP_LOSSY
-    } else {
-        Bitmap.CompressFormat.JPEG
-    }
-    val fileType = if (compressFormat == Bitmap.CompressFormat.JPEG) "jpg" else "webp"
-    val imageName = Random.nextInt()
-    val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "$imageName.$fileType")
-
-    return try {
-        FileOutputStream(file).use { out ->
-            bitmap?.compress(compressFormat, 100, out)
-        }
-        FileProvider.getUriForFile(context, "${context.packageName}.file-provider", file)
-    } catch (e: IOException) {
-        Log.e("CreateCoinScreen", "storeBitmap", e)
-        null
-    }
-}
-
-fun deleteBitmap(context: Context, uri: Uri): Boolean {
-    return try {
-        val deletedRows = context.contentResolver.delete(uri, null, null)
-        // If delete operation was successful, it returns the number of rows deleted.
-        // In case of a file, it should be 1 if the file was successfully deleted.
-        deletedRows > 0
-    } catch (e: Exception) {
-        Log.e("DeleteFile", "Failed to delete file", e)
-        false
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable

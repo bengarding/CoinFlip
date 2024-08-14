@@ -3,15 +3,29 @@ package com.helsinkiwizard.cointoss.ui.viewmodel
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.wearable.CapabilityClient
+import com.google.android.gms.wearable.CapabilityClient.FILTER_REACHABLE
+import com.google.android.gms.wearable.ChannelClient
+import com.google.android.gms.wearable.MessageClient
+import com.google.android.gms.wearable.Node
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
+import com.helsinkiwizard.cointoss.utils.SendCustomCoinHelper
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
+import com.helsinkiwizard.core.CoreConstants.WEAR_CAPABILITY
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
+import com.helsinkiwizard.core.viewmodel.AbstractViewModel
+import com.helsinkiwizard.core.viewmodel.BaseDialogType
+import com.helsinkiwizard.core.viewmodel.BaseErrorType
+import com.helsinkiwizard.core.viewmodel.BaseType
+import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,10 +35,15 @@ class CreateCoinViewModel @Inject constructor(
 
     private val model = CreateCoinModel(
         selectedCoin = repository.getSelectedCustomCoin(),
-        customCoins = repository.getCustomCoins()
+        customCoins = repository.getCustomCoins(),
+        showSendToWatchButton = repository.getShowSendToWatchButton
     )
 
     init {
+        showContent()
+    }
+
+    fun showContent() {
         mutableUiStateFlow.value = UiState.ShowContent(CreateCoinContent.LoadingComplete(model))
     }
 
@@ -130,6 +149,58 @@ class CreateCoinViewModel @Inject constructor(
             repository.selectCustomCoin(coin.id)
         }
     }
+
+    fun sendCoinToWatch(
+        coin: CustomCoinUiModel,
+        messageClient: MessageClient,
+        capabilityClient: CapabilityClient,
+        channelClient: ChannelClient,
+        uriToBitmap: (Uri) -> Bitmap?
+    ) {
+        viewModelScope.launch {
+            val nodes = capabilityClient
+                .getCapability(WEAR_CAPABILITY, FILTER_REACHABLE)
+                .await()
+                .nodes
+
+            when (nodes.size) {
+                0 -> mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.NoNodesFoundDialog)
+                1 -> sendCoinToNode(nodes.first(), coin, messageClient, channelClient, uriToBitmap)
+                else -> mutableDialogStateFlow.value = DialogState.ShowContent(
+                    CreateCoinDialogs.SelectNodesDialog(coin, nodes, messageClient, channelClient, uriToBitmap)
+                )
+            }
+        }
+    }
+
+    fun sendCoinToNode(
+        node: Node,
+        coin: CustomCoinUiModel,
+        messageClient: MessageClient,
+        channelClient: ChannelClient,
+        uriToBitmap: (Uri) -> Bitmap?
+    ) {
+        viewModelScope.safeLaunch(context = Dispatchers.IO) {
+            val onSuccess: (SendCustomCoinHelper.FinishedResult) -> Unit = { result ->
+                if (result == SendCustomCoinHelper.FinishedResult.SUCCESS) {
+                    showContent()
+                    mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SendToWatchSuccess)
+                } else {
+                    onError(
+                        e = (result as SendCustomCoinHelper.FinishedResult.FAILURE).exception,
+                        errorType = CreateCoinError.SendToWatchError(
+                            retry = { sendCoinToNode(node, coin, messageClient, channelClient, uriToBitmap) }
+                        )
+                    )
+                }
+            }
+
+            val helper = SendCustomCoinHelper(
+                node, coin, messageClient, channelClient, viewModelScope, uriToBitmap, onSuccess
+            )
+            helper.sendCoin()
+        }
+    }
 }
 
 sealed interface CreateCoinContent : BaseType {
@@ -142,4 +213,17 @@ sealed interface CreateCoinDialogs : BaseDialogType {
     data object SaveError : CreateCoinDialogs
     data class DeleteCoinBitmaps(val headsUri: Uri, val tailsUri: Uri) : CreateCoinDialogs
     data class DeleteCoinDialog(val coin: CustomCoinUiModel) : CreateCoinDialogs
+    data object SendToWatchSuccess : CreateCoinDialogs
+    data object NoNodesFoundDialog : CreateCoinDialogs
+    data class SelectNodesDialog(
+        val coin: CustomCoinUiModel,
+        val nodes: Set<Node>,
+        val messageClient: MessageClient,
+        val channelClient: ChannelClient,
+        val uriToBitmap: (Uri) -> Bitmap?
+    ) : CreateCoinDialogs
+}
+
+sealed interface CreateCoinError : BaseErrorType {
+    data class SendToWatchError(val retry: () -> Unit) : BaseErrorType
 }

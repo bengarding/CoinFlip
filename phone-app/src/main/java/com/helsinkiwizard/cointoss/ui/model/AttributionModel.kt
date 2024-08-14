@@ -138,5 +138,25 @@ object AttributionParams {
             name = "Zetko",
             source = UCoin
         ),
+        AttributionModel(
+            coin = CoinType.PALESTINE,
+            name = "Cloud Pavilion",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.PAKISTAN,
+            name = "Алексей Зименс",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.BAHRAIN,
+            name = "Фанис 67",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.MACEDONIA,
+            name = "Andra",
+            source = UCoin
+        ),
     )
 }

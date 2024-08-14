@@ -12,7 +12,8 @@ import kotlinx.coroutines.flow.flowOf
 
 class CreateCoinModel(
     val selectedCoin: Flow<CustomCoinUiModel?> = flowOf(),
-    val customCoins: Flow<List<CustomCoinUiModel>> = flowOf()
+    val customCoins: Flow<List<CustomCoinUiModel>> = flowOf(),
+    val showSendToWatchButton: Flow<Boolean> = flowOf()
 ) {
     var headsBitmap by mutableStateOf<Bitmap?>(null)
     var tailsBitmap by mutableStateOf<Bitmap?>(null)

@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.helsinkiwizard.cointoss.data.room.CoinTossDatabase
 import com.helsinkiwizard.cointoss.data.room.CustomCoin
-import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.BaseRepository
+import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -23,6 +23,8 @@ class Repository @Inject constructor(
     companion object {
         private val THEME_MODE = stringPreferencesKey("selected_theme")
         private val MATERIAL_YOU = booleanPreferencesKey("material_you")
+        private val SHOW_SEND_TO_WATCH_BUTTON = booleanPreferencesKey("show_send_to_watch")
+        private val SHOW_SEND_TO_WATCH_DIALOG = booleanPreferencesKey("show_send_to_watch_dialog")
     }
 
     suspend fun setTheme(themeMode: ThemeMode) = savePreference(THEME_MODE, themeMode.name)
@@ -35,6 +37,18 @@ class Repository @Inject constructor(
     val getMaterialYou: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[MATERIAL_YOU] ?: true
+        }
+
+    suspend fun setShowSendToWatchButton(show: Boolean) = savePreference(SHOW_SEND_TO_WATCH_BUTTON, show)
+    val getShowSendToWatchButton: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[SHOW_SEND_TO_WATCH_BUTTON] ?: true
+        }
+
+    suspend fun disableShowSendToWatchDialog() = savePreference(SHOW_SEND_TO_WATCH_DIALOG, false)
+    val getShowSendToWatchDialog: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[SHOW_SEND_TO_WATCH_DIALOG] ?: true
         }
 
     suspend fun storeCustomCoin(headsUri: Uri, tailsUri: Uri, name: String) {

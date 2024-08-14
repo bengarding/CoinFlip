@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import java.io.IOException
 import java.util.Locale
 
@@ -29,6 +30,7 @@ fun Uri.toBitmap(context: Context): Bitmap? {
             BitmapFactory.decodeStream(inputStream)
         }
     } catch (e: IOException) {
+        Log.e("Extensions", "toBitmap failed: $e")
         null
     }
 }

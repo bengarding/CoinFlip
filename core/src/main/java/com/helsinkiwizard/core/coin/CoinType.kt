@@ -53,6 +53,10 @@ enum class CoinType(
     NORWAY(41, R.drawable.norway_heads, R.drawable.norway_tails, R.string.norway),
     SWITZERLAND(42, R.drawable.switzerland_heads, R.drawable.switzerland_tails, R.string.switzerland),
     COLOMBIA(43, R.drawable.colombia_heads, R.drawable.colombia_tails, R.string.colombia),
+    PALESTINE(44, R.drawable.palestine_heads, R.drawable.palestine_tails, R.string.palestine),
+    PAKISTAN(45, R.drawable.pakistan_heads, R.drawable.pakistan_tails, R.string.pakistan),
+    BAHRAIN(46, R.drawable.bahrain_heads, R.drawable.bahrain_tails, R.string.bahrain),
+    MACEDONIA(47, R.drawable.macedonia_heads, R.drawable.macedonia_tails, R.string.macedonia),
     ;
 
     companion object {

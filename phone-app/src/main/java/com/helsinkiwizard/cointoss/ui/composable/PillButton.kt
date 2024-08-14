@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.Twenty
@@ -92,6 +93,7 @@ fun PillButton(
             text = text,
             color = textColor,
             style = MaterialTheme.typography.bodySmall,
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(start = Four)
         )
     }

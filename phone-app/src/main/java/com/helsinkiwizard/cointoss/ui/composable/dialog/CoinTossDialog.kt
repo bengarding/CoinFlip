@@ -23,7 +23,8 @@ import com.helsinkiwizard.core.theme.Twenty
 @Composable
 fun CoinTossDialog(
     onDismiss: () -> Unit,
-    text: String,
+    text: String? = null,
+    content: @Composable (() -> Unit)? = null,
     title: String? = null,
     confirmButtonText: String = stringResource(id = R.string.ok),
     dismissButtonText: String? = null,
@@ -79,10 +80,13 @@ fun CoinTossDialog(
                 }
             },
             text = {
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                if (text != null) {
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+                content?.invoke()
             }
         )
     }

@@ -31,7 +31,7 @@ import com.helsinkiwizard.cointoss.ui.model.SettingsModel
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsViewModel
-import com.helsinkiwizard.cointoss.ui.viewmodel.UiState
+import com.helsinkiwizard.core.viewmodel.UiState
 import com.helsinkiwizard.core.CoreConstants.SPEED_MAX
 import com.helsinkiwizard.core.CoreConstants.SPEED_MIN
 import com.helsinkiwizard.core.CoreConstants.SPEED_STEPS
@@ -65,14 +65,18 @@ private fun Content(
             themeModeWrapper = model.themeMode,
             materialYouWrapper = model.materialYou,
             themeModeOnclick = { themeMode -> viewModel.onThemeModeClicked(themeMode) },
-            materialYouOnclick = { checked -> viewModel.onMaterialYouClicked(checked) }
+            materialYouOnclick = { checked -> viewModel.onSwitchChecked(model.materialYou, checked) }
         )
         HorizontalDivider(
             modifier = Modifier.padding(top = Twelve)
         )
         CoinSettings(
             speedWrapper = model.speed,
-            onValueChangeFinished = { viewModel.onSpeedValueChangeFinished() }
+            showSendToWatchButtonWrapper = model.showSendToWatchButton,
+            onSpeedChangeFinished = { viewModel.onSpeedValueChangeFinished() },
+            onShowSendToWatchButtonChecked = { checked ->
+                viewModel.onSwitchChecked(model.showSendToWatchButton, checked)
+            }
         )
     }
 }
@@ -117,7 +121,9 @@ private fun ThemeButtons(
 @Composable
 private fun CoinSettings(
     speedWrapper: MutableInputWrapper<Float>,
-    onValueChangeFinished: () -> Unit
+    showSendToWatchButtonWrapper: MutableInputWrapper<Boolean>,
+    onSpeedChangeFinished: () -> Unit,
+    onShowSendToWatchButtonChecked: (Boolean) -> Unit,
 ) {
     Column {
         Title(textRes = R.string.coin)
@@ -128,8 +134,14 @@ private fun CoinSettings(
             steps = SPEED_STEPS,
             title = stringResource(id = R.string.speed_seconds),
             onValueChange = { value -> speedWrapper.value = value },
-            onValueChangeFinished = onValueChangeFinished,
+            onValueChangeFinished = onSpeedChangeFinished,
             modifier = Modifier.padding(horizontal = Twelve)
+        )
+        PrimarySwitch(
+            label = stringResource(id = R.string.show_send_to_watch_button),
+            checked = showSendToWatchButtonWrapper.value,
+            onCheckChanged = onShowSendToWatchButtonChecked,
+            modifier = Modifier.padding(horizontal = Twenty)
         )
     }
 }
@@ -144,12 +156,12 @@ private fun Title(@StringRes textRes: Int) {
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, locale = "ru")
 @Composable
 private fun SettingsScreenPreview() {
     val repository = Repository(LocalContext.current)
     val viewModel = SettingsViewModel(repository)
-    val model = SettingsModel(ThemeMode.DARK, true, 3f)
+    val model = SettingsModel(ThemeMode.DARK, true, 3f, true)
     Surface {
         CoinTossTheme {
             Content(model, viewModel)
