@@ -11,6 +11,7 @@ object CoreConstants {
     const val WEAR_CAPABILITY = "wear"
     const val PREPARE_FOR_COIN_TRANSFER = "/prepare-for-coin-transfer"
     const val READY_FOR_COIN_TRANSFER = "/ready-for-coin-transfer"
+    const val TRANSFER_COMPLETE = "/transfer-complete"
     const val IMAGE_PATH = "/image"
     const val BYTE_BUFFER_CAPACITY = 4
     const val NODE_ID = "node-id"

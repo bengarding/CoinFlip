@@ -33,6 +33,7 @@ import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.CoreConstants.IMAGE_PATH
 import com.helsinkiwizard.core.CoreConstants.NODE_ID
 import com.helsinkiwizard.core.CoreConstants.READY_FOR_COIN_TRANSFER
+import com.helsinkiwizard.core.CoreConstants.TRANSFER_COMPLETE
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.Forty
@@ -61,6 +62,8 @@ class ReceiveImageActivity : ComponentActivity() {
     private val channelClient by lazy { Wearable.getChannelClient(this) }
     private val messageClient by lazy { Wearable.getMessageClient(this) }
 
+    private lateinit var sourceNodeId: String
+
     private val channelCallback = object : ChannelClient.ChannelCallback() {
         override fun onChannelOpened(channel: ChannelClient.Channel) {
             if (channel.path == IMAGE_PATH) {
@@ -81,9 +84,10 @@ class ReceiveImageActivity : ComponentActivity() {
         window.addFlags(FLAG_KEEP_SCREEN_ON)
         channelClient.registerChannelCallback(channelCallback)
 
+        sourceNodeId = intent.getStringExtra(NODE_ID) ?: EMPTY_STRING
+
         lifecycleScope.launch(Dispatchers.IO) {
-            val nodeId = intent.getStringExtra(NODE_ID) ?: EMPTY_STRING
-            messageClient.sendMessage(nodeId, READY_FOR_COIN_TRANSFER, byteArrayOf())
+            messageClient.sendMessage(sourceNodeId, READY_FOR_COIN_TRANSFER, byteArrayOf())
         }
 
         super.onCreate(savedInstanceState)
@@ -121,6 +125,8 @@ class ReceiveImageActivity : ComponentActivity() {
             inputStream.close()
 
             updateImage(heads, tails, name)
+            messageClient.sendMessage(sourceNodeId, TRANSFER_COMPLETE, byteArrayOf())
+
             val intent = Intent(this@ReceiveImageActivity, MainActivity::class.java).apply {
                 flags = FLAG_ACTIVITY_CLEAR_TOP or FLAG_ACTIVITY_SINGLE_TOP
             }

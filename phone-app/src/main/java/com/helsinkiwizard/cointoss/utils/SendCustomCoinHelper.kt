@@ -9,6 +9,8 @@ import com.google.android.gms.wearable.Node
 import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
 import com.helsinkiwizard.core.CoreConstants.IMAGE_PATH
 import com.helsinkiwizard.core.CoreConstants.PREPARE_FOR_COIN_TRANSFER
+import com.helsinkiwizard.core.CoreConstants.READY_FOR_COIN_TRANSFER
+import com.helsinkiwizard.core.CoreConstants.TRANSFER_COMPLETE
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +33,11 @@ internal class SendCustomCoinHelper(
         private const val SCALED_BITMAP_SIZE = 500
     }
 
-    private val messageListener = MessageClient.OnMessageReceivedListener {
-        openChannelAndSendCoin()
+    private val messageListener = MessageClient.OnMessageReceivedListener { message ->
+        when (message.path) {
+            READY_FOR_COIN_TRANSFER ->  openChannelAndSendCoin()
+            TRANSFER_COMPLETE -> completeTransfer()
+        }
     }
 
     suspend fun sendCoin() {
@@ -66,12 +71,8 @@ internal class SendCustomCoinHelper(
                     flush()
                     close()
                 }
-
-                onFinished(FinishedResult.SUCCESS)
             } catch (e: Exception) {
                 onFinished(FinishedResult.FAILURE(e))
-            } finally {
-                messageClient.removeListener(messageListener)
             }
         }
     }
@@ -95,6 +96,11 @@ internal class SendCustomCoinHelper(
         val size = stringData.size
         val sizeBytes = ByteBuffer.allocate(BYTE_BUFFER_CAPACITY).putInt(size).array()
         return sizeBytes + stringData
+    }
+
+    private fun completeTransfer() {
+        messageClient.removeListener(messageListener)
+        onFinished(FinishedResult.SUCCESS)
     }
 
     sealed class FinishedResult {
