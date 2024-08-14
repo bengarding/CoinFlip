@@ -4,6 +4,7 @@ object CoreConstants {
     const val PACKAGE_NAME = "com.helsinkiwizard.cointoss"
     const val EXTRA_COIN_TYPE = "coinType"
     const val VALUE_UNDEFINED = -1
+    const val SPACE_STRING = " "
     const val EMPTY_STRING = ""
 
     // Device communication
