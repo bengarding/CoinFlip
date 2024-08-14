@@ -1,4 +1,4 @@
-package com.helsinkiwizard.cointoss.datalayer
+package com.helsinkiwizard.cointoss.service
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,7 +10,7 @@ import com.helsinkiwizard.cointoss.ui.ReceiveImageActivity
 import com.helsinkiwizard.core.CoreConstants.NODE_ID
 import com.helsinkiwizard.core.CoreConstants.PREPARE_FOR_COIN_TRANSFER
 
-class DataLayerListenerService : WearableListenerService() {
+class MessageListenerService : WearableListenerService() {
 
     @SuppressLint("WearRecents") // Ignore because the activity is very short-lived
     override fun onMessageReceived(messageEvent: MessageEvent) {

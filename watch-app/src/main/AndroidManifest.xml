@@ -64,7 +64,7 @@
         </service>
 
         <service
-            android:name="com.helsinkiwizard.cointoss.datalayer.DataLayerListenerService"
+            android:name="com.helsinkiwizard.cointoss.service.MessageListenerService"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.CHANNEL_EVENT" />
