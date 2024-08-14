@@ -15,8 +15,8 @@ android {
         applicationId "com.helsinkiwizard.cointoss"
         minSdk 26
         targetSdk 34
-        versionCode 111
-        versionName "v1.1.1"
+        versionCode 114
+        versionName "v1.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
