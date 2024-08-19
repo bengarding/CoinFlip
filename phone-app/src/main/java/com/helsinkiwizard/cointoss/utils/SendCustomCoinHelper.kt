@@ -3,6 +3,8 @@ package com.helsinkiwizard.cointoss.utils
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.graphics.scale
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.wearable.ChannelClient
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Node
@@ -35,12 +37,20 @@ internal class SendCustomCoinHelper(
 
     private val messageListener = MessageClient.OnMessageReceivedListener { message ->
         when (message.path) {
-            READY_FOR_COIN_TRANSFER ->  openChannelAndSendCoin()
+            READY_FOR_COIN_TRANSFER -> openChannelAndSendCoin()
             TRANSFER_COMPLETE -> completeTransfer()
         }
     }
 
     suspend fun sendCoin() {
+        val isGooglePlayServicesAvailable = GoogleApiAvailability.getInstance()
+            .isGooglePlayServicesAvailable(messageClient.applicationContext)
+
+        if (isGooglePlayServicesAvailable != ConnectionResult.SUCCESS) {
+            onFinished(FinishedResult.FAILURE(Exception("Google API is not available")))
+            return
+        }
+
         try {
             messageClient.addListener(messageListener)
             messageClient.sendMessage(node.id, PREPARE_FOR_COIN_TRANSFER, byteArrayOf()).await()

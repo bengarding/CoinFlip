@@ -2,6 +2,7 @@ package com.helsinkiwizard.core.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.helsinkiwizard.core.utils.Logger
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -21,7 +22,7 @@ abstract class AbstractViewModel(defaultState: UiState = UiState.Loading) : View
 
     protected open fun onError(e: Exception, errorType: BaseErrorType? = null) {
         mutableUiStateFlow.value = UiState.Error(e, errorType)
-        Log.e(javaClass.simpleName, e.message, e)
+        Logger.e(javaClass.simpleName, e.message, e)
     }
 
     /**

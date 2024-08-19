@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,6 +37,7 @@ import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.DialogTonalOverlay
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
+import com.helsinkiwizard.core.utils.Logger
 
 @Composable
 fun MediaPicker(
@@ -63,7 +63,7 @@ fun MediaPicker(
                 onImageCropped(bitmap)
             }
         } else {
-            Log.e("MediaPicker", "Image crop error", result.error)
+            Logger.e("MediaPicker", "Image crop error", result.error)
         }
     }
 
