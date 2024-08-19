@@ -1,5 +1,6 @@
 package com.helsinkiwizard.cointoss.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,16 +59,18 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var repo: Repository
 
+    private var startFlipping by mutableStateOf(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        val startFlipping = intent.extras?.getBoolean(EXTRA_START_FLIPPING) ?: false
+        startFlipping = intent.extras?.getBoolean(EXTRA_START_FLIPPING) ?: false
         val initialCoinType = runBlocking { repo.getCoinType.firstOrNull() ?: CoinType.BITCOIN }
 
         setContent {
             CoinTossTheme {
-                CoinToss(initialCoinType, startFlipping)
+                CoinToss(initialCoinType)
                 CustomCoinDialog()
             }
         }
@@ -79,14 +81,18 @@ class MainActivity : ComponentActivity() {
         FirebaseAnalytics.getInstance(applicationContext).logEvent(FirebaseAnalytics.Event.APP_OPEN, params)
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        startFlipping = intent?.extras?.getBoolean(EXTRA_START_FLIPPING) ?: false
+    }
+
     @OptIn(ExperimentalPagerApi::class)
     @Composable
-    fun CoinToss(initialCoinType: CoinType, startFlippingIntent: Boolean) {
+    fun CoinToss(initialCoinType: CoinType) {
         val coinType = repo.getCoinType.collectAsState(initial = initialCoinType).value
         val customCoin = repo.getCustomCoin.collectAsState(initial = null).value
 
         val pagerState = rememberPagerState()
-        var startFlipping by remember { mutableStateOf(startFlippingIntent) }
 
         Column(
             modifier = Modifier
