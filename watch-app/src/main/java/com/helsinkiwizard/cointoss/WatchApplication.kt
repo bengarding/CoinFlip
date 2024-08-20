@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.android.gms.wearable.Wearable
 import com.helsinkiwizard.core.CoreConstants.WEAR_CAPABILITY
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class WatchApplication : Application() {
 
     private val lifecycleObserver = AppLifecycleObserver()
