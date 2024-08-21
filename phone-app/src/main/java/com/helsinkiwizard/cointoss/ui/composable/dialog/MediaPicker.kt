@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.graphics.scale
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
@@ -38,6 +39,8 @@ import com.helsinkiwizard.core.theme.DialogTonalOverlay
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
 import com.helsinkiwizard.core.utils.Logger
+
+private const val MAX_IMAGE_SIZE = 1000
 
 @Composable
 fun MediaPicker(
@@ -54,12 +57,18 @@ fun MediaPicker(
         if (result.isSuccessful) {
             result.uriContent?.let {
                 //getBitmap method is deprecated in Android SDK 29 or above so we need to do this check here
-                val bitmap = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+                var bitmap = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
                     MediaStore.Images.Media.getBitmap(context.contentResolver, it)
                 } else {
                     val source = ImageDecoder.createSource(context.contentResolver, it)
                     ImageDecoder.decodeBitmap(source)
                 }
+
+                // Scale down the image if it's very large
+                if (bitmap.width > MAX_IMAGE_SIZE || bitmap.height > MAX_IMAGE_SIZE) {
+                    bitmap = bitmap.scale(MAX_IMAGE_SIZE, MAX_IMAGE_SIZE)
+                }
+
                 onImageCropped(bitmap)
             }
         } else {
