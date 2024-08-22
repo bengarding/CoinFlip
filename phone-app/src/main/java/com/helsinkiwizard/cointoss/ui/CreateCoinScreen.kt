@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowUpward
+import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.HorizontalDivider
@@ -37,7 +38,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
+import coil.size.Size
 import com.google.android.gms.wearable.Wearable
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
@@ -395,13 +398,26 @@ private fun CustomCoinSide(
     coinSideString: String,
     modifier: Modifier = Modifier
 ) {
-    AsyncImage(
-        model = uri,
+    val imageRequest = ImageRequest.Builder(LocalContext.current)
+        .data(uri)
+        .size(Size.ORIGINAL)
+        .build()
+
+    SubcomposeAsyncImage(
+        model = imageRequest,
         contentDescription = "$name, $coinSideString",
         modifier = modifier
             .size(Eighty)
             .clip(shape = CircleShape)
-            .background(MaterialTheme.colorScheme.primary)
+            .background(MaterialTheme.colorScheme.primary),
+        error = {
+            Icon(
+                imageVector = Icons.Outlined.BrokenImage, 
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.padding(Twenty)
+            )
+        }
     )
 }
 
