@@ -38,7 +38,6 @@ import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Twelve
-import com.helsinkiwizard.core.utils.Logger
 import com.helsinkiwizard.core.utils.deleteBitmap
 import com.helsinkiwizard.core.utils.storeBitmap
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +49,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import okio.IOException
+import timber.log.Timber
 import java.nio.ByteBuffer
 import javax.inject.Inject
 
@@ -127,14 +127,14 @@ class ReceiveImageActivity : ComponentActivity() {
                 val (heads, tails, name) = byteArray.toBitmapAndString()
                 updateImage(heads, tails, name)
             } catch (e: IOException) {
-                Logger.e(javaClass.simpleName, "Error reading from channel input stream", e)
+                Timber.e(e, "Error reading from channel input stream")
             } catch (e: Exception) {
-                Logger.e(javaClass.simpleName, "Error receiving custom coin", e)
+                Timber.e(e, "Error receiving custom coin")
             } finally {
                 try {
                     inputStream.close()
                 } catch (e: IOException) {
-                    Logger.e(javaClass.simpleName, "Error closing the input stream.", e)
+                    Timber.e(e, "Error closing the input stream")
                 }
             }
 

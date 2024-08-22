@@ -30,7 +30,7 @@ private const val IMAGE_WIDTH_PERCENT = .8f
 fun ErrorScreen(
     message: String,
     onCancelClicked: () -> Unit,
-    onRetryClicked: () -> Unit
+    onRetryClicked: (() -> Unit)?
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -62,11 +62,13 @@ fun ErrorScreen(
             modifier = Modifier.padding(top = ThirtyTwo),
             onClick = onCancelClicked
         )
-        PrimaryButton(
-            text = stringResource(id = R.string.retry),
-            modifier = Modifier.padding(top = Sixteen),
-            onClick = onRetryClicked
-        )
+        if (onRetryClicked != null) {
+            PrimaryButton(
+                text = stringResource(id = R.string.retry),
+                modifier = Modifier.padding(top = Sixteen),
+                onClick = onRetryClicked
+            )
+        }
     }
 }
 

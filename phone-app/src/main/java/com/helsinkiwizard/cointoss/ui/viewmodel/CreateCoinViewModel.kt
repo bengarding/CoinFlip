@@ -8,9 +8,12 @@ import com.google.android.gms.wearable.CapabilityClient.FILTER_REACHABLE
 import com.google.android.gms.wearable.ChannelClient
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Node
+import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
 import com.helsinkiwizard.cointoss.utils.SendCustomCoinHelper
+import com.helsinkiwizard.cointoss.utils.exception.GoogleAPIUnavailableException
+import com.helsinkiwizard.cointoss.utils.exception.WearCapabilityUnavailableException
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.CoreConstants.WEAR_CAPABILITY
 import com.helsinkiwizard.core.coin.CoinSide
@@ -181,14 +184,24 @@ class CreateCoinViewModel @Inject constructor(
         uriToBitmap: (Uri) -> Bitmap?
     ) {
         viewModelScope.safeLaunch(context = Dispatchers.IO) {
-            val onSuccess: (SendCustomCoinHelper.FinishedResult) -> Unit = { result ->
+            val onFinished: (SendCustomCoinHelper.FinishedResult) -> Unit = { result ->
                 if (result == SendCustomCoinHelper.FinishedResult.SUCCESS) {
                     showContent()
                     mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SendToWatchSuccess)
                 } else {
+                    val exception = (result as SendCustomCoinHelper.FinishedResult.FAILURE).exception
+                    val messageRes = if (exception is GoogleAPIUnavailableException
+                        || exception is WearCapabilityUnavailableException
+                    ) {
+                        R.string.error_sending_coin_api_exception
+                    } else {
+                        R.string.error_sending_coin_to_watch
+                    }
+
                     onError(
-                        e = (result as SendCustomCoinHelper.FinishedResult.FAILURE).exception,
+                        e = exception,
                         errorType = CreateCoinError.SendToWatchError(
+                            messageRes = messageRes,
                             retry = { sendCoinToNode(node, coin, messageClient, channelClient, uriToBitmap) }
                         )
                     )
@@ -196,7 +209,7 @@ class CreateCoinViewModel @Inject constructor(
             }
 
             val helper = SendCustomCoinHelper(
-                node, coin, messageClient, channelClient, viewModelScope, uriToBitmap, onSuccess
+                node, coin, messageClient, channelClient, viewModelScope, uriToBitmap, onFinished
             )
             helper.sendCoin()
         }
@@ -225,5 +238,5 @@ sealed interface CreateCoinDialogs : BaseDialogType {
 }
 
 sealed interface CreateCoinError : BaseErrorType {
-    data class SendToWatchError(val retry: () -> Unit) : BaseErrorType
+    data class SendToWatchError(val messageRes: Int, val retry: () -> Unit) : CreateCoinError
 }

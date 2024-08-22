@@ -5,20 +5,26 @@ import android.net.Uri
 import androidx.core.graphics.scale
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.wearable.CapabilityClient.FILTER_REACHABLE
 import com.google.android.gms.wearable.ChannelClient
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.Node
+import com.google.android.gms.wearable.Wearable
+import com.helsinkiwizard.cointoss.utils.exception.GoogleAPIUnavailableException
+import com.helsinkiwizard.cointoss.utils.exception.WearCapabilityUnavailableException
 import com.helsinkiwizard.core.CoreConstants.BYTE_BUFFER_CAPACITY
 import com.helsinkiwizard.core.CoreConstants.IMAGE_PATH
 import com.helsinkiwizard.core.CoreConstants.PREPARE_FOR_COIN_TRANSFER
 import com.helsinkiwizard.core.CoreConstants.READY_FOR_COIN_TRANSFER
 import com.helsinkiwizard.core.CoreConstants.TRANSFER_COMPLETE
+import com.helsinkiwizard.core.CoreConstants.WEAR_CAPABILITY
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.nio.ByteBuffer
 
 internal class SendCustomCoinHelper(
@@ -43,11 +49,21 @@ internal class SendCustomCoinHelper(
     }
 
     suspend fun sendCoin() {
+        // check that Google Play services are available
         val isGooglePlayServicesAvailable = GoogleApiAvailability.getInstance()
             .isGooglePlayServicesAvailable(messageClient.applicationContext)
 
         if (isGooglePlayServicesAvailable != ConnectionResult.SUCCESS) {
-            onFinished(FinishedResult.FAILURE(Exception("Google API is not available")))
+            onFinished(FinishedResult.FAILURE(GoogleAPIUnavailableException()))
+            return
+        }
+
+        // double check that the client has wear capability
+        try {
+            val wearableClient = Wearable.getCapabilityClient(messageClient.applicationContext)
+            wearableClient.getCapability(WEAR_CAPABILITY, FILTER_REACHABLE).await()
+        } catch (e: Exception) {
+            onFinished(FinishedResult.FAILURE(WearCapabilityUnavailableException()))
             return
         }
 
@@ -67,7 +83,7 @@ internal class SendCustomCoinHelper(
                 val nameByteArray = coin.name.toPrefixedByteArray()
 
                 if (headsByteArray == null || tailsByteArray == null) {
-                    onFinished(FinishedResult.FAILURE(Exception("Converting uri to bitmap failed")))
+                    onFinished(FinishedResult.FAILURE(IOException("Converting uri to bitmap failed")))
                     return@launch
                 }
 

@@ -44,6 +44,7 @@
     <string name="show_send_to_watch_button">Mostrar botón de enviar moneda personalizada para mirar</string>
     <string name="something_went_wrong">Algo salió mal</string>
     <string name="error_sending_coin_to_watch">¡Ups! Se produjo un error al enviar su moneda al reloj. Asegúrate de que tu reloj esté cerca y conectado y vuelve a intentarlo.</string>
+    <string name="error_sending_coin_api_exception">Esta función requiere un dispositivo Wear OS conectado, pero parece que tu dispositivo no es compatible con Wear OS. Asegúrate de que tu teléfono esté emparejado con un reloj inteligente compatible y vuelve a intentarlo.</string>
     <string name="retry">Rever</string>
     <string name="new_feature_alert">¡Alerta de nueva función!</string>
     <string name="send_custom_coins_message">¡Ahora puedes enviar monedas personalizadas a tu reloj!</string>

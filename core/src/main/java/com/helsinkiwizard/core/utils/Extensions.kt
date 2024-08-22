@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import timber.log.Timber
 import java.io.IOException
 import java.util.Locale
 
@@ -29,7 +30,7 @@ fun Uri.toBitmap(context: Context): Bitmap? {
             BitmapFactory.decodeStream(inputStream)
         }
     } catch (e: IOException) {
-        Logger.e("Extensions", "toBitmap failed", e)
+        Timber.e(e, "toBitmap failed")
         null
     }
 }
