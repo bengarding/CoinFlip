@@ -45,6 +45,7 @@
     <string name="show_send_to_watch_button">Show send custom coin to watch button</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="error_sending_coin_to_watch">Oops! An error occurred while sending your coin to the watch. Please make sure your watch is nearby and connected, then try again.</string>
+    <string name="error_sending_coin_api_exception">This feature requires a connected Wear OS device, but it seems that your device does not support Wear OS. Please ensure your phone is paired with a compatible smartwatch and try again.</string>
     <string name="retry">Retry</string>
     <string name="new_feature_alert">New feature alert!</string>
     <string name="send_custom_coins_message">You can now send custom coins to your watch!</string>

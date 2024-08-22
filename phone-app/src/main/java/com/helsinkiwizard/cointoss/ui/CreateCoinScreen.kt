@@ -94,10 +94,20 @@ private fun CreateCoinContent(viewModel: CreateCoinViewModel) {
         }
 
         is UiState.Error -> {
+            var messageRes: Int = R.string.error_sending_coin_to_watch
+            var retry: (() -> Unit)? = null
+            when (val type = state.type as? CreateCoinError) {
+                is CreateCoinError.SendToWatchError -> {
+                    messageRes = type.messageRes
+                    retry = type.retry
+                }
+
+                else -> {}
+            }
             ErrorScreen(
-                message = stringResource(id = R.string.error_sending_coin_to_watch),
+                message = stringResource(id = messageRes),
                 onCancelClicked = { viewModel.showContent() },
-                onRetryClicked = (state.type as CreateCoinError.SendToWatchError).retry
+                onRetryClicked = retry
             )
         }
     }
