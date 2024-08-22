@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import androidx.core.content.FileProvider
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -39,7 +40,7 @@ fun storeBitmap(
         }
         FileProvider.getUriForFile(context, "${context.packageName}.file-provider", file)
     } catch (e: IOException) {
-        Logger.e("Utils", "Failed to store bitmap", e)
+        Timber.e(e, "Failed to store bitmap")
         null
     }
 }
@@ -51,7 +52,7 @@ fun deleteBitmap(context: Context, uri: Uri): Boolean {
         // In case of a file, it should be 1 if the file was successfully deleted.
         deletedRows > 0
     } catch (e: Exception) {
-        Logger.e("Utils", "Failed to delete bitmap", e)
+        Timber.e(e, "Failed to delete bitmap")
         false
     }
 }

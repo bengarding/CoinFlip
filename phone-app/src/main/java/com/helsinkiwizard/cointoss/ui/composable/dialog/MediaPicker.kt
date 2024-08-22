@@ -38,7 +38,7 @@ import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.DialogTonalOverlay
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
-import com.helsinkiwizard.core.utils.Logger
+import timber.log.Timber
 
 private const val MAX_IMAGE_SIZE = 1000
 
@@ -72,7 +72,7 @@ fun MediaPicker(
                 onImageCropped(bitmap)
             }
         } else {
-            Logger.e("MediaPicker", "Image crop error", result.error)
+            Timber.e(result.error, "Image crop error")
         }
     }
 
