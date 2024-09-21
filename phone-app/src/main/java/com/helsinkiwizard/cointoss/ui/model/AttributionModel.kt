@@ -158,5 +158,15 @@ object AttributionParams {
             name = "Andra",
             source = UCoin
         ),
+        AttributionModel(
+            coin = CoinType.HUNGARY,
+            name = "Фанис 67",
+            source = UCoin
+        ),
+        AttributionModel(
+            coin = CoinType.SINGAPORE,
+            name = "Cloud Pavilion",
+            source = UCoin
+        ),
     )
 }
