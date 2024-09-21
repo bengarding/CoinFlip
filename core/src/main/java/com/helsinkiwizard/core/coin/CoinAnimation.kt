@@ -28,8 +28,8 @@ import androidx.compose.ui.res.stringResource
 import com.helsinkiwizard.core.R
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.utils.toBitmap
-import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
+import kotlin.random.Random
 
 private const val QUARTER_ROTATION = 90f
 private const val HALF_ROTATION = 180
@@ -41,7 +41,7 @@ private const val SPEED_TO_MILLIS = 1000f
 
 private var rotationAmount = 1
 private var currentSide = CoinSide.HEADS
-private var nextSide = if (ThreadLocalRandom.current().nextInt() % 2 == 0) CoinSide.HEADS else CoinSide.TAILS
+private var nextSide = if (Random.nextInt() % 2 == 0) CoinSide.HEADS else CoinSide.TAILS
 
 var flipCount = 0
 
@@ -193,12 +193,10 @@ fun FlipAnimation(
 
 /**
  * Randomizes the rotation amount to be used for each coin flip.
- * There is a bug in Kotlin's Random class where it repeats itself every time the app loads,
- * so use java.util.Random here and add 10 to increase the number of rotations per flip.
- * https://issuetracker.google.com/issues/234631055
+ * Add 10 to increase the number of rotations per flip.
  */
 private fun randomizeRotationAmount() {
-    val randomFlips = ThreadLocalRandom.current().nextInt(8) + 10
+    val randomFlips = Random.nextInt(8) + 10
     rotationAmount = randomFlips * HALF_ROTATION
 
     currentSide = nextSide
