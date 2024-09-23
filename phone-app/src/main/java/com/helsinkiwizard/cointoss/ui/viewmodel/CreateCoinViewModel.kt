@@ -160,7 +160,12 @@ class CreateCoinViewModel @Inject constructor(
         channelClient: ChannelClient,
         uriToBitmap: (Uri) -> Bitmap?
     ) {
-        viewModelScope.launch {
+        viewModelScope.safeLaunch(
+            typeOfError = CreateCoinError.SendToWatchError(
+                messageRes = R.string.error_sending_coin_api_exception,
+                retry = { sendCoinToWatch(coin, messageClient, capabilityClient, channelClient, uriToBitmap) }
+            )
+        ) {
             val nodes = capabilityClient
                 .getCapability(WEAR_CAPABILITY, FILTER_REACHABLE)
                 .await()
