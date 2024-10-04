@@ -33,7 +33,6 @@ class CoinTileService : SuspendingTileService() {
 
     companion object {
         private const val SELECTED_COIN = "selected_coin"
-        private const val APP_ICON = "app_icon"
         private const val SCALED_BITMAP_SIZE = 500
         private const val ICON_SIZE = 50f
         private const val ICON_BOTTOM_PADDING = 8f
@@ -68,10 +67,6 @@ class CoinTileService : SuspendingTileService() {
             .addIdToImageMapping(
                 SELECTED_COIN,
                 headsImageResource
-            )
-            .addIdToImageMapping(
-                APP_ICON,
-                drawableResToImageResource(R.mipmap.ic_launcher_round)
             )
             .build()
     }
@@ -133,27 +128,6 @@ class CoinTileService : SuspendingTileService() {
                         setHeight(dp(deviceParams.screenHeightDp.toFloat()))
                         setWidth(dp(deviceParams.screenWidthDp.toFloat()))
                     }.build()
-            )
-            .addContent(
-                LayoutElementBuilders.Box.Builder()
-                    .setWidth(DimensionBuilders.expand())
-                    .setHeight(DimensionBuilders.expand())
-                    .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_BOTTOM)
-                    .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
-                    .addContent(
-                        LayoutElementBuilders.Image.Builder().apply {
-                            setResourceId(APP_ICON)
-                            setHeight(dp(ICON_SIZE))
-                            setWidth(dp(ICON_SIZE))
-                            setModifiers(
-                                ModifiersBuilders.Modifiers.Builder()
-                                    .setPadding(
-                                        ModifiersBuilders.Padding.Builder()
-                                            .setBottom(dp(ICON_BOTTOM_PADDING)).build()
-                                    ).build()
-                            )
-                        }.build()
-                    ).build()
             ).build()
     }
 
