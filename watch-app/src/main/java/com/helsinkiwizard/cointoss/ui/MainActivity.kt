@@ -24,6 +24,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.PositionIndicator
+import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Dialog
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -127,33 +129,38 @@ class MainActivity : ComponentActivity() {
                 // do nothing
             }
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Twelve),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxRectangle()
-                    .verticalScroll(rememberScrollState())
+            val scrollState = rememberScrollState()
+            Scaffold(
+                positionIndicator = { PositionIndicator(scrollState) }
             ) {
-                Text(
-                    text = stringResource(id = R.string.new_feature_alert),
-                    fontSize = Text20,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = stringResource(id = R.string.custom_coin_dialog_message),
-                    textAlign = TextAlign.Center
-                )
-                Button(
-                    onClick = {
-                        lifecycleScope.launch {
-                            repo.disableShowSendToWatchDialog()
-                        }
-                    },
-                    modifier = Modifier.padding(top = Eight)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Twelve),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxRectangle()
+                        .verticalScroll(scrollState)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.custom_coin_dialog_got_it)
+                        text = stringResource(id = R.string.new_feature_alert),
+                        fontSize = Text20,
+                        textAlign = TextAlign.Center
                     )
+                    Text(
+                        text = stringResource(id = R.string.custom_coin_dialog_message),
+                        textAlign = TextAlign.Center
+                    )
+                    Button(
+                        onClick = {
+                            lifecycleScope.launch {
+                                repo.disableShowSendToWatchDialog()
+                            }
+                        },
+                        modifier = Modifier.padding(top = Eight)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.custom_coin_dialog_got_it)
+                        )
+                    }
                 }
             }
         }
