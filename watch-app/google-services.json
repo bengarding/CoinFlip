@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "314836813636",
-    "project_id": "coin-toss-d7fa2",
-    "storage_bucket": "coin-toss-d7fa2.appspot.com"
+    "project_number": "995779956739",
+    "project_id": "coin-toss-2e4d1",
+    "storage_bucket": "coin-toss-2e4d1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:314836813636:android:81072a4131689f05b2f911",
+        "mobilesdk_app_id": "1:995779956739:android:150cbbdd774aacaae5be36",
         "android_client_info": {
           "package_name": "com.helsinkiwizard.cointoss"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "314836813636-paedvknjkd2ttrhg8a6pigd854q4jgat.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC0qdR9aS59oCj89TgYuECcd8rNlMgvq3g"
+          "current_key": "AIzaSyDBOhqNxzLf-hSdDYOLLZEaEWDd-l8mCHc"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "314836813636-paedvknjkd2ttrhg8a6pigd854q4jgat.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
