@@ -2,7 +2,6 @@ package com.helsinkiwizard.cointoss
 
 import android.content.Context
 import android.net.Uri
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.helsinkiwizard.core.BaseRepository
@@ -20,7 +19,6 @@ class Repository(context: Context) : BaseRepository(context) {
         val CUSTOM_COIN_HEADS = stringPreferencesKey("custom_coin_heads")
         val CUSTOM_COIN_TAILS = stringPreferencesKey("custom_coin_tails")
         val CUSTOM_COIN_NAME = stringPreferencesKey("custom_coin_name")
-        val SHOW_CUSTOM_COIN_DIALOG = booleanPreferencesKey("show_custom_coin_dialog")
     }
 
     val getResourceVersion: Flow<Int> = context.dataStore.data
@@ -48,12 +46,6 @@ class Repository(context: Context) : BaseRepository(context) {
                     name = preferences[CUSTOM_COIN_NAME] ?: EMPTY_STRING
                 )
             }
-        }
-
-    suspend fun disableShowSendToWatchDialog() = savePreference(SHOW_CUSTOM_COIN_DIALOG, false)
-    val getShowSendToWatchDialog: Flow<Boolean> = context.dataStore.data
-        .map { preferences ->
-            preferences[SHOW_CUSTOM_COIN_DIALOG] ?: true
         }
 
     suspend fun setResourceVersion(value: Int) = savePreference(TILE_RESOURCE_VERSION, value)

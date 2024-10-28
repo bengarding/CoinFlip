@@ -57,4 +57,5 @@ dependencies {
     api platform('com.google.firebase:firebase-bom:32.6.0')
     api 'com.google.firebase:firebase-crashlytics'
     api 'com.google.firebase:firebase-analytics'
+    api 'com.google.firebase:firebase-perf'
 }

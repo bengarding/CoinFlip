@@ -24,7 +24,6 @@ class Repository @Inject constructor(
         private val THEME_MODE = stringPreferencesKey("selected_theme")
         private val MATERIAL_YOU = booleanPreferencesKey("material_you")
         private val SHOW_SEND_TO_WATCH_BUTTON = booleanPreferencesKey("show_send_to_watch")
-        private val SHOW_SEND_TO_WATCH_DIALOG = booleanPreferencesKey("show_send_to_watch_dialog")
     }
 
     suspend fun setTheme(themeMode: ThemeMode) = savePreference(THEME_MODE, themeMode.name)
@@ -43,12 +42,6 @@ class Repository @Inject constructor(
     val getShowSendToWatchButton: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[SHOW_SEND_TO_WATCH_BUTTON] ?: true
-        }
-
-    suspend fun disableShowSendToWatchDialog() = savePreference(SHOW_SEND_TO_WATCH_DIALOG, false)
-    val getShowSendToWatchDialog: Flow<Boolean> = context.dataStore.data
-        .map { preferences ->
-            preferences[SHOW_SEND_TO_WATCH_DIALOG] ?: true
         }
 
     suspend fun storeCustomCoin(headsUri: Uri, tailsUri: Uri, name: String) {

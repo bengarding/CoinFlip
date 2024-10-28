@@ -4,9 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.viewmodel.AbstractViewModel
-import com.helsinkiwizard.core.viewmodel.BaseDialogType
 import com.helsinkiwizard.core.viewmodel.BaseType
-import com.helsinkiwizard.core.viewmodel.DialogState
 import com.helsinkiwizard.core.viewmodel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.filterNotNull
@@ -30,31 +28,8 @@ internal class HomeViewModel @Inject constructor(
             mutableUiStateFlow.value = UiState.ShowContent(
                 HomeScreenContent.LoadingComplete(initialCoinType, initialSpeed)
             )
-
-            val showSendToWatchDialog = repository.getShowSendToWatchDialog.filterNotNull().first()
-            if (showSendToWatchDialog) {
-                mutableDialogStateFlow.value = DialogState.ShowContent(HomeScreenDialogs.ShowSendToWatchDialog)
-            }
         }
     }
-
-    fun onHideButtonClicked() {
-        viewModelScope.launch {
-            repository.setShowSendToWatchButton(false)
-        }
-    }
-
-    fun dismissDialog() {
-        resetDialogState()
-        viewModelScope.launch {
-            repository.disableShowSendToWatchDialog()
-        }
-    }
-}
-
-
-internal sealed interface HomeScreenDialogs : BaseDialogType {
-    data object ShowSendToWatchDialog : HomeScreenDialogs
 }
 
 internal sealed interface HomeScreenContent : BaseType {
