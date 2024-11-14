@@ -22,10 +22,10 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -44,6 +44,7 @@ import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.navigation.mainGraph
 import com.helsinkiwizard.cointoss.ui.drawer.DrawerContent
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
+import com.helsinkiwizard.core.theme.LocalActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -72,14 +73,18 @@ class MainActivity : ComponentActivity() {
             val themeMode = repository.getThemeMode.collectAsState(initial = initialThemeMode).value
 
             CoinTossTheme(repository, themeMode, initialMaterialYou) {
-                CoinToss(themeMode)
+                CompositionLocalProvider(
+                    LocalActivity provides this@MainActivity
+                ) {
+                    CoinToss()
+                }
             }
         }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun CoinToss(themeMode: ThemeMode) {
+    private fun CoinToss() {
         val navController: NavHostController = rememberNavController()
         val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val coroutineScope = rememberCoroutineScope()
@@ -171,14 +176,4 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
-
-    @Composable
-    @OptIn(ExperimentalMaterial3Api::class)
-    fun topBarColors(themeMode: ThemeMode): TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary,
-        scrolledContainerColor = MaterialTheme.colorScheme.primary,
-        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-        titleContentColor = MaterialTheme.colorScheme.onPrimary,
-        actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-    )
 }

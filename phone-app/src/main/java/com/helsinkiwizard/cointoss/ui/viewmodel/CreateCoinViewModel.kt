@@ -92,6 +92,7 @@ class CreateCoinViewModel @Inject constructor(
                     repository.storeCustomCoin(headsUri, tailsUri, model.name.value)
                 }
                 clear()
+                mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SaveSuccess)
             } else {
                 mutableDialogStateFlow.value = DialogState.ShowContent(CreateCoinDialogs.SaveError)
             }
@@ -228,6 +229,7 @@ sealed interface CreateCoinContent : BaseType {
 sealed interface CreateCoinDialogs : BaseDialogType {
     data class MediaPicker(val coinSide: CoinSide) : CreateCoinDialogs
     data object MissingImages : CreateCoinDialogs
+    data object SaveSuccess : CreateCoinDialogs
     data object SaveError : CreateCoinDialogs
     data class DeleteCoinBitmaps(val headsUri: Uri, val tailsUri: Uri) : CreateCoinDialogs
     data class DeleteCoinDialog(val coin: CustomCoinUiModel) : CreateCoinDialogs

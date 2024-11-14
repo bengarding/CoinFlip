@@ -37,7 +37,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
@@ -55,10 +54,12 @@ import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinError
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinViewModel
+import com.helsinkiwizard.cointoss.utils.launchInAppReview
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Eighty
 import com.helsinkiwizard.core.theme.Four
+import com.helsinkiwizard.core.theme.LocalActivity
 import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
@@ -76,7 +77,6 @@ private const val INDEX_SELECTED_COIN = 1
 
 @Composable
 fun CreateCoinScreen(
-    navController: NavController,
     viewModel: CreateCoinViewModel = hiltViewModel()
 ) {
     CreateCoinContent(viewModel)
@@ -135,6 +135,10 @@ private fun CreateCoinDialogs(viewModel: CreateCoinViewModel) {
                         Toast.LENGTH_LONG
                     ).show()
                     viewModel.resetDialogState()
+                }
+
+                is CreateCoinDialogs.SaveSuccess -> {
+                    LocalActivity.current.launchInAppReview()
                 }
 
                 is CreateCoinDialogs.SaveError -> {
