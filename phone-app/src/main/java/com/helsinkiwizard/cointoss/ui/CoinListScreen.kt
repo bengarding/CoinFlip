@@ -53,6 +53,7 @@ import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListViewModel
+import com.helsinkiwizard.cointoss.utils.launchInAppReview
 import com.helsinkiwizard.core.CoreConstants
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.Alpha20
@@ -61,6 +62,7 @@ import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.LargeCoinButtonHeight
+import com.helsinkiwizard.core.theme.LocalActivity
 import com.helsinkiwizard.core.theme.Sixty
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Two
@@ -76,11 +78,18 @@ internal fun CoinListScreen(
     navController: NavController,
     viewModel: CoinListViewModel = hiltViewModel()
 ) {
+    val activity = LocalActivity.current
     when (val state = viewModel.uiState.collectAsState().value) {
         is UiState.ShowContent -> {
             when (val type = state.type as CoinListContent) {
                 is CoinListContent.LoadingComplete -> Content(viewModel, type.customCoinFlow, navController)
-                is CoinListContent.CoinSet -> navController.navigate(NavRoute.Home.name)
+                is CoinListContent.CoinSet -> {
+                    activity.launchInAppReview(
+                        onComplete = {
+                            navController.navigate(NavRoute.Home.name)
+                        }
+                    )
+                }
             }
         }
 

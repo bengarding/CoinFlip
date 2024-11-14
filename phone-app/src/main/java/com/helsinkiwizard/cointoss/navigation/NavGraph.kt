@@ -43,7 +43,7 @@ fun NavGraphBuilder.mainGraph(navController: NavController) {
             AttributionsScreen()
         }
         composable(NavRoute.CreateCoin.name) {
-            CreateCoinScreen(navController)
+            CreateCoinScreen()
         }
     }
 }

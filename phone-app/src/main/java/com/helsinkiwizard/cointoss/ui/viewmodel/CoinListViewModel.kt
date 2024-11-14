@@ -9,6 +9,7 @@ import com.helsinkiwizard.core.viewmodel.BaseType
 import com.helsinkiwizard.core.viewmodel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,13 +26,15 @@ internal class CoinListViewModel @Inject constructor(
 
     fun onCoinClick(coinType: CoinType) {
         viewModelScope.launch {
+            // Show in-app review only if the user has previously changed coins
+            val showInAppReview = repository.getCoinType.first() != CoinType.BITCOIN
             repository.setCoinType(coinType)
-            mutableUiStateFlow.value = UiState.ShowContent(CoinListContent.CoinSet)
+            mutableUiStateFlow.value = UiState.ShowContent(CoinListContent.CoinSet(showInAppReview))
         }
     }
 }
 
 internal sealed interface CoinListContent: BaseType {
     data class LoadingComplete(val customCoinFlow: Flow<CustomCoinUiModel?>): CoinListContent
-    data object CoinSet: CoinListContent
+    data class CoinSet(val showInAppReview: Boolean): CoinListContent
 }
