@@ -8,6 +8,7 @@
     <string name="about">Результат перевода</string>
     <string name="create_a_coin">Создать монету</string>
     <string name="remove_ads">Удалить рекламу</string>
+    <string name="remove_all_ads_forever">Удалить всю рекламу навсегда</string>
     <string name="image_cropper">Обрезка изображения</string>
     <string name="theme">Тема</string>
     <string name="theme_light">Светлый</string>
