@@ -164,6 +164,7 @@ class MainActivity : ComponentActivity() {
                 NavRoute.About -> R.string.about
                 NavRoute.Attributions -> R.string.attributions
                 NavRoute.CreateCoin -> R.string.create_a_coin
+                NavRoute.RemoveAds -> R.string.remove_ads
             }
         )
         AnimatedContent(

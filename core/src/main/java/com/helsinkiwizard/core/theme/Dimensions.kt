@@ -10,6 +10,7 @@ val Text20 = 20.sp
 val Text22 = 22.sp
 val Text24 = 24.sp
 
+val Zero = 0.dp
 val One = 1.dp
 val Two = 2.dp
 val Four = 4.dp

@@ -9,6 +9,7 @@ import com.helsinkiwizard.cointoss.ui.AttributionsScreen
 import com.helsinkiwizard.cointoss.ui.CoinListScreen
 import com.helsinkiwizard.cointoss.ui.CreateCoinScreen
 import com.helsinkiwizard.cointoss.ui.HomeScreen
+import com.helsinkiwizard.cointoss.ui.RemoveAdsScreen
 import com.helsinkiwizard.cointoss.ui.SettingsScreen
 
 const val MAIN_ROUTE = "mainNavRoute"
@@ -19,7 +20,8 @@ enum class NavRoute {
     Settings,
     About,
     Attributions,
-    CreateCoin
+    CreateCoin,
+    RemoveAds
 }
 
 fun NavGraphBuilder.mainGraph(navController: NavController) {
@@ -44,6 +46,9 @@ fun NavGraphBuilder.mainGraph(navController: NavController) {
         }
         composable(NavRoute.CreateCoin.name) {
             CreateCoinScreen()
+        }
+        composable(NavRoute.RemoveAds.name) {
+            RemoveAdsScreen()
         }
     }
 }
