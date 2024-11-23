@@ -92,6 +92,8 @@ class MainActivity : ComponentActivity() {
         val currentDestination = navController.currentBackStackEntryAsState().value?.destination
         val currentRoute = NavRoute.valueOf(currentDestination?.route ?: NavRoute.Home.name)
 
+        val adsRemoved = repository.getAdsRemoved.collectAsState(initial = false).value
+
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
@@ -137,7 +139,8 @@ class MainActivity : ComponentActivity() {
                                     }
                                     drawerState.close()
                                 }
-                            }
+                            },
+                            adsRemoved = adsRemoved
                         )
                     }
                 ) {

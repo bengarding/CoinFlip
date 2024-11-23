@@ -21,7 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,7 +35,7 @@ import com.helsinkiwizard.core.theme.Twenty
 import com.helsinkiwizard.core.theme.Zero
 
 object DrawerParams {
-    val drawerButtons = listOf(
+    val drawerButtons = mutableStateListOf(
         DrawerModel(
             NavRoute.Home,
             R.string.home,
@@ -71,9 +71,13 @@ object DrawerParams {
 
 @Composable
 fun DrawerContent(
-    onClick: (NavRoute) -> Unit
+    onClick: (NavRoute) -> Unit,
+    adsRemoved: Boolean
 ) {
-    val menuItems: List<DrawerModel> = remember { DrawerParams.drawerButtons }
+    val menuItems = DrawerParams.drawerButtons
+    if (adsRemoved && menuItems.last().drawerOption == NavRoute.RemoveAds) {
+        menuItems.removeAt(menuItems.lastIndex)
+    }
 
     ModalDrawerSheet(
         modifier = Modifier.width(IntrinsicSize.Max)
