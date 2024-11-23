@@ -22,6 +22,7 @@ buildscript {
         compose_compiler_version = '1.5.15'
 
         billing_version = '7.1.1'
+        revenue_cat_version = '8.7.2'
     }
 
     repositories {

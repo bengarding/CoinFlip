@@ -24,7 +24,6 @@ val ThirtyTwo = 32.dp
 val Forty = 40.dp
 val Sixty = 60.dp
 val Eighty = 80.dp
-val OneHundred = 100.dp
 
 val ButtonHeight = 48.dp
 

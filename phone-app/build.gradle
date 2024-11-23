@@ -16,7 +16,7 @@ android {
         applicationId "com.helsinkiwizard.cointoss"
         minSdk 26
         targetSdk 34
-        versionCode 131
+        versionCode 132
         versionName "v1.2.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -93,6 +93,8 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_version"
 
     implementation "com.android.billingclient:billing:$billing_version"
+    implementation "com.revenuecat.purchases:purchases:$revenue_cat_version"
+    implementation "com.revenuecat.purchases:purchases-ui:$revenue_cat_version"
 
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
