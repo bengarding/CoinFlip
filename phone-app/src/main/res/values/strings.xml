@@ -50,4 +50,6 @@
     <string name="error_sending_coin_api_exception">This feature requires a connected Wear OS device, but it seems that your device does not support Wear OS. Please ensure your phone is paired with a compatible smartwatch and try again.</string>
     <string name="retry">Retry</string>
     <string name="success">Success!</string>
+    <string name="purchase_error">Error completing purchase</string>
+    <string name="purchase_success"></string>
 </resources>

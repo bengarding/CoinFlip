@@ -48,13 +48,7 @@
     <string name="error_sending_coin_to_watch">Упс! Произошла ошибка при отправке монеты на часы. Убедитесь, что ваши часы находятся поблизости и подключены, а затем повторите попытку.</string>
     <string name="error_sending_coin_api_exception">Эта функция требует подключенного устройства Wear OS, но, похоже, ваше устройство не поддерживает Wear OS. Убедитесь, что ваш телефон сопряжен с совместимыми умными часами, и повторите попытку.</string>
     <string name="retry">Повторить попытку</string>
-    <string name="new_feature_alert">Оповещение о новой функции!</string>
-    <string name="send_custom_coins_message">Теперь вы можете отправлять персонализированные монеты на свои часы!</string>
-    <string name="send_custom_coins_step_1">1. Загрузите и установите приложение Coin Toss на свое устройство Wear OS</string>
-    <string name="send_custom_coins_step_2">2. Выберите «Создать монету» в меню, затем создайте свою собственную монету</string>
-    <string name="send_custom_coins_step_3_start">3. Нажмите кнопку</string>
-    <string name="send_custom_coins_step_3_end">, чтобы отправить монету на ваши часы</string>
-    <string name="send_custom_coins_i_dont_have_watch">У меня нет устройства Wear OS, скройте кнопку</string>
-    <string name="send_custom_coins_got_it">Понятно</string>
     <string name="success">Успех!</string>
+    <string name="purchase_error">Ошибка при завершении покупки</string>
+    <string name="purchase_success">Реклама удалена!</string>
 </resources>

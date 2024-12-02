@@ -44,6 +44,7 @@ import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.navigation.mainGraph
 import com.helsinkiwizard.cointoss.ui.drawer.DrawerContent
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.theme.LocalNavController
 import com.helsinkiwizard.core.theme.LocalActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
@@ -71,12 +72,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val themeMode = repository.getThemeMode.collectAsState(initial = initialThemeMode).value
+            val navController: NavHostController = rememberNavController()
 
             CoinTossTheme(repository, themeMode, initialMaterialYou) {
                 CompositionLocalProvider(
-                    LocalActivity provides this@MainActivity
+                    LocalActivity provides this@MainActivity,
+                    LocalNavController provides navController
                 ) {
-                    CoinToss()
+                    CoinToss(navController)
                 }
             }
         }
@@ -84,8 +87,7 @@ class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun CoinToss() {
-        val navController: NavHostController = rememberNavController()
+    private fun CoinToss(navController: NavHostController) {
         val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val coroutineScope = rememberCoroutineScope()
 

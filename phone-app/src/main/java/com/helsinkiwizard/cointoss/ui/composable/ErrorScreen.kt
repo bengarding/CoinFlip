@@ -30,7 +30,7 @@ private const val IMAGE_WIDTH_PERCENT = .8f
 fun ErrorScreen(
     message: String,
     onCancelClicked: () -> Unit,
-    onRetryClicked: (() -> Unit)?
+    onRetryClicked: (() -> Unit)? = null
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

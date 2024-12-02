@@ -48,13 +48,7 @@
     <string name="error_sending_coin_to_watch">¡Ups! Se produjo un error al enviar su moneda al reloj. Asegúrate de que tu reloj esté cerca y conectado y vuelve a intentarlo.</string>
     <string name="error_sending_coin_api_exception">Esta función requiere un dispositivo Wear OS conectado, pero parece que tu dispositivo no es compatible con Wear OS. Asegúrate de que tu teléfono esté emparejado con un reloj inteligente compatible y vuelve a intentarlo.</string>
     <string name="retry">Rever</string>
-    <string name="new_feature_alert">¡Alerta de nueva función!</string>
-    <string name="send_custom_coins_message">¡Ahora puedes enviar monedas personalizadas a tu reloj!</string>
-    <string name="send_custom_coins_step_1">1. Descargue e instale la aplicación Coin Toss en su dispositivo Wear OS</string>
-    <string name="send_custom_coins_step_2">2. Selecciona \"Crear una moneda\" en el menú y luego crea tu propia moneda</string>
-    <string name="send_custom_coins_step_3_start">3. Presiona el botón</string>
-    <string name="send_custom_coins_step_3_end">para enviar la moneda a tu reloj</string>
-    <string name="send_custom_coins_i_dont_have_watch">No tengo un dispositivo Wear OS, ocultar el botón</string>
-    <string name="send_custom_coins_got_it">Entiendo</string>
     <string name="success">¡Éxito!</string>
+    <string name="purchase_error">Error al completar la compra</string>
+    <string name="purchase_success">¡Anuncios eliminados!</string>
 </resources>
