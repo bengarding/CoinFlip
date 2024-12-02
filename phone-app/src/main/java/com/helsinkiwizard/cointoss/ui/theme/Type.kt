@@ -15,6 +15,7 @@ import com.helsinkiwizard.core.theme.Text16
 import com.helsinkiwizard.core.theme.Text20
 import com.helsinkiwizard.core.theme.Text22
 import com.helsinkiwizard.core.theme.Text24
+import com.helsinkiwizard.core.theme.Text60
 
 val ArimaMadurai = FontFamily(
     Font(R.font.arima_madurai)
@@ -50,10 +51,11 @@ val Typography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = Text20
     ),
+    // displaySmall is used for revenuecat's dialog, which is why the font size is so large
     displaySmall = TextStyle(
         fontFamily = ArimaMadurai,
         fontWeight = FontWeight.SemiBold,
-        fontSize = Text16
+        fontSize = Text60
     ),
     bodyLarge = TextStyle(
         fontFamily = Mulish,
