@@ -31,8 +31,6 @@ import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Sixty
-import com.helsinkiwizard.core.theme.Twenty
-import com.helsinkiwizard.core.theme.Zero
 
 object DrawerParams {
     val drawerButtons = mutableStateListOf(
@@ -94,7 +92,16 @@ fun DrawerContent(
 private fun DrawerItem(item: DrawerModel, onClick: (options: NavRoute) -> Unit) {
     val isRemoveAdsItem = item.title == R.string.remove_ads
     Surface(
-        tonalElevation = if (isRemoveAdsItem) Twenty else Zero
+        color = if (isRemoveAdsItem) {
+            MaterialTheme.colorScheme.surfaceVariant
+        } else {
+            MaterialTheme.colorScheme.surfaceContainer
+        },
+        contentColor = if (isRemoveAdsItem) {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
