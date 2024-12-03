@@ -87,7 +87,7 @@ private fun AdMobBanner(
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)
                 adUnitId = if (BuildConfig.DEBUG) DEBUG_BANNER_AD_ID else BANNER_AD_ID
-                loadAd(AdManager.getAdRequest())
+                loadAd(AdManager.getAdRequest(context))
             }
         }
     )
