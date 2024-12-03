@@ -6,7 +6,6 @@
     <string name="home">Página principal</string>
     <string name="settings">Ajustes</string>
     <string name="about">Acerca</string>
-    <string name="create_a_coin">Crear una moneda</string>
     <string name="remove_ads">Quitar anuncios</string>
     <string name="remove_all_ads_forever">Eliminar todos los anuncios para siempre</string>
     <string name="image_cropper">Recortador de imágenes</string>

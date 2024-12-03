@@ -11,5 +11,9 @@ class CoinListViewModel @Inject constructor(
 ) : AbstractViewModel() {
 
     val customCoinFlow = repository.getCustomCoin
+
+    fun launchPhoneApp() {
+
+    }
 }
 

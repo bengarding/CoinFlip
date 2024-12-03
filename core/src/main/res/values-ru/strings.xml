@@ -4,6 +4,7 @@
     <string name="request_coin">"Не видите нужную монету? Отправьте мне электронное письмо, и я сделаю все возможное, чтобы добавить его.\ncointossrequest@gmail.com"</string>
     <string name="email_address">"contossrequest@gmail.com"</string>
     <string name="speed_seconds">"Скорость (секунды)"</string>
+    <string name="create_a_coin">Создать монету</string>
 
     <string name="coin">"Монета"</string>
     <string name="heads">орёл</string>
