@@ -49,6 +49,5 @@
     <string name="error_sending_coin_api_exception">Esta función requiere un dispositivo Wear OS conectado, pero parece que tu dispositivo no es compatible con Wear OS. Asegúrate de que tu teléfono esté emparejado con un reloj inteligente compatible y vuelve a intentarlo.</string>
     <string name="retry">Rever</string>
     <string name="success">¡Éxito!</string>
-    <string name="purchase_error">Error al completar la compra</string>
     <string name="purchase_success">¡Anuncios eliminados!</string>
 </resources>

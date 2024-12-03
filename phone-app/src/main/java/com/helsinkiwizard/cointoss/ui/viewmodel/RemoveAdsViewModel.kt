@@ -12,34 +12,16 @@ import javax.inject.Inject
 @HiltViewModel
 class RemoveAdsViewModel @Inject constructor(
     private val repo: Repository
-) : AbstractViewModel() {
-
-    init {
-        showDialog()
-    }
-
-    fun showDialog() {
-        mutableUiStateFlow.value = UiState.ShowContent(RemoveAdsContent.ShowDialog)
-    }
-
+) : AbstractViewModel(defaultState = UiState.ShowContent(RemoveAdsContent.ShowDialog)) {
     fun onPurchaseCompleted() {
         viewModelScope.launch {
             repo.setAdsRemoved(true)
             mutableUiStateFlow.value = UiState.ShowContent(RemoveAdsContent.PurchaseComplete)
         }
     }
-
-    fun onPurchaseError() {
-        mutableUiStateFlow.value = UiState.Error()
-    }
-
-    fun onPurchaseCancelled() {
-        mutableUiStateFlow.value = UiState.ShowContent(RemoveAdsContent.PurchaseCancelled)
-    }
 }
 
 sealed interface RemoveAdsContent : BaseType {
     data object ShowDialog : RemoveAdsContent
     data object PurchaseComplete : RemoveAdsContent
-    data object PurchaseCancelled : RemoveAdsContent
 }

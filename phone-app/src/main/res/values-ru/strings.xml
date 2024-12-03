@@ -49,6 +49,5 @@
     <string name="error_sending_coin_api_exception">Эта функция требует подключенного устройства Wear OS, но, похоже, ваше устройство не поддерживает Wear OS. Убедитесь, что ваш телефон сопряжен с совместимыми умными часами, и повторите попытку.</string>
     <string name="retry">Повторить попытку</string>
     <string name="success">Успех!</string>
-    <string name="purchase_error">Ошибка при завершении покупки</string>
     <string name="purchase_success">Реклама удалена!</string>
 </resources>
