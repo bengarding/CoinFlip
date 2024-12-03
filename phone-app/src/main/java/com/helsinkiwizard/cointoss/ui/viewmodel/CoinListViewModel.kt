@@ -5,7 +5,9 @@ import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.viewmodel.AbstractViewModel
+import com.helsinkiwizard.core.viewmodel.BaseDialogType
 import com.helsinkiwizard.core.viewmodel.BaseType
+import com.helsinkiwizard.core.viewmodel.DialogState
 import com.helsinkiwizard.core.viewmodel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -29,12 +31,23 @@ internal class CoinListViewModel @Inject constructor(
             // Show in-app review only if the user has previously changed coins
             val showInAppReview = repository.getCoinType.first() != CoinType.BITCOIN
             repository.setCoinType(coinType)
-            mutableUiStateFlow.value = UiState.ShowContent(CoinListContent.CoinSet(showInAppReview))
+
+            if (showInAppReview) {
+                mutableDialogStateFlow.value = DialogState.ShowContent(CoinListDialogs.InAppReview(
+                    onComplete = { mutableUiStateFlow.value = UiState.ShowContent(CoinListContent.CoinSet) }
+                ))
+            } else {
+                mutableUiStateFlow.value = UiState.ShowContent(CoinListContent.CoinSet)
+            }
         }
     }
 }
 
-internal sealed interface CoinListContent: BaseType {
-    data class LoadingComplete(val customCoinFlow: Flow<CustomCoinUiModel?>): CoinListContent
-    data class CoinSet(val showInAppReview: Boolean): CoinListContent
+internal sealed interface CoinListContent : BaseType {
+    data class LoadingComplete(val customCoinFlow: Flow<CustomCoinUiModel?>) : CoinListContent
+    data object CoinSet : CoinListContent
+}
+
+internal sealed interface CoinListDialogs : BaseDialogType {
+    data class InAppReview(val onComplete: () -> Unit) : CoinListDialogs
 }
