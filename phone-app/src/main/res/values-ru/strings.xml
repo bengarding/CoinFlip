@@ -50,4 +50,6 @@
     <string name="retry">Повторить попытку</string>
     <string name="success">Успех!</string>
     <string name="purchase_success">Реклама удалена!</string>
+    <string name="privacy">Конфиденциальность</string>
+    <string name="update_privacy_consent">Обновить согласие на конфиденциальность</string>
 </resources>

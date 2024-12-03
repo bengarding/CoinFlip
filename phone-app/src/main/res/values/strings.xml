@@ -51,4 +51,6 @@
     <string name="retry">Retry</string>
     <string name="success">Success!</string>
     <string name="purchase_success">Ads removed!</string>
+    <string name="privacy">Privacy</string>
+    <string name="update_privacy_consent">Update privacy consent</string>
 </resources>

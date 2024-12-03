@@ -46,6 +46,15 @@ object AdManager {
             .build()
     }
 
+    fun showConsentForm(activity: Activity) {
+        UserMessagingPlatform.showPrivacyOptionsForm(activity) { formError ->
+            formError?.let {
+                Timber.e("Error loading consent form from settings: ${it.message}")
+            }
+
+        }
+    }
+
     // The following methods are from https://stackoverflow.com/a/68310602/19034973
 
     fun isGDPR(context: Context): Boolean {

@@ -10,8 +10,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import com.helsinkiwizard.cointoss.R
+import com.helsinkiwizard.core.theme.Text12
 import com.helsinkiwizard.core.theme.Text14
 import com.helsinkiwizard.core.theme.Text16
+import com.helsinkiwizard.core.theme.Text18
 import com.helsinkiwizard.core.theme.Text20
 import com.helsinkiwizard.core.theme.Text22
 import com.helsinkiwizard.core.theme.Text24
@@ -71,6 +73,21 @@ val Typography = Typography(
         fontFamily = Mulish,
         fontWeight = FontWeight.Normal,
         fontSize = Text14
+    ),
+    labelLarge = TextStyle(
+        fontFamily = Mulish,
+        fontWeight = FontWeight.Medium,
+        fontSize = Text18
+    ),
+    labelMedium = TextStyle(
+        fontFamily = Mulish,
+        fontWeight = FontWeight.Normal,
+        fontSize = Text14
+    ),
+    labelSmall = TextStyle(
+        fontFamily = Mulish,
+        fontWeight = FontWeight.Normal,
+        fontSize = Text12
     ),
 )
 

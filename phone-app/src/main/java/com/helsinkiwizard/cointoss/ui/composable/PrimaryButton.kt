@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.helsinkiwizard.cointoss.data.ThemeMode
@@ -58,8 +57,7 @@ fun PrimaryButton(
             }
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center
             )
         }
@@ -97,9 +95,8 @@ fun PrimaryOutlinedButton(
             }
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             )
         }
