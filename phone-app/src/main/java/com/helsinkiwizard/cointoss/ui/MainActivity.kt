@@ -152,7 +152,7 @@ class MainActivity : ComponentActivity() {
                         enterTransition = { fadeIn(tween(NAV_TRANSITION_DURATION)) },
                         exitTransition = { fadeOut(tween(NAV_TRANSITION_DURATION)) }
                     ) {
-                        mainGraph(navController)
+                        mainGraph()
                     }
                 }
             }

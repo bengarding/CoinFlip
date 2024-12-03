@@ -1,6 +1,5 @@
 package com.helsinkiwizard.cointoss.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -24,7 +23,7 @@ enum class NavRoute {
     RemoveAds
 }
 
-fun NavGraphBuilder.mainGraph(navController: NavController) {
+fun NavGraphBuilder.mainGraph() {
     navigation(
         startDestination = NavRoute.Home.name,
         route = MAIN_ROUTE
@@ -33,13 +32,13 @@ fun NavGraphBuilder.mainGraph(navController: NavController) {
             HomeScreen()
         }
         composable(NavRoute.CoinList.name) {
-            CoinListScreen(navController)
+            CoinListScreen()
         }
         composable(NavRoute.Settings.name) {
             SettingsScreen()
         }
         composable(NavRoute.About.name) {
-            AboutScreen(navController)
+            AboutScreen()
         }
         composable(NavRoute.Attributions.name) {
             AttributionsScreen()
