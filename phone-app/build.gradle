@@ -74,8 +74,9 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.8.2'
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
-    implementation 'com.google.android.play:review:2.0.2'
-    implementation 'com.google.android.gms:play-services-ads:23.5.0'
+    implementation "com.google.android.play:review:2.0.2"
+    implementation "com.google.android.gms:play-services-ads:23.5.0"
+    implementation "com.google.android.ump:user-messaging-platform:3.1.0"
 
     implementation "io.coil-kt:coil-compose:$compose_coil_version"
     implementation "com.vanniktech:android-image-cropper:4.5.0"

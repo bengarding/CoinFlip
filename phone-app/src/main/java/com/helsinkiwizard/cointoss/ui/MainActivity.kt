@@ -45,6 +45,7 @@ import com.helsinkiwizard.cointoss.navigation.mainGraph
 import com.helsinkiwizard.cointoss.ui.drawer.DrawerContent
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.theme.LocalNavController
+import com.helsinkiwizard.cointoss.utils.AdManager
 import com.helsinkiwizard.core.theme.LocalActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
@@ -64,10 +65,12 @@ class MainActivity : ComponentActivity() {
 
         var initialThemeMode: ThemeMode
         var initialMaterialYou: Boolean
+        var adsRemoved: Boolean
 
         runBlocking {
             initialThemeMode = repository.getThemeMode.firstOrNull() ?: ThemeMode.SYSTEM
             initialMaterialYou = repository.getMaterialYou.firstOrNull() ?: true
+            adsRemoved = repository.getAdsRemoved.firstOrNull() ?: false
         }
 
         setContent {
@@ -82,6 +85,10 @@ class MainActivity : ComponentActivity() {
                     CoinToss(navController)
                 }
             }
+        }
+
+        if (adsRemoved.not()) {
+            AdManager.updateConsentStatus(this)
         }
     }
 

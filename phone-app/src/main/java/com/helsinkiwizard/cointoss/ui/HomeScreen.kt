@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.helsinkiwizard.cointoss.BuildConfig
@@ -18,6 +17,7 @@ import com.helsinkiwizard.cointoss.Constants.BANNER_AD_ID
 import com.helsinkiwizard.cointoss.Constants.DEBUG_BANNER_AD_ID
 import com.helsinkiwizard.cointoss.ui.viewmodel.HomeScreenContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.HomeViewModel
+import com.helsinkiwizard.cointoss.utils.AdManager
 import com.helsinkiwizard.core.coin.CoinAnimation
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.PercentEighty
@@ -87,7 +87,7 @@ private fun AdMobBanner(
             AdView(context).apply {
                 setAdSize(AdSize.BANNER)
                 adUnitId = if (BuildConfig.DEBUG) DEBUG_BANNER_AD_ID else BANNER_AD_ID
-                loadAd(AdRequest.Builder().build())
+                loadAd(AdManager.getAdRequest())
             }
         }
     )
