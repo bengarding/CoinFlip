@@ -21,7 +21,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -44,12 +43,12 @@ import com.google.android.gms.wearable.Wearable
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.ui.composable.ErrorScreen
+import com.helsinkiwizard.cointoss.ui.composable.PreviewSurface
 import com.helsinkiwizard.cointoss.ui.composable.ProgressIndicator
 import com.helsinkiwizard.cointoss.ui.composable.dialog.CoinTossDialog
 import com.helsinkiwizard.cointoss.ui.composable.dialog.MediaPicker
 import com.helsinkiwizard.cointoss.ui.composable.dialog.SelectWatchDialog
 import com.helsinkiwizard.cointoss.ui.model.CreateCoinModel
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.CreateCoinError
@@ -416,7 +415,7 @@ private fun CustomCoinSide(
             .background(MaterialTheme.colorScheme.primary),
         error = {
             Icon(
-                imageVector = Icons.Outlined.BrokenImage, 
+                imageVector = Icons.Outlined.BrokenImage,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(Twenty)
@@ -488,9 +487,7 @@ private fun CreateCoinScreenPreview() {
     )
     val repository = Repository(LocalContext.current)
     val viewModel = CreateCoinViewModel(repository)
-    CoinTossTheme {
-        Surface {
-            Content(model, viewModel)
-        }
+    PreviewSurface {
+        Content(model, viewModel)
     }
 }

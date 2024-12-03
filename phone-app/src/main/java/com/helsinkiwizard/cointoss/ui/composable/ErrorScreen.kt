@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.helsinkiwizard.cointoss.R
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.Eighty
 import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.ThirtyTwo
@@ -75,13 +73,11 @@ fun ErrorScreen(
 @Preview(showBackground = true)
 @Composable
 private fun ErrorScreenPreview() {
-    Surface {
-        CoinTossTheme {
-            ErrorScreen(
-                message = stringResource(id = R.string.error_sending_coin_to_watch),
-                onCancelClicked = {},
-                onRetryClicked = {}
-            )
-        }
+    PreviewSurface {
+        ErrorScreen(
+            message = stringResource(id = R.string.error_sending_coin_to_watch),
+            onCancelClicked = {},
+            onRetryClicked = {}
+        )
     }
 }

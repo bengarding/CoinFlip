@@ -1,7 +1,6 @@
 package com.helsinkiwizard.cointoss.ui
 
 import android.os.Build
-import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,10 +13,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,12 +25,12 @@ import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.ui.composable.PillButton
+import com.helsinkiwizard.cointoss.ui.composable.PreviewSurface
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryOutlinedButton
 import com.helsinkiwizard.cointoss.ui.composable.PrimarySlider
 import com.helsinkiwizard.cointoss.ui.composable.PrimarySwitch
 import com.helsinkiwizard.cointoss.ui.model.MutableInputWrapper
 import com.helsinkiwizard.cointoss.ui.model.SettingsModel
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsViewModel
 import com.helsinkiwizard.cointoss.utils.AdManager
@@ -196,13 +193,7 @@ private fun SettingsScreenPreview() {
     val repository = Repository(LocalContext.current)
     val viewModel = SettingsViewModel(repository)
     val model = SettingsModel(ThemeMode.DARK, true, 3f, true)
-    Surface {
-        CoinTossTheme {
-            CompositionLocalProvider(
-                LocalActivity provides ComponentActivity(),
-            ) {
-                Content(model, viewModel)
-            }
-        }
+    PreviewSurface {
+        Content(model, viewModel)
     }
 }

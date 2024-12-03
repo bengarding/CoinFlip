@@ -22,7 +22,6 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,7 +49,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.navigation.NavRoute
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.composable.PreviewSurface
 import com.helsinkiwizard.cointoss.ui.theme.LocalNavController
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListDialogs
@@ -307,9 +306,7 @@ private fun Coin(
 private fun CoinListPreview() {
     val viewModel = CoinListViewModel(Repository(LocalContext.current))
     val navController = NavController(LocalContext.current)
-    CoinTossTheme {
-        Surface {
-            CoinList(viewModel, flowOf(), navController)
-        }
+    PreviewSurface {
+        CoinList(viewModel, flowOf(), navController)
     }
 }

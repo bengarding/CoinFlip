@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -16,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.helsinkiwizard.cointoss.R
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.composable.PreviewSurface
 import com.helsinkiwizard.core.theme.DialogTonalOverlay
 import com.helsinkiwizard.core.theme.Twenty
 
@@ -95,15 +94,13 @@ fun CoinTossDialog(
 @Preview(showBackground = true)
 @Composable
 private fun CoinTossDialogPreview() {
-    CoinTossTheme {
-        Surface {
-            CoinTossDialog(
-                onDismiss = { },
-                title = "This is a title",
-                text = stringResource(id = R.string.are_you_sure_delete_coin),
-                confirmButtonText = "Delete",
-                dismissButtonText = "Cancel"
-            )
-        }
+    PreviewSurface {
+        CoinTossDialog(
+            onDismiss = { },
+            title = "This is a title",
+            text = stringResource(id = R.string.are_you_sure_delete_coin),
+            confirmButtonText = "Delete",
+            dismissButtonText = "Cancel"
+        )
     }
 }

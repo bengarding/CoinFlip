@@ -13,7 +13,6 @@ import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,7 +23,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.helsinkiwizard.cointoss.data.ThemeMode
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.ButtonHeight
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.One
@@ -106,26 +104,24 @@ fun PrimaryOutlinedButton(
 @Preview(showBackground = true)
 @Composable
 private fun PrimaryButtonPreview() {
-    CoinTossTheme {
-        Surface {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Twenty),
-                modifier = Modifier.padding(Eight)
-            ) {
-                PrimaryButton(
-                    text = "Rate on Google Play",
-                    onClick = {}
-                )
-                PrimaryButton(
-                    text = "Gallery",
-                    icon = Icons.Outlined.Image,
-                    onClick = {}
-                )
-                PrimaryOutlinedButton(
-                    text = "Clear",
-                    onClick = {}
-                )
-            }
+    PreviewSurface {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Twenty),
+            modifier = Modifier.padding(Eight)
+        ) {
+            PrimaryButton(
+                text = "Rate on Google Play",
+                onClick = {}
+            )
+            PrimaryButton(
+                text = "Gallery",
+                icon = Icons.Outlined.Image,
+                onClick = {}
+            )
+            PrimaryOutlinedButton(
+                text = "Clear",
+                onClick = {}
+            )
         }
     }
 }
@@ -133,28 +129,24 @@ private fun PrimaryButtonPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun PrimaryButtonDarkPreview() {
-    CoinTossTheme(
-        themeMode = ThemeMode.DARK
-    ) {
-        Surface {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Twenty),
-                modifier = Modifier.padding(Eight)
-            ) {
-                PrimaryButton(
-                    text = "Rate on Google Play",
-                    onClick = {}
-                )
-                PrimaryButton(
-                    text = "Gallery",
-                    icon = Icons.Outlined.Image,
-                    onClick = {}
-                )
-                PrimaryOutlinedButton(
-                    text = "Clear",
-                    onClick = {}
-                )
-            }
+    PreviewSurface(themeMode = ThemeMode.DARK) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Twenty),
+            modifier = Modifier.padding(Eight)
+        ) {
+            PrimaryButton(
+                text = "Rate on Google Play",
+                onClick = {}
+            )
+            PrimaryButton(
+                text = "Gallery",
+                icon = Icons.Outlined.Image,
+                onClick = {}
+            )
+            PrimaryOutlinedButton(
+                text = "Clear",
+                onClick = {}
+            )
         }
     }
 }

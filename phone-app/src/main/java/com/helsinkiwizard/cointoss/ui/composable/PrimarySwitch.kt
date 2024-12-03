@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
@@ -19,7 +18,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.helsinkiwizard.cointoss.R
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.Eight
 
 @Composable
@@ -69,13 +67,11 @@ fun PrimarySwitch(
 @Preview(showBackground = true)
 @Composable
 private fun PrimarySwitchPreview() {
-    Surface {
-        CoinTossTheme {
-            PrimarySwitch(
-                label = stringResource(id = R.string.show_send_to_watch_button),
-                checked = true,
-                onCheckChanged = {}
-            )
-        }
+    PreviewSurface {
+        PrimarySwitch(
+            label = stringResource(id = R.string.show_send_to_watch_button),
+            checked = true,
+            onCheckChanged = {}
+        )
     }
 }
