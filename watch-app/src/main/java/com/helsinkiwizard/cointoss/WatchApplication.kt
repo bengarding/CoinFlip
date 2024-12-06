@@ -1,8 +1,6 @@
 package com.helsinkiwizard.cointoss
 
 import android.app.Application
-import com.google.android.gms.wearable.Wearable
-import com.helsinkiwizard.core.CoreConstants.WEAR_CAPABILITY
 import com.helsinkiwizard.core.utils.logging.CrashlyticsTree
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -12,7 +10,6 @@ class WatchApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Wearable.getCapabilityClient(this).addLocalCapability(WEAR_CAPABILITY)
         initTimber()
     }
 

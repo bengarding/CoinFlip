@@ -2,13 +2,12 @@ package com.helsinkiwizard.core
 
 object CoreConstants {
     const val PACKAGE_NAME = "com.helsinkiwizard.cointoss"
-    const val EXTRA_COIN_TYPE = "coinType"
     const val VALUE_UNDEFINED = -1
     const val SPACE_STRING = " "
     const val EMPTY_STRING = ""
 
     // Device communication
-    const val WEAR_CAPABILITY = "wear"
+    const val WEAR_CAPABILITY = "coin_toss_send_custom_coin"
     const val PREPARE_FOR_COIN_TRANSFER = "/prepare-for-coin-transfer"
     const val READY_FOR_COIN_TRANSFER = "/ready-for-coin-transfer"
     const val TRANSFER_COMPLETE = "/transfer-complete"
