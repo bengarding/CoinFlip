@@ -8,6 +8,7 @@ object CoreConstants {
 
     // Device communication
     const val WEAR_SEND_COIN_CAPABILITY = "coin_toss_send_custom_coin"
+    const val PHONE_NAV_TO_CREATE_COIN_CAPABILITY = "coin_toss_nav_to_create_coin"
     const val PREPARE_FOR_COIN_TRANSFER = "/prepare-for-coin-transfer"
     const val READY_FOR_COIN_TRANSFER = "/ready-for-coin-transfer"
     const val TRANSFER_COMPLETE = "/transfer-complete"
