@@ -7,7 +7,7 @@ object CoreConstants {
     const val EMPTY_STRING = ""
 
     // Device communication
-    const val WEAR_CAPABILITY = "coin_toss_send_custom_coin"
+    const val WEAR_SEND_COIN_CAPABILITY = "coin_toss_send_custom_coin"
     const val PREPARE_FOR_COIN_TRANSFER = "/prepare-for-coin-transfer"
     const val READY_FOR_COIN_TRANSFER = "/ready-for-coin-transfer"
     const val TRANSFER_COMPLETE = "/transfer-complete"

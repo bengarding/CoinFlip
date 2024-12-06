@@ -15,7 +15,7 @@ import com.helsinkiwizard.cointoss.utils.SendCustomCoinHelper
 import com.helsinkiwizard.cointoss.utils.exception.GoogleAPIUnavailableException
 import com.helsinkiwizard.cointoss.utils.exception.WearCapabilityUnavailableException
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
-import com.helsinkiwizard.core.CoreConstants.WEAR_CAPABILITY
+import com.helsinkiwizard.core.CoreConstants.WEAR_SEND_COIN_CAPABILITY
 import com.helsinkiwizard.core.coin.CoinSide
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.viewmodel.AbstractViewModel
@@ -168,7 +168,7 @@ class CreateCoinViewModel @Inject constructor(
             )
         ) {
             val nodes = capabilityClient
-                .getCapability(WEAR_CAPABILITY, FILTER_REACHABLE)
+                .getCapability(WEAR_SEND_COIN_CAPABILITY, FILTER_REACHABLE)
                 .await()
                 .nodes
 
