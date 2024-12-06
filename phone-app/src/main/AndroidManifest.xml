@@ -40,6 +40,13 @@
                     android:pathPrefix="/ready-for-coin-transfer"
                     android:scheme="wear" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="cointoss" />
+                <data android:host="create-coin" />
+            </intent-filter>
         </activity>
 
         <activity

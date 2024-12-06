@@ -34,6 +34,7 @@ import com.helsinkiwizard.cointoss.ui.theme.BodyMediumSpan
 import com.helsinkiwizard.cointoss.ui.theme.LinkText
 import com.helsinkiwizard.cointoss.ui.theme.LocalNavController
 import com.helsinkiwizard.core.CoreConstants.PACKAGE_NAME
+import com.helsinkiwizard.core.CoreConstants.PLAY_STORE_DEEPLINK
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.Sixty
@@ -163,7 +164,7 @@ private fun openGooglePlay(context: Context) {
         context.startActivity(
             Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("market://details?id=$PACKAGE_NAME")
+                Uri.parse(PLAY_STORE_DEEPLINK)
             )
         )
     } catch (e: android.content.ActivityNotFoundException) {
