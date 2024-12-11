@@ -86,7 +86,7 @@ import com.helsinkiwizard.core.viewmodel.UiState
 import kotlinx.coroutines.launch
 
 @Composable
-fun CoinList(viewModel: CoinListViewModel = hiltViewModel()) {
+fun CoinListScreen(viewModel: CoinListViewModel = hiltViewModel()) {
     CoinListContent(viewModel)
     Dialogs(viewModel)
 }
@@ -118,7 +118,7 @@ private fun Dialogs(viewModel: CoinListViewModel) {
 @Composable
 private fun CoinListContent(viewModel: CoinListViewModel) {
     when (viewModel.uiState.collectAsState().value) {
-        is UiState.ShowContent -> Content(viewModel)
+        is UiState.ShowContent -> CoinList(viewModel)
         is UiState.Loading -> ProgressIndicator()
         else -> {}
     }
@@ -126,7 +126,7 @@ private fun CoinListContent(viewModel: CoinListViewModel) {
 
 @OptIn(ExperimentalWearFoundationApi::class)
 @Composable
-private fun Content(viewModel: CoinListViewModel) {
+private fun CoinList(viewModel: CoinListViewModel) {
     val customCoin = viewModel.customCoinFlow.collectAsState(initial = null).value
     val listState = rememberScalingLazyListState()
     Scaffold(
@@ -348,5 +348,5 @@ private fun CoinButtonPreview() {
 @Preview(name = "square", device = WearDevices.SQUARE)
 @Composable
 private fun CoinListPreview() {
-    CoinList()
+    CoinListScreen()
 }

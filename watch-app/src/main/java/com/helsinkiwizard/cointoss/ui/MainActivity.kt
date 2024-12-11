@@ -24,7 +24,7 @@ import com.helsinkiwizard.cointoss.Constants.APP_DRAWER
 import com.helsinkiwizard.cointoss.Constants.EXTRA_START_FLIPPING
 import com.helsinkiwizard.cointoss.Constants.TILE
 import com.helsinkiwizard.cointoss.ui.coinlist.Coin
-import com.helsinkiwizard.cointoss.ui.coinlist.CoinList
+import com.helsinkiwizard.cointoss.ui.coinlist.CoinListScreen
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinTossViewModel
 import com.helsinkiwizard.core.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.LocalActivity
@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                 CompositionLocalProvider(
                     LocalActivity provides this
                 ) {
-                    CoinToss()
+                    CoinTossScreen()
                 }
             }
         }
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun CoinToss(
+fun CoinTossScreen(
     viewModel: CoinTossViewModel = hiltViewModel(LocalActivity.current)
 ) {
     val coinType = viewModel.coinTypeFlow.collectAsState().value
@@ -94,7 +94,7 @@ fun CoinToss(
                     }
                 )
 
-                1 -> CoinList()
+                1 -> CoinListScreen()
             }
         }
     }
