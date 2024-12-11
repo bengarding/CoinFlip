@@ -27,6 +27,13 @@ fun Coin(
     onStartFlipping: () -> Unit
 ) {
     var showChevron by remember { mutableStateOf(startFlipping.not()) }
+
+    LaunchedEffect(startFlipping) {
+        if (showChevron) {
+            showChevron = false
+        }
+    }
+
     Chevron(showChevron)
 
     Box(
