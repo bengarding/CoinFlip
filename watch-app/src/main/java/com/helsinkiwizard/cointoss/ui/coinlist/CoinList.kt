@@ -1,4 +1,4 @@
-package com.helsinkiwizard.cointoss.coin
+package com.helsinkiwizard.cointoss.ui.coinlist
 
 import android.net.Uri
 import android.os.Bundle
@@ -59,6 +59,8 @@ import com.helsinkiwizard.cointoss.tile.CoinTileService
 import com.helsinkiwizard.cointoss.ui.DownloadMobileAppConfirmation
 import com.helsinkiwizard.cointoss.ui.ProgressIndicator
 import com.helsinkiwizard.cointoss.ui.ShowOnPhoneConfirmation
+import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListDialogs
+import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListViewModel
 import com.helsinkiwizard.core.CoreConstants.COIN_SELECTED
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinType

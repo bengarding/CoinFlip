@@ -1,4 +1,4 @@
-package com.helsinkiwizard.cointoss.coin
+package com.helsinkiwizard.cointoss.ui.viewmodel
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope

@@ -24,8 +24,8 @@ import com.helsinkiwizard.cointoss.Constants.APP_DRAWER
 import com.helsinkiwizard.cointoss.Constants.EXTRA_START_FLIPPING
 import com.helsinkiwizard.cointoss.Constants.TILE
 import com.helsinkiwizard.cointoss.Repository
-import com.helsinkiwizard.cointoss.coin.Coin
-import com.helsinkiwizard.cointoss.coin.CoinList
+import com.helsinkiwizard.cointoss.ui.coinlist.Coin
+import com.helsinkiwizard.cointoss.ui.coinlist.CoinList
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.theme.CoinTossTheme
 import dagger.hilt.android.AndroidEntryPoint
