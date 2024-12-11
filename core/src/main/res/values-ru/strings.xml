@@ -7,6 +7,9 @@
     <string name="create_a_coin">Создать монету</string>
     <string name="ok">одобрять</string>
     <string name="cancel">Отмена</string>
+    <string name="home">Дом</string>
+    <string name="settings">Настройки</string>
+    <string name="about">Результат перевода</string>
 
     <string name="coin">"Монета"</string>
     <string name="heads">орёл</string>

@@ -3,9 +3,6 @@
     <string name="confirm">Подтверждать</string>
     <string name="menu">Меню</string>
     <string name="crop_image">Обрезать изображение</string>
-    <string name="home">Дом</string>
-    <string name="settings">Настройки</string>
-    <string name="about">Результат перевода</string>
     <string name="remove_ads">Удалить рекламу</string>
     <string name="remove_all_ads_forever">Удалить всю рекламу навсегда</string>
     <string name="image_cropper">Обрезка изображения</string>

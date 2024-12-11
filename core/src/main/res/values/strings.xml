@@ -7,6 +7,9 @@
     <string name="create_a_coin">Create a coin</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
 
     <string name="coin">"Coin"</string>
     <string name="heads">heads</string>

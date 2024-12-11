@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -23,8 +25,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.helsinkiwizard.cointoss.Constants.APP_DRAWER
 import com.helsinkiwizard.cointoss.Constants.EXTRA_START_FLIPPING
 import com.helsinkiwizard.cointoss.Constants.TILE
+import com.helsinkiwizard.cointoss.navigation.MAIN_ROUTE
+import com.helsinkiwizard.cointoss.navigation.mainGraph
 import com.helsinkiwizard.cointoss.ui.coinlist.Coin
-import com.helsinkiwizard.cointoss.ui.coinlist.CoinListScreen
+import com.helsinkiwizard.cointoss.ui.menu.WatchMenu
+import com.helsinkiwizard.cointoss.ui.theme.LocalNavController
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinTossViewModel
 import com.helsinkiwizard.core.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.LocalActivity
@@ -47,9 +52,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             CoinTossTheme {
                 CompositionLocalProvider(
-                    LocalActivity provides this
+                    LocalActivity provides this,
+                    LocalNavController provides rememberSwipeDismissableNavController()
                 ) {
-                    CoinTossScreen()
+                    HomeScreen()
                 }
             }
         }
@@ -63,6 +69,16 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         viewModel.startFlipping = intent?.extras?.getBoolean(EXTRA_START_FLIPPING) ?: false
+    }
+}
+
+@Composable
+private fun HomeScreen() {
+    SwipeDismissableNavHost(
+        navController = LocalNavController.current,
+        startDestination = MAIN_ROUTE
+    ) {
+        mainGraph()
     }
 }
 
@@ -94,7 +110,7 @@ fun CoinTossScreen(
                     }
                 )
 
-                1 -> CoinListScreen()
+                1 -> WatchMenu()
             }
         }
     }

@@ -3,9 +3,6 @@
     <string name="confirm">Confirmar</string>
     <string name="menu">Menú</string>
     <string name="crop_image">Delimitar imagen</string>
-    <string name="home">Página principal</string>
-    <string name="settings">Ajustes</string>
-    <string name="about">Acerca</string>
     <string name="remove_ads">Quitar anuncios</string>
     <string name="remove_all_ads_forever">Eliminar todos los anuncios para siempre</string>
     <string name="image_cropper">Recortador de imágenes</string>
