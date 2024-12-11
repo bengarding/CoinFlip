@@ -14,7 +14,9 @@ import com.helsinkiwizard.core.CoreConstants.CREATE_COIN_DEEPLINK
 import com.helsinkiwizard.core.CoreConstants.PLAY_STORE_DEEPLINK
 import com.helsinkiwizard.core.viewmodel.AbstractViewModel
 import com.helsinkiwizard.core.viewmodel.BaseDialogType
+import com.helsinkiwizard.core.viewmodel.BaseType
 import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CoinListViewModel @Inject constructor(
     repository: Repository
-) : AbstractViewModel() {
+) : AbstractViewModel(defaultState = UiState.ShowContent(CoinListContent.ShowCoinList)) {
 
     val customCoinFlow = repository.getCustomCoin
 
@@ -32,10 +34,13 @@ class CoinListViewModel @Inject constructor(
         remoteActivityHelper: RemoteActivityHelper
     ) {
         viewModelScope.launch {
+            mutableUiStateFlow.value = UiState.Loading
+
             val appInstalledOnPhone = isAppInstalledOnPhone(capabilityClient)
             val connectedToAnyNode = isConnectedToAnyNode(nodeClient)
 
             if (connectedToAnyNode.not()) {
+                mutableUiStateFlow.value = UiState.ShowContent(CoinListContent.ShowCoinList)
                 mutableDialogStateFlow.value = DialogState.ShowContent(CoinListDialogs.DownloadMobileApp)
                 return@launch
             }
@@ -48,6 +53,7 @@ class CoinListViewModel @Inject constructor(
                 deepLink = deepLink
             )
 
+            mutableUiStateFlow.value = UiState.ShowContent(CoinListContent.ShowCoinList)
             mutableDialogStateFlow.value = if (deepLinkLaunched) {
                 DialogState.ShowContent(CoinListDialogs.OpenOnPhone(messageRes = messageRes))
             } else {
@@ -55,6 +61,10 @@ class CoinListViewModel @Inject constructor(
             }
         }
     }
+}
+
+internal sealed interface CoinListContent : BaseType {
+    data object ShowCoinList : CoinListContent
 }
 
 internal sealed interface CoinListDialogs : BaseDialogType {

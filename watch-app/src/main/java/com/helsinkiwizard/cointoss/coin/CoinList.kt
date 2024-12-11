@@ -57,6 +57,7 @@ import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.tile.CoinTileService
 import com.helsinkiwizard.cointoss.ui.DownloadMobileAppConfirmation
+import com.helsinkiwizard.cointoss.ui.ProgressIndicator
 import com.helsinkiwizard.cointoss.ui.ShowOnPhoneConfirmation
 import com.helsinkiwizard.core.CoreConstants.COIN_SELECTED
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
@@ -79,6 +80,7 @@ import com.helsinkiwizard.core.utils.buildTextWithLink
 import com.helsinkiwizard.core.utils.getEmailIntent
 import com.helsinkiwizard.core.utils.onLinkClick
 import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import kotlinx.coroutines.launch
 
 @Composable
@@ -111,9 +113,18 @@ private fun Dialogs(viewModel: CoinListViewModel) {
     }
 }
 
-@OptIn(ExperimentalWearFoundationApi::class)
 @Composable
 private fun CoinListContent(viewModel: CoinListViewModel) {
+    when (viewModel.uiState.collectAsState().value) {
+        is UiState.ShowContent -> Content(viewModel)
+        is UiState.Loading -> ProgressIndicator()
+        else -> {}
+    }
+}
+
+@OptIn(ExperimentalWearFoundationApi::class)
+@Composable
+private fun Content(viewModel: CoinListViewModel) {
     val customCoin = viewModel.customCoinFlow.collectAsState(initial = null).value
     val listState = rememberScalingLazyListState()
     Scaffold(
