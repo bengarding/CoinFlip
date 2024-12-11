@@ -33,8 +33,6 @@
     <string name="edit">Editar</string>
     <string name="delete">Borrar</string>
     <string name="are_you_sure_delete_coin">¿Estás seguro de que quieres eliminar esta moneda?</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancelar</string>
     <string name="name">Nombre</string>
     <string name="append_optional"> (Opcional)</string>
     <string name="enter_valid_name">Introduzca un nombre válido</string>

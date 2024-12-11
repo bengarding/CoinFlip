@@ -83,8 +83,6 @@ dependencies {
     implementation "io.coil-kt:coil-compose:$compose_coil_version"
     implementation "com.vanniktech:android-image-cropper:4.5.0"
 
-    implementation "androidx.compose.material:material-icons-extended:$material_icons_version"
-
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"

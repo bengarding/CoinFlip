@@ -5,6 +5,8 @@
     <string name="email_address">"cointossrequest@gmail.com"</string>
     <string name="speed_seconds">"Speed (seconds)"</string>
     <string name="create_a_coin">Create a coin</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <string name="coin">"Coin"</string>
     <string name="heads">heads</string>

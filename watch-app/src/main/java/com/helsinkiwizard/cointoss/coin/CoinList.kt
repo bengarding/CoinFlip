@@ -47,13 +47,17 @@ import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
+import androidx.wear.remote.interactions.RemoteActivityHelper
 import androidx.wear.tiles.TileService
 import androidx.wear.tooling.preview.devices.WearDevices
 import coil.compose.SubcomposeAsyncImage
+import com.google.android.gms.wearable.Wearable
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.tile.CoinTileService
+import com.helsinkiwizard.cointoss.ui.DownloadMobileAppConfirmation
+import com.helsinkiwizard.cointoss.ui.ShowOnPhoneConfirmation
 import com.helsinkiwizard.core.CoreConstants.COIN_SELECTED
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinType
@@ -74,21 +78,50 @@ import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.utils.buildTextWithLink
 import com.helsinkiwizard.core.utils.getEmailIntent
 import com.helsinkiwizard.core.utils.onLinkClick
+import com.helsinkiwizard.core.viewmodel.DialogState
 import kotlinx.coroutines.launch
+
+@Composable
+fun CoinList(viewModel: CoinListViewModel = hiltViewModel()) {
+    CoinListContent(viewModel)
+    Dialogs(viewModel)
+}
+
+@Composable
+private fun Dialogs(viewModel: CoinListViewModel) {
+    when (val state = viewModel.dialogState.collectAsState().value) {
+        is DialogState.ShowContent -> {
+            when (val type = state.type as CoinListDialogs) {
+                is CoinListDialogs.OpenOnPhone -> {
+                    ShowOnPhoneConfirmation(
+                        messageRes = type.messageRes,
+                        onTimeout = { viewModel.resetDialogState() }
+                    )
+                }
+
+                is CoinListDialogs.DownloadMobileApp -> {
+                    DownloadMobileAppConfirmation(
+                        onClick = { viewModel.resetDialogState() }
+                    )
+                }
+            }
+        }
+
+        else -> {}
+    }
+}
 
 @OptIn(ExperimentalWearFoundationApi::class)
 @Composable
-fun CoinList(
-    viewModel: CoinListViewModel = hiltViewModel()
-) {
+private fun CoinListContent(viewModel: CoinListViewModel) {
     val customCoin = viewModel.customCoinFlow.collectAsState(initial = null).value
     val listState = rememberScalingLazyListState()
     Scaffold(
         positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
     ) {
+        val context = LocalContext.current
         val focusRequester = rememberActiveFocusRequester()
         val coroutineScope = rememberCoroutineScope()
-        val context = LocalContext.current
         val sortedCoins = remember {
             CoinType.entries
                 .filterNot { it == CUSTOM }
@@ -119,7 +152,14 @@ fun CoinList(
                         customCoinHeadsUri = customCoin.headsUri
                     )
                 } else {
-                    BlankCustomCoin(launchPhoneApp = { viewModel.launchPhoneApp() })
+                    val capabilityClient by lazy { Wearable.getCapabilityClient(context) }
+                    val nodeClient by lazy { Wearable.getNodeClient(context) }
+                    val remoteActivityHelper by lazy { RemoteActivityHelper(context) }
+                    BlankCustomCoin(
+                        onclick = {
+                            viewModel.onBlankCustomCoinClicked(capabilityClient, nodeClient, remoteActivityHelper)
+                        }
+                    )
                 }
             }
             items(sortedCoins) { coin ->
@@ -212,12 +252,10 @@ fun CoinButton(
 
 @Composable
 private fun BlankCustomCoin(
-    launchPhoneApp: () -> Unit
+    onclick: () -> Unit
 ) {
     Button(
-        onClick = {
-
-        },
+        onClick = onclick,
         modifier = Modifier
             .fillMaxWidth()
             .height(CoinButtonHeight)
