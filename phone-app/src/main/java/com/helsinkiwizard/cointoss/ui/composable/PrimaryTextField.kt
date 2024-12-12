@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -28,7 +27,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.theme.Alpha40
 import com.helsinkiwizard.core.theme.Six
@@ -113,33 +111,31 @@ private fun ErrorText(
 @Preview(showBackground = true)
 @Composable
 private fun PrimaryTextFieldPreview() {
-    CoinTossTheme {
-        Surface {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(Twelve),
-                modifier = Modifier.padding(all = Twelve)
-            ) {
-                PrimaryTextField(
-                    value = "Name entered",
-                    onValueChange = {},
-                    label = "Coin name"
-                )
+    PreviewSurface {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(Twelve),
+            modifier = Modifier.padding(all = Twelve)
+        ) {
+            PrimaryTextField(
+                value = "Name entered",
+                onValueChange = {},
+                label = "Coin name"
+            )
 
-                PrimaryTextField(
-                    value = "Name entered error",
-                    onValueChange = {},
-                    label = "Coin name",
-                    isError = true,
-                    errorText = "Enter a valid name"
-                )
+            PrimaryTextField(
+                value = "Name entered error",
+                onValueChange = {},
+                label = "Coin name",
+                isError = true,
+                errorText = "Enter a valid name"
+            )
 
-                PrimaryTextField(
-                    value = "Name entered optional",
-                    onValueChange = {},
-                    label = "Coin name",
-                    markOptional = true
-                )
-            }
+            PrimaryTextField(
+                value = "Name entered optional",
+                onValueChange = {},
+                label = "Coin name",
+                markOptional = true
+            )
         }
     }
 }

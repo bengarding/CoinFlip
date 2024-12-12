@@ -9,9 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,19 +25,23 @@ import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.data.ThemeMode
 import com.helsinkiwizard.cointoss.ui.composable.PillButton
+import com.helsinkiwizard.cointoss.ui.composable.PreviewSurface
+import com.helsinkiwizard.cointoss.ui.composable.PrimaryOutlinedButton
 import com.helsinkiwizard.cointoss.ui.composable.PrimarySlider
 import com.helsinkiwizard.cointoss.ui.composable.PrimarySwitch
 import com.helsinkiwizard.cointoss.ui.model.MutableInputWrapper
 import com.helsinkiwizard.cointoss.ui.model.SettingsModel
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.SettingsViewModel
-import com.helsinkiwizard.core.viewmodel.UiState
+import com.helsinkiwizard.cointoss.utils.AdManager
 import com.helsinkiwizard.core.CoreConstants.SPEED_MAX
 import com.helsinkiwizard.core.CoreConstants.SPEED_MIN
 import com.helsinkiwizard.core.CoreConstants.SPEED_STEPS
+import com.helsinkiwizard.core.theme.LocalActivity
+import com.helsinkiwizard.core.theme.ThirtyTwo
 import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.Twenty
+import com.helsinkiwizard.core.viewmodel.UiState
 
 @Composable
 internal fun SettingsScreen(
@@ -59,7 +64,10 @@ private fun Content(
     viewModel: SettingsViewModel
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = ThirtyTwo)
     ) {
         ThemeButtons(
             themeModeWrapper = model.themeMode,
@@ -78,6 +86,10 @@ private fun Content(
                 viewModel.onSwitchChecked(model.showSendToWatchButton, checked)
             }
         )
+        HorizontalDivider(
+            modifier = Modifier.padding(top = Twelve)
+        )
+        PrivacySettings()
     }
 }
 
@@ -147,6 +159,25 @@ private fun CoinSettings(
 }
 
 @Composable
+private fun PrivacySettings() {
+    val activity = LocalActivity.current
+    if (AdManager.isGDPR(activity)) {
+        Column {
+            Title(R.string.privacy)
+            PrimaryOutlinedButton(
+                text = stringResource(id = R.string.update_privacy_consent),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Twenty),
+                onClick = {
+                    AdManager.showConsentForm(activity)
+                }
+            )
+        }
+    }
+}
+
+@Composable
 private fun Title(@StringRes textRes: Int) {
     Text(
         text = stringResource(id = textRes),
@@ -156,15 +187,13 @@ private fun Title(@StringRes textRes: Int) {
     )
 }
 
-@Preview(showBackground = true, locale = "ru")
+@Preview(showBackground = true)
 @Composable
 private fun SettingsScreenPreview() {
     val repository = Repository(LocalContext.current)
     val viewModel = SettingsViewModel(repository)
     val model = SettingsModel(ThemeMode.DARK, true, 3f, true)
-    Surface {
-        CoinTossTheme {
-            Content(model, viewModel)
-        }
+    PreviewSurface {
+        Content(model, viewModel)
     }
 }

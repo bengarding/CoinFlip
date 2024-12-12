@@ -4,6 +4,9 @@
     <string name="request_coin">"¿No ves la moneda que quieres? Envíame un correo electrónico y haré todo lo posible para agregarlo.\ncointossrequest@gmail.com"</string>
     <string name="email_address">"contossrequest@gmail.com"</string>
     <string name="speed_seconds">"Velocidad (segundos)"</string>
+    <string name="create_a_coin">Crear una moneda</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
 
     <string name="coin">"Moneda"</string>
     <string name="heads">cara</string>
@@ -56,4 +59,7 @@
     <string name="macedonia">Macedonia</string>
     <string name="hungary">Hungría</string>
     <string name="singapore">Singapur</string>
+    <string name="dogecoin">Dogecoin</string>
+    <string name="morocco">Marruecos</string>
+    <string name="peru">Perú</string>
 </resources>

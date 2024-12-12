@@ -6,10 +6,13 @@ import androidx.compose.ui.unit.sp
 val Text12 = 12.sp
 val Text14 = 14.sp
 val Text16 = 16.sp
+val Text18 = 18.sp
 val Text20 = 20.sp
 val Text22 = 22.sp
 val Text24 = 24.sp
+val Text60 = 60.sp
 
+val Zero = 0.dp
 val One = 1.dp
 val Two = 2.dp
 val Four = 4.dp

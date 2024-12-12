@@ -44,6 +44,8 @@ import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.navigation.mainGraph
 import com.helsinkiwizard.cointoss.ui.drawer.DrawerContent
 import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.theme.LocalNavController
+import com.helsinkiwizard.cointoss.utils.AdManager
 import com.helsinkiwizard.core.theme.LocalActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
@@ -63,34 +65,43 @@ class MainActivity : ComponentActivity() {
 
         var initialThemeMode: ThemeMode
         var initialMaterialYou: Boolean
+        var adsRemoved: Boolean
 
         runBlocking {
             initialThemeMode = repository.getThemeMode.firstOrNull() ?: ThemeMode.SYSTEM
             initialMaterialYou = repository.getMaterialYou.firstOrNull() ?: true
+            adsRemoved = repository.getAdsRemoved.firstOrNull() ?: false
         }
 
         setContent {
             val themeMode = repository.getThemeMode.collectAsState(initial = initialThemeMode).value
+            val navController: NavHostController = rememberNavController()
 
             CoinTossTheme(repository, themeMode, initialMaterialYou) {
                 CompositionLocalProvider(
-                    LocalActivity provides this@MainActivity
+                    LocalActivity provides this@MainActivity,
+                    LocalNavController provides navController
                 ) {
-                    CoinToss()
+                    CoinToss(navController)
                 }
             }
+        }
+
+        if (adsRemoved.not()) {
+            AdManager.updateConsentStatus(this)
         }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun CoinToss() {
-        val navController: NavHostController = rememberNavController()
+    private fun CoinToss(navController: NavHostController) {
         val drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val coroutineScope = rememberCoroutineScope()
 
         val currentDestination = navController.currentBackStackEntryAsState().value?.destination
         val currentRoute = NavRoute.valueOf(currentDestination?.route ?: NavRoute.Home.name)
+
+        val adsRemoved = repository.getAdsRemoved.collectAsState(initial = false).value
 
         Scaffold(
             topBar = {
@@ -137,7 +148,8 @@ class MainActivity : ComponentActivity() {
                                     }
                                     drawerState.close()
                                 }
-                            }
+                            },
+                            adsRemoved = adsRemoved
                         )
                     }
                 ) {
@@ -147,7 +159,7 @@ class MainActivity : ComponentActivity() {
                         enterTransition = { fadeIn(tween(NAV_TRANSITION_DURATION)) },
                         exitTransition = { fadeOut(tween(NAV_TRANSITION_DURATION)) }
                     ) {
-                        mainGraph(navController)
+                        mainGraph()
                     }
                 }
             }
@@ -164,6 +176,7 @@ class MainActivity : ComponentActivity() {
                 NavRoute.About -> R.string.about
                 NavRoute.Attributions -> R.string.attributions
                 NavRoute.CreateCoin -> R.string.create_a_coin
+                NavRoute.RemoveAds -> R.string.remove_ads
             }
         )
         AnimatedContent(

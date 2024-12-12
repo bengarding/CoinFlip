@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.CoreConstants.SPEED_MAX
 import com.helsinkiwizard.core.CoreConstants.SPEED_MIN
 import com.helsinkiwizard.core.CoreConstants.SPEED_STEPS
@@ -65,18 +63,16 @@ fun PrimarySlider(
 @Preview(showBackground = true)
 @Composable
 private fun PrimarySliderPreview() {
-    CoinTossTheme {
-        Surface {
-            var value by remember { mutableFloatStateOf(3f) }
-            PrimarySlider(
-                value = value,
-                minRange = SPEED_MIN,
-                maxRange = SPEED_MAX,
-                steps = SPEED_STEPS,
-                title = "Speed (seconds)",
-                onValueChange = { newValue -> value = newValue },
-                onValueChangeFinished = {}
-            )
-        }
+    PreviewSurface {
+        var value by remember { mutableFloatStateOf(3f) }
+        PrimarySlider(
+            value = value,
+            minRange = SPEED_MIN,
+            maxRange = SPEED_MAX,
+            steps = SPEED_STEPS,
+            title = "Speed (seconds)",
+            onValueChange = { newValue -> value = newValue },
+            onValueChangeFinished = {}
+        )
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="receiving_custom_coin">Recibir moneda personalizada</string>
-    <string name="new_feature_alert">¡Alerta de nueva función!</string>
-    <string name="custom_coin_dialog_message">Crea monedas personalizadas descargando la aplicación Coin Toss en tu teléfono.</string>
-    <string name="custom_coin_dialog_got_it">Entiendo</string>
+    <string name="create_coin_on_phone">Crear moneda en el teléfono</string>
+    <string name="download_mobile_app">Descargue la aplicación móvil Coin Toss</string>
+    <string name="download_mobile_app_message">Crea monedas personalizadas y envíalas a tu reloj desde la aplicación móvil Coin Toss</string>
 </resources>

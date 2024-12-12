@@ -17,12 +17,14 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.helsinkiwizard.cointoss.R
@@ -31,7 +33,7 @@ import com.helsinkiwizard.core.theme.Sixteen
 import com.helsinkiwizard.core.theme.Sixty
 
 object DrawerParams {
-    val drawerButtons = listOf(
+    val drawerButtons = mutableStateListOf(
         DrawerModel(
             NavRoute.Home,
             R.string.home,
@@ -56,15 +58,24 @@ object DrawerParams {
             NavRoute.About,
             R.string.about,
             Icons.Outlined.Info
+        ),
+        DrawerModel(
+            NavRoute.RemoveAds,
+            R.string.remove_ads,
+            iconRes = R.drawable.ic_no_ads
         )
     )
 }
 
 @Composable
 fun DrawerContent(
-    onClick: (NavRoute) -> Unit
+    onClick: (NavRoute) -> Unit,
+    adsRemoved: Boolean
 ) {
-    val menuItems: List<DrawerModel> = remember { DrawerParams.drawerButtons }
+    val menuItems = DrawerParams.drawerButtons
+    if (adsRemoved && menuItems.last().drawerOption == NavRoute.RemoveAds) {
+        menuItems.removeAt(menuItems.lastIndex)
+    }
 
     ModalDrawerSheet(
         modifier = Modifier.width(IntrinsicSize.Max)
@@ -79,24 +90,48 @@ fun DrawerContent(
 
 @Composable
 private fun DrawerItem(item: DrawerModel, onClick: (options: NavRoute) -> Unit) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .minimumInteractiveComponentSize()
-            .fillMaxWidth()
-            .clickable { onClick(item.drawerOption) }
+    val isRemoveAdsItem = item.title == R.string.remove_ads
+    Surface(
+        color = if (isRemoveAdsItem) {
+            MaterialTheme.colorScheme.surfaceVariant
+        } else {
+            MaterialTheme.colorScheme.surfaceContainer
+        },
+        contentColor = if (isRemoveAdsItem) {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
     ) {
-        Icon(
-            imageVector = item.icon,
-            contentDescription = null,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .size(Sixty)
-                .padding(horizontal = Sixteen)
-        )
-        Text(
-            text = stringResource(id = item.title),
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium
-        )
+                .minimumInteractiveComponentSize()
+                .fillMaxWidth()
+                .clickable { onClick(item.drawerOption) }
+        ) {
+            if (item.icon != null) {
+                Icon(
+                    imageVector = item.icon,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(Sixty)
+                        .padding(horizontal = Sixteen)
+                )
+            } else if (item.iconRes != null) {
+                Icon(
+                    painter = painterResource(item.iconRes),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(Sixty)
+                        .padding(horizontal = Sixteen)
+                )
+            }
+            Text(
+                text = stringResource(id = item.title),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium
+            )
+        }
     }
 }

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="receiving_custom_coin">Receiving custom coin</string>
+    <string name="create_coin_on_phone">Create coin on phone</string>
+    <string name="download_mobile_app">Download the Coin Toss mobile app</string>
+    <string name="download_mobile_app_message">Create custom coins and send them to your watch from the Coin Toss mobile app</string>
 </resources>

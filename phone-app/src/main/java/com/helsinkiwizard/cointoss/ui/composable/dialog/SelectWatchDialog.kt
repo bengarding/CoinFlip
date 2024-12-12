@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -20,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.android.gms.wearable.Node
 import com.helsinkiwizard.cointoss.R
+import com.helsinkiwizard.cointoss.ui.composable.PreviewSurface
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.core.theme.DialogTonalOverlay
 import com.helsinkiwizard.core.theme.Twelve
 
@@ -98,18 +97,16 @@ private fun CoinTossDialogPreview() {
         override fun isNearby() = true
     }
 
-    CoinTossTheme {
-        Surface {
-            SelectWatchDialog(
-                nodes = setOf(
-                    PreviewNode("Galaxy Watch 5", "1"),
-                    PreviewNode("Pixel Watch 2", "2"),
-                    PreviewNode("Galaxy Watch 6", "3"),
-                ),
-                onDismiss = {},
-                onNodeClick = {}
-            )
-        }
+    PreviewSurface {
+        SelectWatchDialog(
+            nodes = setOf(
+                PreviewNode("Galaxy Watch 5", "1"),
+                PreviewNode("Pixel Watch 2", "2"),
+                PreviewNode("Galaxy Watch 6", "3"),
+            ),
+            onDismiss = {},
+            onNodeClick = {}
+        )
     }
 }
 

@@ -1,4 +1,4 @@
-package com.helsinkiwizard.cointoss.coin
+package com.helsinkiwizard.cointoss.ui.coinlist
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
+import com.helsinkiwizard.cointoss.ui.composables.Chevron
 import com.helsinkiwizard.core.coin.CoinAnimation
 import com.helsinkiwizard.core.coin.CoinType
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
@@ -26,6 +27,13 @@ fun Coin(
     onStartFlipping: () -> Unit
 ) {
     var showChevron by remember { mutableStateOf(startFlipping.not()) }
+
+    LaunchedEffect(startFlipping) {
+        if (showChevron) {
+            showChevron = false
+        }
+    }
+
     Chevron(showChevron)
 
     Box(

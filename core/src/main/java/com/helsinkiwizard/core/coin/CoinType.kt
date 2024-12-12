@@ -59,6 +59,10 @@ enum class CoinType(
     MACEDONIA(47, R.drawable.macedonia_heads, R.drawable.macedonia_tails, R.string.macedonia),
     HUNGARY(48, R.drawable.hungary_heads, R.drawable.hungary_tails, R.string.hungary),
     SINGAPORE(49, R.drawable.singapore_heads, R.drawable.singapore_tails, R.string.singapore),
+    INDIA_2(50, R.drawable.india_2_heads, R.drawable.india_2_tails, R.string.india),
+    DOGECOIN(51, R.drawable.dogecoin_heads, R.drawable.dogecoin_tails, R.string.dogecoin),
+    MOROCCO(52, R.drawable.morocco_heads, R.drawable.morocco_tails, R.string.morocco),
+    PERU(53, R.drawable.peru_heads, R.drawable.peru_tails, R.string.peru),
     ;
 
     companion object {

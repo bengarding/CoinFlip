@@ -1,6 +1,5 @@
-package com.helsinkiwizard.cointoss.coin
+package com.helsinkiwizard.cointoss.ui.composables
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

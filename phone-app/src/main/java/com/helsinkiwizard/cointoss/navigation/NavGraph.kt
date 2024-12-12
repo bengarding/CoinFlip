@@ -1,6 +1,5 @@
 package com.helsinkiwizard.cointoss.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -9,6 +8,7 @@ import com.helsinkiwizard.cointoss.ui.AttributionsScreen
 import com.helsinkiwizard.cointoss.ui.CoinListScreen
 import com.helsinkiwizard.cointoss.ui.CreateCoinScreen
 import com.helsinkiwizard.cointoss.ui.HomeScreen
+import com.helsinkiwizard.cointoss.ui.RemoveAdsScreen
 import com.helsinkiwizard.cointoss.ui.SettingsScreen
 
 const val MAIN_ROUTE = "mainNavRoute"
@@ -19,10 +19,11 @@ enum class NavRoute {
     Settings,
     About,
     Attributions,
-    CreateCoin
+    CreateCoin,
+    RemoveAds
 }
 
-fun NavGraphBuilder.mainGraph(navController: NavController) {
+fun NavGraphBuilder.mainGraph() {
     navigation(
         startDestination = NavRoute.Home.name,
         route = MAIN_ROUTE
@@ -31,19 +32,22 @@ fun NavGraphBuilder.mainGraph(navController: NavController) {
             HomeScreen()
         }
         composable(NavRoute.CoinList.name) {
-            CoinListScreen(navController)
+            CoinListScreen()
         }
         composable(NavRoute.Settings.name) {
             SettingsScreen()
         }
         composable(NavRoute.About.name) {
-            AboutScreen(navController)
+            AboutScreen()
         }
         composable(NavRoute.Attributions.name) {
             AttributionsScreen()
         }
         composable(NavRoute.CreateCoin.name) {
             CreateCoinScreen()
+        }
+        composable(NavRoute.RemoveAds.name) {
+            RemoveAdsScreen()
         }
     }
 }

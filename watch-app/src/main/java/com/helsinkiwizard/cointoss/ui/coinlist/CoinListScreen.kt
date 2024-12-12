@@ -1,4 +1,4 @@
-package com.helsinkiwizard.cointoss.coin
+package com.helsinkiwizard.cointoss.ui.coinlist
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,12 +8,16 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -39,16 +43,24 @@ import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.foundation.rememberActiveFocusRequester
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.CircularProgressIndicator
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
+import androidx.wear.remote.interactions.RemoteActivityHelper
 import androidx.wear.tiles.TileService
 import androidx.wear.tooling.preview.devices.WearDevices
 import coil.compose.SubcomposeAsyncImage
+import com.google.android.gms.wearable.Wearable
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.Repository
 import com.helsinkiwizard.cointoss.tile.CoinTileService
+import com.helsinkiwizard.cointoss.ui.DownloadMobileAppConfirmation
+import com.helsinkiwizard.cointoss.ui.ProgressIndicator
+import com.helsinkiwizard.cointoss.ui.ShowOnPhoneConfirmation
+import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListDialogs
+import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListViewModel
 import com.helsinkiwizard.core.CoreConstants.COIN_SELECTED
 import com.helsinkiwizard.core.CoreConstants.EMPTY_STRING
 import com.helsinkiwizard.core.coin.CoinType
@@ -59,7 +71,9 @@ import com.helsinkiwizard.core.theme.CoinButtonHeight
 import com.helsinkiwizard.core.theme.Eight
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Four
+import com.helsinkiwizard.core.theme.OnPrimaryContainerDark
 import com.helsinkiwizard.core.theme.PercentEighty
+import com.helsinkiwizard.core.theme.PrimaryContainerDark
 import com.helsinkiwizard.core.theme.Text14
 import com.helsinkiwizard.core.theme.Text20
 import com.helsinkiwizard.core.theme.ThirtyTwo
@@ -67,22 +81,60 @@ import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.utils.buildTextWithLink
 import com.helsinkiwizard.core.utils.getEmailIntent
 import com.helsinkiwizard.core.utils.onLinkClick
+import com.helsinkiwizard.core.viewmodel.DialogState
+import com.helsinkiwizard.core.viewmodel.UiState
 import kotlinx.coroutines.launch
+
+@Composable
+fun CoinListScreen(viewModel: CoinListViewModel = hiltViewModel()) {
+    CoinListContent(viewModel)
+    Dialogs(viewModel)
+}
+
+@Composable
+private fun Dialogs(viewModel: CoinListViewModel) {
+    when (val state = viewModel.dialogState.collectAsState().value) {
+        is DialogState.ShowContent -> {
+            when (val type = state.type as CoinListDialogs) {
+                is CoinListDialogs.OpenOnPhone -> {
+                    ShowOnPhoneConfirmation(
+                        messageRes = type.messageRes,
+                        onTimeout = { viewModel.resetDialogState() }
+                    )
+                }
+
+                is CoinListDialogs.DownloadMobileApp -> {
+                    DownloadMobileAppConfirmation(
+                        onClick = { viewModel.resetDialogState() }
+                    )
+                }
+            }
+        }
+
+        else -> {}
+    }
+}
+
+@Composable
+private fun CoinListContent(viewModel: CoinListViewModel) {
+    when (viewModel.uiState.collectAsState().value) {
+        is UiState.ShowContent -> CoinList(viewModel)
+        is UiState.Loading -> ProgressIndicator()
+        else -> {}
+    }
+}
 
 @OptIn(ExperimentalWearFoundationApi::class)
 @Composable
-fun CoinList(
-    viewModel: CoinListViewModel = hiltViewModel()
-) {
+private fun CoinList(viewModel: CoinListViewModel) {
     val customCoin = viewModel.customCoinFlow.collectAsState(initial = null).value
     val listState = rememberScalingLazyListState()
-
     Scaffold(
         positionIndicator = { PositionIndicator(scalingLazyListState = listState) }
     ) {
+        val context = LocalContext.current
         val focusRequester = rememberActiveFocusRequester()
         val coroutineScope = rememberCoroutineScope()
-        val context = LocalContext.current
         val sortedCoins = remember {
             CoinType.entries
                 .filterNot { it == CUSTOM }
@@ -105,12 +157,21 @@ fun CoinList(
                 .focusable()
         ) {
             item { ListTitle() }
-            if (customCoin != null) {
-                item {
+            item {
+                if (customCoin != null) {
                     CoinButton(
                         coin = CUSTOM,
                         name = customCoin.name,
                         customCoinHeadsUri = customCoin.headsUri
+                    )
+                } else {
+                    val capabilityClient by lazy { Wearable.getCapabilityClient(context) }
+                    val nodeClient by lazy { Wearable.getNodeClient(context) }
+                    val remoteActivityHelper by lazy { RemoteActivityHelper(context) }
+                    BlankCustomCoin(
+                        onclick = {
+                            viewModel.onBlankCustomCoinClicked(capabilityClient, nodeClient, remoteActivityHelper)
+                        }
                     )
                 }
             }
@@ -194,21 +255,64 @@ fun CoinButton(
                     contentScale = ContentScale.Crop
                 )
             }
-            Text(
-                text = name.ifEmpty { stringResource(id = coin.nameRes) },
-                fontSize = Text14,
-                fontWeight = FontWeight.Normal,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .background(color = BlackTransparent, shape = CircleShape)
-                    .padding(vertical = Four, horizontal = Twelve)
+            CoinLabel(
+                name = name,
+                nameRes = coin.nameRes
             )
         }
     }
+}
+
+@Composable
+private fun BlankCustomCoin(
+    onclick: () -> Unit
+) {
+    Button(
+        onClick = onclick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(CoinButtonHeight)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = PrimaryContainerDark)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = null,
+                tint = OnPrimaryContainerDark,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(Forty)
+                    .fillMaxSize()
+            )
+            CoinLabel(
+                name = EMPTY_STRING,
+                nameRes = R.string.create_a_coin
+            )
+        }
+    }
+}
+
+@Composable
+private fun BoxScope.CoinLabel(
+    name: String,
+    nameRes: Int
+) {
+    Text(
+        text = name.ifEmpty { stringResource(id = nameRes) },
+        fontSize = Text14,
+        fontWeight = FontWeight.Normal,
+        color = Color.White,
+        textAlign = TextAlign.Center,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .background(color = BlackTransparent, shape = CircleShape)
+            .padding(vertical = Four, horizontal = Twelve)
+    )
 }
 
 @Composable
@@ -244,5 +348,5 @@ private fun CoinButtonPreview() {
 @Preview(name = "square", device = WearDevices.SQUARE)
 @Composable
 private fun CoinListPreview() {
-    CoinList()
+    CoinListScreen()
 }

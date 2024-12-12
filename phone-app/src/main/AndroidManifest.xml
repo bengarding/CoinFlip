@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:name="com.helsinkiwizard.cointoss.PhoneApplication"
@@ -13,10 +16,19 @@
             android:name="firebase_crashlytics_collection_enabled"
             android:value="${crashlyticsCollectionEnabled}" />
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6145401003007704~9015764750" />
+
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            tools:replace="android:resource"
+            android:resource="@xml/gma_ad_services_config" />
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:theme="@style/SplashTheme" >
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -27,6 +39,13 @@
                     android:host="*"
                     android:pathPrefix="/ready-for-coin-transfer"
                     android:scheme="wear" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="cointoss" />
+                <data android:host="create-coin" />
             </intent-filter>
         </activity>
 

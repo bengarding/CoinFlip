@@ -24,6 +24,7 @@ class Repository @Inject constructor(
         private val THEME_MODE = stringPreferencesKey("selected_theme")
         private val MATERIAL_YOU = booleanPreferencesKey("material_you")
         private val SHOW_SEND_TO_WATCH_BUTTON = booleanPreferencesKey("show_send_to_watch")
+        private val ADS_REMOVED = booleanPreferencesKey("ads_removed")
     }
 
     suspend fun setTheme(themeMode: ThemeMode) = savePreference(THEME_MODE, themeMode.name)
@@ -42,6 +43,12 @@ class Repository @Inject constructor(
     val getShowSendToWatchButton: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[SHOW_SEND_TO_WATCH_BUTTON] ?: true
+        }
+
+    suspend fun setAdsRemoved(adsRemoved: Boolean) = savePreference(ADS_REMOVED, adsRemoved)
+    val getAdsRemoved: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[ADS_REMOVED] ?: false
         }
 
     suspend fun storeCustomCoin(headsUri: Uri, tailsUri: Uri, name: String) {

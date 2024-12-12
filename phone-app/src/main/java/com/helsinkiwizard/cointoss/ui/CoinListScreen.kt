@@ -22,7 +22,6 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -50,8 +49,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.data.Repository
 import com.helsinkiwizard.cointoss.navigation.NavRoute
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
+import com.helsinkiwizard.cointoss.ui.composable.PreviewSurface
+import com.helsinkiwizard.cointoss.ui.theme.LocalNavController
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListContent
+import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListDialogs
 import com.helsinkiwizard.cointoss.ui.viewmodel.CoinListViewModel
 import com.helsinkiwizard.cointoss.utils.launchInAppReview
 import com.helsinkiwizard.core.CoreConstants
@@ -69,25 +70,47 @@ import com.helsinkiwizard.core.theme.Two
 import com.helsinkiwizard.core.ui.composable.CoinListShape
 import com.helsinkiwizard.core.ui.model.CustomCoinUiModel
 import com.helsinkiwizard.core.utils.ifNullOrEmpty
+import com.helsinkiwizard.core.viewmodel.DialogState
 import com.helsinkiwizard.core.viewmodel.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun CoinListScreen(
-    navController: NavController,
     viewModel: CoinListViewModel = hiltViewModel()
 ) {
-    val activity = LocalActivity.current
+    CoinListContent(viewModel)
+    CoinListDialogs(viewModel)
+}
+
+@Composable
+private fun CoinListContent(
+    viewModel: CoinListViewModel
+) {
+    val navController = LocalNavController.current
     when (val state = viewModel.uiState.collectAsState().value) {
         is UiState.ShowContent -> {
             when (val type = state.type as CoinListContent) {
-                is CoinListContent.LoadingComplete -> Content(viewModel, type.customCoinFlow, navController)
-                is CoinListContent.CoinSet -> {
+                is CoinListContent.LoadingComplete -> CoinList(viewModel, type.customCoinFlow, navController)
+                is CoinListContent.CoinSet -> navController.navigate(NavRoute.Home.name)
+            }
+        }
+
+        else -> {}
+    }
+}
+
+@Composable
+private fun CoinListDialogs(
+    viewModel: CoinListViewModel
+) {
+    val activity = LocalActivity.current
+    when (val state = viewModel.dialogState.collectAsState().value) {
+        is DialogState.ShowContent -> {
+            when (val type = state.type as CoinListDialogs) {
+                is CoinListDialogs.InAppReview -> {
                     activity.launchInAppReview(
-                        onComplete = {
-                            navController.navigate(NavRoute.Home.name)
-                        }
+                        onComplete = type.onComplete
                     )
                 }
             }
@@ -98,7 +121,7 @@ internal fun CoinListScreen(
 }
 
 @Composable
-private fun Content(
+private fun CoinList(
     viewModel: CoinListViewModel,
     customCoinFlow: Flow<CustomCoinUiModel?>,
     navController: NavController
@@ -283,9 +306,7 @@ private fun Coin(
 private fun CoinListPreview() {
     val viewModel = CoinListViewModel(Repository(LocalContext.current))
     val navController = NavController(LocalContext.current)
-    CoinTossTheme {
-        Surface {
-            Content(viewModel, flowOf(), navController)
-        }
+    PreviewSurface {
+        CoinList(viewModel, flowOf(), navController)
     }
 }

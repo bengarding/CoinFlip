@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,21 +24,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.helsinkiwizard.cointoss.BuildConfig
 import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.navigation.NavRoute
 import com.helsinkiwizard.cointoss.ui.composable.AppIconPainterResource
+import com.helsinkiwizard.cointoss.ui.composable.PreviewSurface
 import com.helsinkiwizard.cointoss.ui.composable.PrimaryButton
 import com.helsinkiwizard.cointoss.ui.theme.BodyMediumSpan
-import com.helsinkiwizard.cointoss.ui.theme.CoinTossTheme
 import com.helsinkiwizard.cointoss.ui.theme.LinkText
+import com.helsinkiwizard.cointoss.ui.theme.LocalNavController
 import com.helsinkiwizard.core.CoreConstants.PACKAGE_NAME
+import com.helsinkiwizard.core.CoreConstants.PLAY_STORE_DEEPLINK
 import com.helsinkiwizard.core.theme.Forty
 import com.helsinkiwizard.core.theme.Four
 import com.helsinkiwizard.core.theme.Sixty
-import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.ThirtyTwo
+import com.helsinkiwizard.core.theme.Twelve
 import com.helsinkiwizard.core.theme.TwentyFour
 import com.helsinkiwizard.core.utils.buildTextWithLink
 import com.helsinkiwizard.core.utils.getEmailIntent
@@ -55,7 +55,6 @@ private val AppIconSize = 120.dp
 
 @Composable
 fun AboutScreen(
-    navController: NavController,
     dateUpdated: LocalDate = getLastUpdatedDate(LocalContext.current)
 ) {
     Column(
@@ -64,7 +63,7 @@ fun AboutScreen(
         AppInfo(dateUpdated)
         Spacer(modifier = Modifier.height(Sixty))
         Contact()
-        AddCoinDetailsButtons(navController)
+        AddCoinDetailsButtons()
     }
 }
 
@@ -131,7 +130,8 @@ private fun Contact() {
 }
 
 @Composable
-private fun AddCoinDetailsButtons(navController: NavController) {
+private fun AddCoinDetailsButtons() {
+    val navController = LocalNavController.current
     Column(
         verticalArrangement = Arrangement.spacedBy(Twelve),
         modifier = Modifier.padding(horizontal = TwentyFour)
@@ -164,7 +164,7 @@ private fun openGooglePlay(context: Context) {
         context.startActivity(
             Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("market://details?id=$PACKAGE_NAME")
+                Uri.parse(PLAY_STORE_DEEPLINK)
             )
         )
     } catch (e: android.content.ActivityNotFoundException) {
@@ -181,12 +181,9 @@ private fun openGooglePlay(context: Context) {
 @Preview(showBackground = true)
 @Composable
 private fun AboutScreenPreview() {
-    Surface {
-        CoinTossTheme {
-            AboutScreen(
-                navController = NavController(LocalContext.current),
-                dateUpdated = LocalDate.now()
-            )
-        }
+    PreviewSurface {
+        AboutScreen(
+            dateUpdated = LocalDate.now()
+        )
     }
 }
