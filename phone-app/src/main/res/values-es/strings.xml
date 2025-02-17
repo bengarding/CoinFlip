@@ -41,6 +41,7 @@
     <string name="watch_not_found">Reloj no encontrado</string>
     <string name="watch_not_found_message">No se detectaron dispositivos conectados. Asegúrese de que su dispositivo Wear OS esté cerca, encendido, emparejado con su teléfono y que la aplicación se haya actualizado a la última versión.\nInstala la aplicación Coin Toss en tu reloj.</string>
     <string name="show_send_to_watch_button">Mostrar botón de enviar moneda personalizada para mirar</string>
+    <string name="play_sound">Reproducir sonido</string>
     <string name="something_went_wrong">Algo salió mal</string>
     <string name="error_sending_coin_to_watch">¡Ups! Se produjo un error al enviar su moneda al reloj. Asegúrate de que tu reloj esté cerca y conectado y vuelve a intentarlo.</string>
     <string name="error_sending_coin_api_exception">Esta función requiere un dispositivo Wear OS conectado, pero parece que tu dispositivo no es compatible con Wear OS. Asegúrate de que tu teléfono esté emparejado con un reloj inteligente compatible y vuelve a intentarlo.</string>

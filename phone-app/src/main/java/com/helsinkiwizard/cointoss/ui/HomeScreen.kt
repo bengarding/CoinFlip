@@ -44,7 +44,8 @@ internal fun HomeScreen(
                         val speed = viewModel.speedFlow.collectAsState(initial = type.initialSpeed).value
                         val customCoin = viewModel.customCoinFlow.collectAsState(initial = null).value
                         val adsRemoved = viewModel.adsRemoved.collectAsState(initial = false).value
-                        Content(coinType, speed, customCoin, adsRemoved)
+                        val playSound = viewModel.playSound.collectAsState(initial = type.playSound).value
+                        Content(coinType, speed, customCoin, adsRemoved, playSound)
                     }
                 }
             }
@@ -60,6 +61,7 @@ private fun Content(
     speed: Float,
     customCoinUiModel: CustomCoinUiModel?,
     adsRemoved: Boolean,
+    playSound: Boolean,
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -70,9 +72,7 @@ private fun Content(
             coinType = coinType,
             customCoin = customCoinUiModel,
             speed = speed,
-            onFlip = {
-                soundEffect.start()
-            },
+            onFlip = { if (playSound) soundEffect.start() },
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxWidth(PercentEighty)

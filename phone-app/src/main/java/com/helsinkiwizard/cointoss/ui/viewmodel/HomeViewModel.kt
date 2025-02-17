@@ -21,18 +21,24 @@ internal class HomeViewModel @Inject constructor(
     val speedFlow = repository.getSpeed
     val customCoinFlow = repository.getSelectedCustomCoin()
     val adsRemoved = repository.getAdsRemoved
+    val playSound = repository.getPlaySound
 
     init {
         viewModelScope.launch {
             val initialCoinType = repository.getCoinType.filterNotNull().first()
             val initialSpeed = repository.getSpeed.filterNotNull().first()
+            val playSoundEffect = repository.getPlaySound.filterNotNull().first()
             mutableUiStateFlow.value = UiState.ShowContent(
-                HomeScreenContent.LoadingComplete(initialCoinType, initialSpeed)
+                HomeScreenContent.LoadingComplete(initialCoinType, initialSpeed, playSoundEffect)
             )
         }
     }
 }
 
 internal sealed interface HomeScreenContent : BaseType {
-    data class LoadingComplete(val initialCoinType: CoinType, val initialSpeed: Float) : HomeScreenContent
+    data class LoadingComplete(
+        val initialCoinType: CoinType,
+        val initialSpeed: Float,
+        val playSound: Boolean,
+    ) : HomeScreenContent
 }
