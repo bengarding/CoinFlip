@@ -1,13 +1,16 @@
 package com.helsinkiwizard.cointoss.ui
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.ads.AdSize
@@ -15,6 +18,7 @@ import com.google.android.gms.ads.AdView
 import com.helsinkiwizard.cointoss.BuildConfig
 import com.helsinkiwizard.cointoss.Constants.BANNER_AD_ID
 import com.helsinkiwizard.cointoss.Constants.DEBUG_BANNER_AD_ID
+import com.helsinkiwizard.cointoss.R
 import com.helsinkiwizard.cointoss.ui.viewmodel.HomeScreenContent
 import com.helsinkiwizard.cointoss.ui.viewmodel.HomeViewModel
 import com.helsinkiwizard.cointoss.utils.AdManager
@@ -60,10 +64,15 @@ private fun Content(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+        val context = LocalContext.current
+        val soundEffect = remember { MediaPlayer.create(context, R.raw.coin_toss) }
         CoinAnimation(
             coinType = coinType,
             customCoin = customCoinUiModel,
             speed = speed,
+            onFlip = {
+                soundEffect.start()
+            },
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxWidth(PercentEighty)
