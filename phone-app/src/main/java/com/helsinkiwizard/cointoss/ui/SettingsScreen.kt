@@ -81,9 +81,13 @@ private fun Content(
         CoinSettings(
             speedWrapper = model.speed,
             showSendToWatchButtonWrapper = model.showSendToWatchButton,
+            playSoundEffectWrapper = model.playSound,
             onSpeedChangeFinished = { viewModel.onSpeedValueChangeFinished() },
             onShowSendToWatchButtonChecked = { checked ->
                 viewModel.onSwitchChecked(model.showSendToWatchButton, checked)
+            },
+            onPlaySoundEffectChecked = { checked ->
+                viewModel.onSwitchChecked(model.playSound, checked)
             }
         )
         HorizontalDivider(
@@ -134,8 +138,10 @@ private fun ThemeButtons(
 private fun CoinSettings(
     speedWrapper: MutableInputWrapper<Float>,
     showSendToWatchButtonWrapper: MutableInputWrapper<Boolean>,
+    playSoundEffectWrapper: MutableInputWrapper<Boolean>,
     onSpeedChangeFinished: () -> Unit,
     onShowSendToWatchButtonChecked: (Boolean) -> Unit,
+    onPlaySoundEffectChecked: (Boolean) -> Unit,
 ) {
     Column {
         Title(textRes = R.string.coin)
@@ -153,6 +159,12 @@ private fun CoinSettings(
             label = stringResource(id = R.string.show_send_to_watch_button),
             checked = showSendToWatchButtonWrapper.value,
             onCheckChanged = onShowSendToWatchButtonChecked,
+            modifier = Modifier.padding(horizontal = Twenty)
+        )
+        PrimarySwitch(
+            label =stringResource(id = R.string.play_sound),
+            checked = playSoundEffectWrapper.value,
+            onCheckChanged = onPlaySoundEffectChecked,
             modifier = Modifier.padding(horizontal = Twenty)
         )
     }
@@ -192,7 +204,7 @@ private fun Title(@StringRes textRes: Int) {
 private fun SettingsScreenPreview() {
     val repository = Repository(LocalContext.current)
     val viewModel = SettingsViewModel(repository)
-    val model = SettingsModel(ThemeMode.DARK, true, 3f, true)
+    val model = SettingsModel(ThemeMode.DARK, true, 3f, true, true)
     PreviewSurface {
         Content(model, viewModel)
     }

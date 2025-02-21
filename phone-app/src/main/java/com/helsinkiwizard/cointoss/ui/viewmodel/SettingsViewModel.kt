@@ -27,7 +27,8 @@ internal class SettingsViewModel @Inject constructor(
                 themeMode = repository.getThemeMode.filterNotNull().first(),
                 materialYou = repository.getMaterialYou.filterNotNull().first(),
                 speed = repository.getSpeed.filterNotNull().first(),
-                showSendToWatchButton = repository.getShowSendToWatchButton.filterNotNull().first()
+                showSendToWatchButton = repository.getShowSendToWatchButton.filterNotNull().first(),
+                playSoundEffect = repository.getPlaySound.filterNotNull().first()
             )
             mutableUiStateFlow.value = UiState.ShowContent(SettingsContent.LoadingComplete(model))
         }
@@ -52,6 +53,7 @@ internal class SettingsViewModel @Inject constructor(
             when (wrapper) {
                 model.showSendToWatchButton -> repository.setShowSendToWatchButton(checked)
                 model.materialYou -> repository.setMaterialYou(checked)
+                model.playSound -> repository.setPlaySound(checked)
             }
         }
     }
